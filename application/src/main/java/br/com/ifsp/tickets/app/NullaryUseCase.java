@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.domain.app;
+package br.com.ifsp.tickets.app;
 
 public abstract class NullaryUseCase<OUT> {
 
