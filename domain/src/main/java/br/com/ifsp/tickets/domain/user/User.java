@@ -82,6 +82,10 @@ public class User extends Entity<UserID> {
         this.username = username;
     }
 
+    public boolean isCompanyManager() {
+        return this.roles.contains(Role.COMPANY_MANAGER);
+    }
+
     public void block() {
         this.active = false;
     }
