@@ -1,10 +1,10 @@
 package br.com.ifsp.tickets.domain.event;
 
 import br.com.ifsp.tickets.domain.company.CompanyID;
-import br.com.ifsp.tickets.domain.company.vo.Address;
 import br.com.ifsp.tickets.domain.shared.Entity;
-import br.com.ifsp.tickets.domain.shared.exceptions.AlreadyFinishedEventException;
+import br.com.ifsp.tickets.domain.shared.exceptions.ChangeEventStatusException;
 import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.vo.Address;
 import lombok.Getter;
 
 import java.util.Date;
@@ -20,11 +20,10 @@ public class Event extends Entity<EventID> {
     private Date initialDate;
     private Date endDate;
     private Address address;
-    private boolean published;
-    private boolean active;
+    private EventStatus status;
     private int maxTickets;
 
-    public Event(EventID eventID, String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, boolean published, boolean active, int maxTickets, List<String> attachmentPaths) {
+    public Event(EventID eventID, String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, EventStatus status, int maxTickets, List<String> attachmentPaths) {
         super(eventID);
         this.name = name;
         this.description = description;
@@ -32,18 +31,17 @@ public class Event extends Entity<EventID> {
         this.endDate = endDate;
         this.address = address;
         this.companyID = companyID;
-        this.published = published;
-        this.active = active;
+        this.status = status;
         this.maxTickets = maxTickets;
         this.attachmentPaths = attachmentPaths == null ? List.of() : attachmentPaths;
     }
 
-    public static Event with(EventID eventID, String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, boolean published, boolean active, int maxTickets, List<String> attachmentPaths) {
-        return new Event(eventID, name, description, initialDate, endDate, address, companyID, published, active, maxTickets, attachmentPaths);
+    public static Event with(EventID eventID, String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, EventStatus status, int maxTickets, List<String> attachmentPaths) {
+        return new Event(eventID, name, description, initialDate, endDate, address, companyID, status, maxTickets, attachmentPaths);
     }
 
     public static Event newEvent(String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, int maxTickets) {
-        return new Event(EventID.unique(), name, description, initialDate, endDate, address, companyID, false, true, maxTickets, null);
+        return new Event(EventID.unique(), name, description, initialDate, endDate, address, companyID, EventStatus.SCHEDULED, maxTickets, null);
     }
 
     public void update(String name, String description, Date initialDate, Date endDate, Address address, int maxTickets) {
@@ -55,15 +53,62 @@ public class Event extends Entity<EventID> {
         this.maxTickets = maxTickets;
     }
 
-    public void togglePublished() {
-        this.published = !this.published;
+    public void changeStatus(EventStatus status) {
+        switch (status) {
+            case SCHEDULED -> unpublish();
+            case PUBLISHED -> publish();
+            case OPENED -> open();
+            case CANCELED -> cancel();
+            case FINISHED -> finish();
+        }
     }
 
-    public void toggleActive() {
-        if (this.endDate.before(new Date()))
-            throw new AlreadyFinishedEventException(this.getId());
-        this.active = !this.active;
+    public void unpublish() {
+        if (this.status.isFinished())
+            throw new ChangeEventStatusException("Event is finished");
+        if (this.status.isCanceled())
+            throw new ChangeEventStatusException("Event is canceled");
+        if (this.status.isOpened())
+            throw new ChangeEventStatusException("Event is opened and cannot be unpublished");
+        if (this.status.isScheduled())
+            throw new ChangeEventStatusException("Event is already scheduled to be published");
+        this.status = EventStatus.SCHEDULED;
     }
+
+    public void open() {
+        if (this.status.isFinished())
+            throw new ChangeEventStatusException("Event is finished");
+        if (this.status.isCanceled())
+            throw new ChangeEventStatusException("Event is canceled");
+        if (this.status.isOpened())
+            throw new ChangeEventStatusException("Event is already opened");
+        if (this.status.isScheduled())
+            throw new ChangeEventStatusException("Event is scheduled and cannot be opened before being published");
+        this.status = EventStatus.OPENED;
+    }
+
+    public void publish() {
+        if (this.status.isFinished())
+            throw new ChangeEventStatusException("Event is finished");
+        if (this.status.isCanceled())
+            throw new ChangeEventStatusException("Event is canceled");
+        if (this.status.isOpened())
+            throw new ChangeEventStatusException("Event is opened and cannot need to be closed to be published");
+        if (this.status.isPublished())
+            throw new ChangeEventStatusException("Event is already published");
+        this.status = EventStatus.PUBLISHED;
+    }
+
+    public void cancel() {
+        if (this.status.isOpened())
+            throw new ChangeEventStatusException("Event is opened and cannot be canceled, it only can be finished");
+        if (this.status.isFinished())
+            throw new ChangeEventStatusException("Event is finished");
+        if (this.status.isCanceled())
+            throw new ChangeEventStatusException("Event is already canceled");
+        this.status = EventStatus.CANCELED;
+    }
+
 
     public void addAttachment(String path) {
         this.attachmentPaths.add(path);
@@ -74,9 +119,9 @@ public class Event extends Entity<EventID> {
     }
 
     public void finish() {
-        if (!this.active && this.endDate.before(new Date()))
-            throw new AlreadyFinishedEventException(this.getId());
-        this.active = false;
+        if (!this.status.isOpened())
+            throw new ChangeEventStatusException("Event is not opened, it needs to be opened to be finished");
+        this.status = EventStatus.FINISHED;
     }
 
 

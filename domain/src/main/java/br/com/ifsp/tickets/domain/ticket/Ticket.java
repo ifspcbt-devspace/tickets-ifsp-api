@@ -1,0 +1,118 @@
+package br.com.ifsp.tickets.domain.ticket;
+
+import br.com.ifsp.tickets.domain.event.Event;
+import br.com.ifsp.tickets.domain.event.EventID;
+import br.com.ifsp.tickets.domain.shared.Entity;
+import br.com.ifsp.tickets.domain.shared.exceptions.ChangeTicketStatusException;
+import br.com.ifsp.tickets.domain.shared.exceptions.TicketConsumeException;
+import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.user.UserID;
+import lombok.Getter;
+
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
+@Getter
+public class Ticket extends Entity<TicketID> {
+
+    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private final UserID userID;
+    private final EventID eventID;
+    private final Date validIn;
+    private final Date expiredIn;
+    private final LocalDateTime createdAt;
+    private TicketStatus status;
+    private String code;
+    private LocalDateTime lastTimeConsumed;
+
+    public Ticket(TicketID ticketID, UserID userID, EventID eventID, TicketStatus status, String code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+        super(ticketID);
+        this.userID = userID;
+        this.eventID = eventID;
+        this.status = status;
+        this.code = code;
+        this.validIn = validIn;
+        this.expiredIn = expiredIn;
+        this.createdAt = createdAt;
+        this.lastTimeConsumed = lastTimeConsumed;
+    }
+
+    private static String generateCode() {
+        final int size = 15;
+        final StringBuilder key = new StringBuilder(size);
+        final SecureRandom random = new SecureRandom();
+
+        for (int i = 0; i < size; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            key.append(CHARACTERS.charAt(randomIndex));
+        }
+
+        return key.toString();
+    }
+
+    public static Ticket with(TicketID ticketID, UserID userID, EventID eventID, TicketStatus status, String code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+        return new Ticket(ticketID, userID, eventID, status, code, validIn, expiredIn, createdAt, lastTimeConsumed);
+    }
+
+    public static Ticket newTicket(UserID userID, Event event, Date validIn, Date expiredIn) {
+        return new Ticket(TicketID.unique(), userID, event.getId(), TicketStatus.AVAILABLE, generateCode(), validIn, expiredIn, LocalDateTime.now(ZoneId.of("GMT-3")), null);
+    }
+
+    public void generateNewCode() {
+        this.code = generateCode();
+    }
+
+    public void updateStatus(TicketStatus status) {
+        this.status = status;
+    }
+
+    public void expire() {
+        final ZoneId zoneId = ZoneId.of("GMT-3");
+        final LocalDateTime now = LocalDateTime.now(zoneId);
+
+        if (this.status.isExpired())
+            throw new ChangeTicketStatusException("Ticket is already expired");
+        if (now.toLocalDate().isAfter(this.expiredIn.toInstant().atZone(zoneId).toLocalDate())) {
+            this.status = TicketStatus.EXPIRED;
+        } else throw new ChangeTicketStatusException("Ticket is out of date to be expired, but you can cancel it.");
+
+    }
+
+    public void cancel() {
+        if (this.status.isCanceled())
+            throw new ChangeTicketStatusException("Ticket is already canceled");
+        this.status = TicketStatus.CANCELED;
+    }
+
+    public void consume(Event event) {
+        if (!event.getStatus().isOpened())
+            throw new TicketConsumeException("Event is not opened");
+        if (!event.getId().equals(this.eventID))
+            throw new TicketConsumeException("Ticket does not belong to this event");
+        if (this.status.isCanceled())
+            throw new TicketConsumeException("Ticket is canceled");
+        if (this.status.isExpired())
+            throw new TicketConsumeException("Ticket is expired");
+
+        final ZoneId zoneId = ZoneId.of("GMT-3");
+        final LocalDateTime now = LocalDateTime.now(zoneId);
+
+        if (now.toLocalDate().isBefore(this.validIn.toInstant().atZone(zoneId).toLocalDate()))
+            throw new TicketConsumeException("Ticket is not valid yet");
+
+        if (now.toLocalDate().isAfter(this.expiredIn.toInstant().atZone(zoneId).toLocalDate())) {
+            this.status = TicketStatus.EXPIRED;
+            throw new TicketConsumeException("Ticket is expired");
+        }
+
+        this.status = TicketStatus.CONSUMED;
+        this.lastTimeConsumed = now;
+    }
+
+    @Override
+    public void validate(ValidationHandler handler) {
+        new TicketValidator(handler, this).validate();
+    }
+}

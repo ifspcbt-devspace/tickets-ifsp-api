@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.domain.company.vo;
+package br.com.ifsp.tickets.domain.shared.vo;
 
 import br.com.ifsp.tickets.domain.shared.ValueObject;
 import br.com.ifsp.tickets.domain.shared.exceptions.InvalidAddressException;
