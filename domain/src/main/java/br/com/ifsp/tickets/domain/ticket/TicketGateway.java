@@ -11,7 +11,7 @@ public interface TicketGateway {
 
     Ticket findById(TicketID id);
 
-    Ticket findByCode(TicketCode code);
+    Ticket findByCodeAndNotExpired(TicketCode code);
 
     Pagination<Ticket> findAllByUserID(UserID id);
 

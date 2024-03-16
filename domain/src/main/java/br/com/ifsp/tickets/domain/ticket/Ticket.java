@@ -5,6 +5,7 @@ import br.com.ifsp.tickets.domain.event.EventID;
 import br.com.ifsp.tickets.domain.shared.Entity;
 import br.com.ifsp.tickets.domain.shared.exceptions.ChangeTicketStatusException;
 import br.com.ifsp.tickets.domain.shared.exceptions.TicketConsumeException;
+import br.com.ifsp.tickets.domain.shared.exceptions.TicketExpiredException;
 import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
 import br.com.ifsp.tickets.domain.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.user.UserID;
@@ -80,7 +81,7 @@ public class Ticket extends Entity<TicketID> {
         if (this.status.isCanceled())
             throw new TicketConsumeException("Ticket is canceled");
         if (this.status.isExpired())
-            throw new TicketConsumeException("Ticket is expired");
+            throw new TicketExpiredException(this.getId());
 
         final ZoneId zoneId = ZoneId.of("GMT-3");
         final LocalDateTime now = LocalDateTime.now(zoneId);
@@ -88,10 +89,8 @@ public class Ticket extends Entity<TicketID> {
         if (now.toLocalDate().isBefore(this.validIn.toInstant().atZone(zoneId).toLocalDate()))
             throw new TicketConsumeException("Ticket is not valid yet");
 
-        if (now.toLocalDate().isAfter(this.expiredIn.toInstant().atZone(zoneId).toLocalDate())) {
-            this.status = TicketStatus.EXPIRED;
-            throw new TicketConsumeException("Ticket is expired");
-        }
+        if (now.toLocalDate().isAfter(this.expiredIn.toInstant().atZone(zoneId).toLocalDate()))
+            throw new TicketExpiredException(this.getId());
 
         this.status = TicketStatus.CONSUMED;
         this.lastTimeConsumed = now;
