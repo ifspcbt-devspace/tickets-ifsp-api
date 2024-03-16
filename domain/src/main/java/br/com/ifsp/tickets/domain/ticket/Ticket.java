@@ -6,10 +6,10 @@ import br.com.ifsp.tickets.domain.shared.Entity;
 import br.com.ifsp.tickets.domain.shared.exceptions.ChangeTicketStatusException;
 import br.com.ifsp.tickets.domain.shared.exceptions.TicketConsumeException;
 import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.user.UserID;
 import lombok.Getter;
 
-import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -24,10 +24,10 @@ public class Ticket extends Entity<TicketID> {
     private final Date expiredIn;
     private final LocalDateTime createdAt;
     private TicketStatus status;
-    private String code;
+    private TicketCode code;
     private LocalDateTime lastTimeConsumed;
 
-    public Ticket(TicketID ticketID, UserID userID, EventID eventID, TicketStatus status, String code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+    public Ticket(TicketID ticketID, UserID userID, EventID eventID, TicketStatus status, TicketCode code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         super(ticketID);
         this.userID = userID;
         this.eventID = eventID;
@@ -39,29 +39,16 @@ public class Ticket extends Entity<TicketID> {
         this.lastTimeConsumed = lastTimeConsumed;
     }
 
-    private static String generateCode() {
-        final int size = 15;
-        final StringBuilder key = new StringBuilder(size);
-        final SecureRandom random = new SecureRandom();
-
-        for (int i = 0; i < size; i++) {
-            int randomIndex = random.nextInt(CHARACTERS.length());
-            key.append(CHARACTERS.charAt(randomIndex));
-        }
-
-        return key.toString();
-    }
-
-    public static Ticket with(TicketID ticketID, UserID userID, EventID eventID, TicketStatus status, String code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+    public static Ticket with(TicketID ticketID, UserID userID, EventID eventID, TicketStatus status, TicketCode code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         return new Ticket(ticketID, userID, eventID, status, code, validIn, expiredIn, createdAt, lastTimeConsumed);
     }
 
     public static Ticket newTicket(UserID userID, Event event, Date validIn, Date expiredIn) {
-        return new Ticket(TicketID.unique(), userID, event.getId(), TicketStatus.AVAILABLE, generateCode(), validIn, expiredIn, LocalDateTime.now(ZoneId.of("GMT-3")), null);
+        return new Ticket(TicketID.unique(), userID, event.getId(), TicketStatus.AVAILABLE, TicketCode.generate(), validIn, expiredIn, LocalDateTime.now(ZoneId.of("GMT-3")), null);
     }
 
     public void generateNewCode() {
-        this.code = generateCode();
+        this.code = TicketCode.generate();
     }
 
     public void updateStatus(TicketStatus status) {
