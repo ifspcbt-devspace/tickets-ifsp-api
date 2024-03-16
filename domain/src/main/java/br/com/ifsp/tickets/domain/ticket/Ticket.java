@@ -17,7 +17,6 @@ import java.util.Date;
 @Getter
 public class Ticket extends Entity<TicketID> {
 
-    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private final UserID userID;
     private final EventID eventID;
     private final Date validIn;
