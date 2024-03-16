@@ -34,4 +34,19 @@ public class TicketCode extends ValueObject {
 
         return new TicketCode(key.toString());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TicketCode that = (TicketCode) o;
+
+        return code.equals(that.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return code.hashCode();
+    }
 }
