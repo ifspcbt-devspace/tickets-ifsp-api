@@ -1,5 +1,7 @@
 package br.com.ifsp.tickets.domain.ticket;
 
+import br.com.ifsp.tickets.domain.enrollment.EnrollmentStatus;
+import br.com.ifsp.tickets.domain.shared.exceptions.InvalidEnumException;
 import lombok.Getter;
 
 @Getter
@@ -26,7 +28,7 @@ public enum TicketStatus {
             case 2 -> CONSUMED;
             case 3 -> EXPIRED;
             case 4 -> CANCELED;
-            default -> null;
+            default -> throw new InvalidEnumException(TicketStatus.class, code);
         };
     }
 
