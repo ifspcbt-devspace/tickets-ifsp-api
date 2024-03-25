@@ -3,7 +3,7 @@ package br.com.ifsp.tickets.domain.event;
 import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.shared.Entity;
 import br.com.ifsp.tickets.domain.shared.exceptions.ChangeEventStatusException;
-import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.shared.vo.Address;
 import lombok.Getter;
 
@@ -126,7 +126,7 @@ public class Event extends Entity<EventID> {
 
 
     @Override
-    public void validate(ValidationHandler handler) {
+    public void validate(IValidationHandler handler) {
         new EventValidator(handler, this).validate();
     }
 }

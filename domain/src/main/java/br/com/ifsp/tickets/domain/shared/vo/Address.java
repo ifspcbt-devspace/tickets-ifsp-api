@@ -1,7 +1,7 @@
 package br.com.ifsp.tickets.domain.shared.vo;
 
 import br.com.ifsp.tickets.domain.shared.ValueObject;
-import br.com.ifsp.tickets.domain.shared.exceptions.InvalidAddressException;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalAddressException;
 import lombok.Getter;
 
 @Getter
@@ -17,25 +17,25 @@ public class Address extends ValueObject {
 
     public Address(String street, String number, String neighborhood, String city, String state, String country, String zipCode) {
         if (street == null || street.isBlank())
-            throw new InvalidAddressException("Street is required");
+            throw new IllegalAddressException("Street is required");
 
         if (number == null || number.isBlank())
-            throw new InvalidAddressException("Number is required");
+            throw new IllegalAddressException("Number is required");
 
         if (neighborhood == null || neighborhood.isBlank())
-            throw new InvalidAddressException("Neighborhood is required");
+            throw new IllegalAddressException("Neighborhood is required");
 
         if (city == null || city.isBlank())
-            throw new InvalidAddressException("City is required");
+            throw new IllegalAddressException("City is required");
 
         if (state == null || state.isBlank())
-            throw new InvalidAddressException("State is required");
+            throw new IllegalAddressException("State is required");
 
         if (country == null || country.isBlank())
-            throw new InvalidAddressException("Country is required");
+            throw new IllegalAddressException("Country is required");
 
         if (zipCode == null || zipCode.isBlank())
-            throw new InvalidAddressException("ZipCode is required");
+            throw new IllegalAddressException("ZipCode is required");
 
         this.street = street;
         this.number = number;

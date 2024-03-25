@@ -1,6 +1,6 @@
 package br.com.ifsp.tickets.domain.shared;
 
-import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,41 +10,41 @@ import java.util.Objects;
 public abstract class Entity<ID extends Identifier> {
 
     protected final ID id;
-    private final List<DomainEvent> domainEvents;
+    private final List<IDomainEvent> IDomainEvents;
 
     protected Entity(final ID id) {
         this(id, null);
     }
 
-    protected Entity(final ID id, final List<DomainEvent> domainEvents) {
+    protected Entity(final ID id, final List<IDomainEvent> IDomainEvents) {
         Objects.requireNonNull(id, "entity 'id' should not be null");
         this.id = id;
-        this.domainEvents = new ArrayList<>(domainEvents == null ? Collections.emptyList() : domainEvents);
+        this.IDomainEvents = new ArrayList<>(IDomainEvents == null ? Collections.emptyList() : IDomainEvents);
     }
 
-    public abstract void validate(ValidationHandler handler);
+    public abstract void validate(IValidationHandler handler);
 
     public ID getId() {
         return id;
     }
 
-    public List<DomainEvent> getDomainEvents() {
-        return Collections.unmodifiableList(domainEvents);
+    public List<IDomainEvent> getDomainEvents() {
+        return Collections.unmodifiableList(IDomainEvents);
     }
 
-    public void publishDomainEvents(final DomainEventPublisher publisher) {
+    public void publishDomainEvents(final IDomainEventPublisher publisher) {
         if (publisher == null) {
             return;
         }
         getDomainEvents().forEach(publisher::publishEvent);
-        this.domainEvents.clear();
+        this.IDomainEvents.clear();
     }
 
-    public void registerEvent(final DomainEvent event) {
+    public void registerEvent(final IDomainEvent event) {
         if (event == null) {
             return;
         }
-        this.domainEvents.add(event);
+        this.IDomainEvents.add(event);
     }
 
     @Override

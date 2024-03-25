@@ -2,19 +2,19 @@ package br.com.ifsp.tickets.domain.shared.validation.handler;
 
 import br.com.ifsp.tickets.domain.shared.exceptions.DomainException;
 import br.com.ifsp.tickets.domain.shared.validation.Error;
-import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 
 import java.util.List;
 
-public class ThrowsValidationHandler implements ValidationHandler {
+public class ThrowsValidationHandler implements IValidationHandler {
 
     @Override
-    public ValidationHandler append(final Error anError) {
+    public IValidationHandler append(final Error anError) {
         throw DomainException.with(anError);
     }
 
     @Override
-    public ValidationHandler append(final ValidationHandler anHandler) {
+    public IValidationHandler append(final IValidationHandler anHandler) {
         throw DomainException.with(anHandler.getErrors());
     }
 

@@ -1,13 +1,13 @@
 package br.com.ifsp.tickets.domain.company;
 
-import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.shared.validation.Validator;
 
 public class CompanyValidator extends Validator {
 
     private final Company company;
 
-    public CompanyValidator(ValidationHandler aHandler, Company company) {
+    public CompanyValidator(IValidationHandler aHandler, Company company) {
         super(aHandler);
         this.company = company;
     }

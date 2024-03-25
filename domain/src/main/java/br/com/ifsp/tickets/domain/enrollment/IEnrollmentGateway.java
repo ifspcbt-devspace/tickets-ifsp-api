@@ -4,7 +4,7 @@ import br.com.ifsp.tickets.domain.event.EventID;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.user.UserID;
 
-public interface EnrollmentGateway {
+public interface IEnrollmentGateway {
 
     Enrollment create(Enrollment enrollment);
 

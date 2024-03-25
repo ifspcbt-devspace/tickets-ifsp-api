@@ -1,7 +1,7 @@
 package br.com.ifsp.tickets.domain.user.vo;
 
 import br.com.ifsp.tickets.domain.shared.ValueObject;
-import br.com.ifsp.tickets.domain.shared.exceptions.InvalidEmailException;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalEmailException;
 import br.com.ifsp.tickets.domain.shared.utils.ValidationUtils;
 import lombok.Getter;
 
@@ -12,11 +12,11 @@ public class Email extends ValueObject {
 
     public Email(String value) {
         if (value == null || value.isBlank()) {
-            throw new InvalidEmailException(value);
+            throw new IllegalEmailException(value);
         }
 
         if (!ValidationUtils.isValidEmail(value)) {
-            throw new InvalidEmailException(value);
+            throw new IllegalEmailException(value);
         }
         this.value = value;
     }

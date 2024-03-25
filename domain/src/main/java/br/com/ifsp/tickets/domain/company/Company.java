@@ -3,8 +3,8 @@ package br.com.ifsp.tickets.domain.company;
 import br.com.ifsp.tickets.domain.shared.vo.Address;
 import br.com.ifsp.tickets.domain.company.vo.CNPJ;
 import br.com.ifsp.tickets.domain.shared.Entity;
-import br.com.ifsp.tickets.domain.shared.exceptions.InvalidEntityIdException;
-import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalEntityIdException;
+import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
 import lombok.Getter;
@@ -47,13 +47,13 @@ public class Company extends Entity<CompanyID> {
 
     public void changeOwner(UserID ownerID) {
         if (ownerID == null || ownerID.getValue() == null) {
-            throw new InvalidEntityIdException(User.class, Optional.ofNullable(ownerID).map(UserID::getValue).orElse(null));
+            throw new IllegalEntityIdException(User.class, Optional.ofNullable(ownerID).map(UserID::getValue).orElse(null));
         }
         this.ownerID = ownerID;
     }
 
     @Override
-    public void validate(ValidationHandler handler) {
+    public void validate(IValidationHandler handler) {
         new CompanyValidator(handler, this).validate();
     }
 }

@@ -6,7 +6,7 @@ import br.com.ifsp.tickets.domain.shared.Entity;
 import br.com.ifsp.tickets.domain.shared.exceptions.ChangeTicketStatusException;
 import br.com.ifsp.tickets.domain.shared.exceptions.TicketConsumeException;
 import br.com.ifsp.tickets.domain.shared.exceptions.TicketExpiredException;
-import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.user.UserID;
 import lombok.Getter;
@@ -97,7 +97,7 @@ public class Ticket extends Entity<TicketID> {
     }
 
     @Override
-    public void validate(ValidationHandler handler) {
+    public void validate(IValidationHandler handler) {
         new TicketValidator(handler, this).validate();
     }
 }

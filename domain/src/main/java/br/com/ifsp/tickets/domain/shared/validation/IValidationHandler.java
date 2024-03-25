@@ -2,11 +2,11 @@ package br.com.ifsp.tickets.domain.shared.validation;
 
 import java.util.List;
 
-public interface ValidationHandler {
+public interface IValidationHandler {
 
-    ValidationHandler append(Error anError);
+    IValidationHandler append(Error anError);
 
-    ValidationHandler append(ValidationHandler anHandler);
+    IValidationHandler append(IValidationHandler anHandler);
 
     <T> T validate(Validation<T> aValidation);
 

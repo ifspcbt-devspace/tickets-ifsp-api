@@ -4,7 +4,7 @@ import br.com.ifsp.tickets.domain.company.vo.CNPJ;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
 
-public interface CompanyGateway {
+public interface ICompanyGateway {
 
     Company create(Company company);
 

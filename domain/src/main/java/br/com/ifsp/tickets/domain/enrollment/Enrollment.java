@@ -2,7 +2,7 @@ package br.com.ifsp.tickets.domain.enrollment;
 
 import br.com.ifsp.tickets.domain.event.EventID;
 import br.com.ifsp.tickets.domain.shared.Entity;
-import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.user.UserID;
 import lombok.Getter;
 
@@ -45,7 +45,7 @@ public class Enrollment extends Entity<EnrollmentID> {
     }
 
     @Override
-    public void validate(ValidationHandler handler) {
+    public void validate(IValidationHandler handler) {
         new EnrollmentValidator(handler, this).validate();
     }
 }

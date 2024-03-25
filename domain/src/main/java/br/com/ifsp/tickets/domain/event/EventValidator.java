@@ -1,13 +1,13 @@
 package br.com.ifsp.tickets.domain.event;
 
-import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.shared.validation.Validator;
 
 public class EventValidator extends Validator {
 
     private final Event event;
 
-    public EventValidator(ValidationHandler aHandler, Event event) {
+    public EventValidator(IValidationHandler aHandler, Event event) {
         super(aHandler);
         this.event = event;
     }

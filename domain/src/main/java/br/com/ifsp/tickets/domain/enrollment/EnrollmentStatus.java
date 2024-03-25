@@ -1,6 +1,6 @@
 package br.com.ifsp.tickets.domain.enrollment;
 
-import br.com.ifsp.tickets.domain.shared.exceptions.InvalidEnumException;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalEnumException;
 import lombok.Getter;
 
 @Getter
@@ -24,7 +24,7 @@ public enum EnrollmentStatus {
                 return status;
             }
         }
-        throw new InvalidEnumException(EnrollmentStatus.class, code);
+        throw new IllegalEnumException(EnrollmentStatus.class, code);
     }
 
     public boolean isWaitingConfirmation() {

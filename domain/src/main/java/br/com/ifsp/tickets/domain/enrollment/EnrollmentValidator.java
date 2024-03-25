@@ -1,13 +1,13 @@
 package br.com.ifsp.tickets.domain.enrollment;
 
-import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.shared.validation.Validator;
 
 public class EnrollmentValidator extends Validator {
 
     private final Enrollment enrollment;
 
-    public EnrollmentValidator(ValidationHandler aHandler, Enrollment enrollment) {
+    public EnrollmentValidator(IValidationHandler aHandler, Enrollment enrollment) {
         super(aHandler);
         this.enrollment = enrollment;
     }

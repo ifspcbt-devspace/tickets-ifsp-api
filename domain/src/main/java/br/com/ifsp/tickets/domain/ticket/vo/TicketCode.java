@@ -1,7 +1,7 @@
 package br.com.ifsp.tickets.domain.ticket.vo;
 
 import br.com.ifsp.tickets.domain.shared.ValueObject;
-import br.com.ifsp.tickets.domain.shared.exceptions.InvalidTicketCodeException;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalTicketCodeException;
 import lombok.Getter;
 
 import java.security.SecureRandom;
@@ -15,9 +15,9 @@ public class TicketCode extends ValueObject {
 
     public TicketCode(String code) {
         if (code == null || code.isBlank())
-            throw new InvalidTicketCodeException(code);
+            throw new IllegalTicketCodeException(code);
         if (code.length() != 15)
-            throw new InvalidTicketCodeException(code);
+            throw new IllegalTicketCodeException(code);
 
         this.code = code;
     }

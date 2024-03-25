@@ -1,13 +1,13 @@
 package br.com.ifsp.tickets.domain.user;
 
-import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.shared.validation.Validator;
 
 public class UserValidator extends Validator {
 
     private final User user;
 
-    protected UserValidator(ValidationHandler aHandler, User user) {
+    protected UserValidator(IValidationHandler aHandler, User user) {
         super(aHandler);
         this.user = user;
     }

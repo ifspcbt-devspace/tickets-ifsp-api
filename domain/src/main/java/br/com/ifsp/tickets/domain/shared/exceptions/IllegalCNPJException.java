@@ -1,8 +1,8 @@
 package br.com.ifsp.tickets.domain.shared.exceptions;
 
-public class InvalidCNPJException extends DomainException {
+public class IllegalCNPJException extends DomainException {
 
-    public InvalidCNPJException(String cnpj) {
+    public IllegalCNPJException(String cnpj) {
         super("CNPJ '%s' is not valid".formatted(cnpj));
     }
 

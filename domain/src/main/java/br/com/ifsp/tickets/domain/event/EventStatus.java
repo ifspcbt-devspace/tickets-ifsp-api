@@ -1,7 +1,6 @@
 package br.com.ifsp.tickets.domain.event;
 
-import br.com.ifsp.tickets.domain.enrollment.EnrollmentStatus;
-import br.com.ifsp.tickets.domain.shared.exceptions.InvalidEnumException;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalEnumException;
 import lombok.Getter;
 
 @Getter
@@ -30,7 +29,7 @@ public enum EventStatus {
             case 3 -> OPENED;
             case 4 -> CANCELED;
             case 5 -> FINISHED;
-            default -> throw new InvalidEnumException(EventStatus.class, code);
+            default -> throw new IllegalEnumException(EventStatus.class, code);
         };
     }
 

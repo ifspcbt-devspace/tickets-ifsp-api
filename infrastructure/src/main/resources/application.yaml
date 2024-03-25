@@ -5,10 +5,24 @@ springdoc:
   swagger-ui:
     path: /docs/swagger.html
 
+security:
+  jwt:
+    public-key: classpath:app.pub
+    private-key: classpath:app.ket
+
 spring:
-  spring:
-    config:
-      import:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
+            scope: read:user
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            scope: openid,profile,email
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
@@ -59,5 +73,7 @@ server:
       enabled: true
       force: true
 application:
+  frontend:
+    url: http://localhost:3000
   formatted-version: v1.0.0
   title: TicketsIFSP-API

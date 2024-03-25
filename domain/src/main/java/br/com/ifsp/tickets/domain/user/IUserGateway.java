@@ -6,7 +6,7 @@ import br.com.ifsp.tickets.domain.user.vo.CPF;
 import br.com.ifsp.tickets.domain.user.vo.Email;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 
-public interface UserGateway {
+public interface IUserGateway {
 
     User create(User user);
 

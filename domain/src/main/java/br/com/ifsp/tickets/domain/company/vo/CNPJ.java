@@ -1,7 +1,7 @@
 package br.com.ifsp.tickets.domain.company.vo;
 
 import br.com.ifsp.tickets.domain.shared.ValueObject;
-import br.com.ifsp.tickets.domain.shared.exceptions.InvalidCNPJException;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalCNPJException;
 import br.com.ifsp.tickets.domain.shared.utils.ValidationUtils;
 import lombok.Getter;
 
@@ -12,10 +12,10 @@ public class CNPJ extends ValueObject {
 
     public CNPJ(String value) {
         if (value == null || value.isBlank())
-            throw new InvalidCNPJException(value);
+            throw new IllegalCNPJException(value);
 
         if (!ValidationUtils.isCNPJ(value))
-            throw new InvalidCNPJException(value);
+            throw new IllegalCNPJException(value);
 
         this.value = value;
     }

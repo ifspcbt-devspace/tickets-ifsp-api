@@ -43,3 +43,7 @@ bin/
 .DS_Store
 
 .env
+app.key
+app.pub
+*.key
+*.pub

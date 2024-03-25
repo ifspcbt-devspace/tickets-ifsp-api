@@ -4,7 +4,7 @@ import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
 
-public interface EventGateway {
+public interface IEventGateway {
 
     Event create(Event event);
 

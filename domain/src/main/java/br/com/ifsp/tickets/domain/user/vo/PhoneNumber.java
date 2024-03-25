@@ -1,9 +1,10 @@
 package br.com.ifsp.tickets.domain.user.vo;
 
 import br.com.ifsp.tickets.domain.shared.ValueObject;
-import br.com.ifsp.tickets.domain.shared.exceptions.InvalidPhoneNumberException;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalPhoneNumberException;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 import lombok.Getter;
 
 @Getter
@@ -15,18 +16,23 @@ public class PhoneNumber extends ValueObject {
 
     public PhoneNumber(String value) {
         if (value == null || value.isBlank()) {
-            throw new InvalidPhoneNumberException(value);
+            throw new IllegalPhoneNumberException(value);
         }
-
+        Phonenumber.PhoneNumber phoneNumber;
         try {
-            if (!PHONE_NUMBER_UTIL.isValidNumber(PHONE_NUMBER_UTIL.parse(value, "BR"))) {
-                throw new InvalidPhoneNumberException(value);
+            phoneNumber = PHONE_NUMBER_UTIL.parse(value, "BR");
+            if (!PHONE_NUMBER_UTIL.isValidNumber(phoneNumber)) {
+                throw new IllegalPhoneNumberException(value);
             }
         } catch (NumberParseException e) {
-            throw new InvalidPhoneNumberException(value);
+            throw new IllegalPhoneNumberException(value);
         }
 
-        this.value = value;
+        this.value = phoneNumber.getRawInput();
+    }
+
+    public String getInitials() {
+        return value.substring(0, this.value.length() - 4) + "****";
     }
 
     @Override

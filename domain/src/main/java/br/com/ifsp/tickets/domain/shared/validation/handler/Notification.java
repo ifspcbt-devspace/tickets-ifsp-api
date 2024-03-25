@@ -2,12 +2,12 @@ package br.com.ifsp.tickets.domain.shared.validation.handler;
 
 import br.com.ifsp.tickets.domain.shared.exceptions.DomainException;
 import br.com.ifsp.tickets.domain.shared.validation.Error;
-import br.com.ifsp.tickets.domain.shared.validation.ValidationHandler;
+import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Notification implements ValidationHandler {
+public class Notification implements IValidationHandler {
 
     private final List<Error> errors;
 
@@ -34,7 +34,7 @@ public class Notification implements ValidationHandler {
     }
 
     @Override
-    public Notification append(final ValidationHandler anHandler) {
+    public Notification append(final IValidationHandler anHandler) {
         this.errors.addAll(anHandler.getErrors());
         return this;
     }

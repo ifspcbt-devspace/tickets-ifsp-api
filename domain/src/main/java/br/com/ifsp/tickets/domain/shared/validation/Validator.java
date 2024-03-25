@@ -2,15 +2,15 @@ package br.com.ifsp.tickets.domain.shared.validation;
 
 public abstract class Validator {
 
-    private final ValidationHandler handler;
+    private final IValidationHandler handler;
 
-    protected Validator(final ValidationHandler aHandler) {
-        this.handler = aHandler;
+    protected Validator(final IValidationHandler anHandler) {
+        this.handler = anHandler;
     }
 
     public abstract void validate();
 
-    protected ValidationHandler validationHandler() {
+    protected IValidationHandler validationHandler() {
         return this.handler;
     }
 
@@ -22,7 +22,7 @@ public abstract class Validator {
         this.handler.append(new Error(message));
     }
 
-    protected void validationHandler(ValidationHandler validationHandler) {
+    protected void validationHandler(IValidationHandler validationHandler) {
         this.handler.append(validationHandler);
     }
 }

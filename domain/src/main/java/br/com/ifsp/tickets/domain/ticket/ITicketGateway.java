@@ -5,7 +5,7 @@ import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.user.UserID;
 
-public interface TicketGateway {
+public interface ITicketGateway {
 
     Ticket create(Ticket ticket);
 
