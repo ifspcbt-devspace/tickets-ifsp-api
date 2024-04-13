@@ -21,7 +21,7 @@ public class UserValidator extends Validator {
         this.validatePhoneNumber();
         this.validateCPF();
         this.validateBirthDate();
-        this.validateRoles();
+        this.validateRole();
     }
 
     private void validateEmail() {
@@ -59,9 +59,9 @@ public class UserValidator extends Validator {
             error("Birth date is required");
     }
 
-    private void validateRoles() {
-        if (user.getRoles() == null || user.getRoles().isEmpty())
-            error("Roles are required");
+    private void validateRole() {
+        if (user.getRole() == null)
+            error("Role are required");
     }
 
 

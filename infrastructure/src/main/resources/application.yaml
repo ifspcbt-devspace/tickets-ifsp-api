@@ -7,22 +7,9 @@ springdoc:
 
 security:
   jwt:
-    public-key: classpath:app.pub
-    private-key: classpath:app.ket
+    secret-key: classpath:app.pub
 
 spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          github:
-            clientId: ${GITHUB_CLIENT_ID}
-            clientSecret: ${GITHUB_CLIENT_SECRET}
-            scope: read:user
-          google:
-            clientId: ${GOOGLE_CLIENT_ID}
-            clientSecret: ${GOOGLE_CLIENT_SECRET}
-            scope: openid,profile,email
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
@@ -45,6 +32,8 @@ spring:
     time-zone: America/Sao_Paulo
   jpa:
     open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
   datasource:
     hikari:
       maxLifetime: '2000000'
@@ -73,7 +62,5 @@ server:
       enabled: true
       force: true
 application:
-  frontend:
-    url: http://localhost:3000
   formatted-version: v1.0.0
   title: TicketsIFSP-API

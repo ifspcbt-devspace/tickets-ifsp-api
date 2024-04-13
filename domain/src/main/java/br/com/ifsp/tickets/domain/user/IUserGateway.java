@@ -1,35 +1,39 @@
 package br.com.ifsp.tickets.domain.user;
 
+import br.com.ifsp.tickets.domain.shared.search.AdvancedSearchQuery;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
-import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
 import br.com.ifsp.tickets.domain.user.vo.CPF;
 import br.com.ifsp.tickets.domain.user.vo.Email;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
+
+import java.util.Optional;
 
 public interface IUserGateway {
 
     User create(User user);
 
-    User findByEmail(Email email);
+    Optional<User> findByEmail(Email email);
 
-    User findByUsername(String username);
+    Optional<User> findByUsername(String username);
 
-    User findByCPF(CPF cpf);
+    Optional<User> findByCPF(CPF cpf);
 
-    User findById(UserID id);
+    Optional<User> findById(UserID id);
 
     User update(User user);
 
-    Pagination<User> findAll(SearchQuery sq);
+    Pagination<User> findAll(AdvancedSearchQuery sq);
 
     void delete(User user);
 
-    boolean exists(UserID id);
+    boolean existsById(UserID id);
 
-    boolean exists(Email email);
+    boolean existsByEmail(Email email);
 
-    boolean exists(String username);
+    boolean existsByUsername(String username);
 
-    boolean exists(PhoneNumber phoneNumber);
+    boolean existsByPhoneNumber(PhoneNumber phoneNumber);
+
+    boolean existsByCPF(CPF cpf);
 
 }
