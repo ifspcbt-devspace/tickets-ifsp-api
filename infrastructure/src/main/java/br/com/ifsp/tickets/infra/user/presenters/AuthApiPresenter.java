@@ -1,7 +1,9 @@
 package br.com.ifsp.tickets.infra.user.presenters;
 
 import br.com.ifsp.tickets.app.auth.signin.SignInOutputData;
-import br.com.ifsp.tickets.infra.user.models.LoginResponse;
+import br.com.ifsp.tickets.app.auth.signup.SignUpOutputData;
+import br.com.ifsp.tickets.infra.user.models.login.LoginResponse;
+import br.com.ifsp.tickets.infra.user.models.register.RegisterResponse;
 
 public interface AuthApiPresenter {
 
@@ -25,6 +27,31 @@ public interface AuthApiPresenter {
 
     static LoginResponse.RoleResponse presentRole(SignInOutputData.RoleOutputData data) {
         return new LoginResponse.RoleResponse(
+                data.code(),
+                data.description()
+        );
+    }
+
+    static RegisterResponse present(SignUpOutputData data) {
+        return new RegisterResponse(data.token(), presentUser(data.user()));
+    }
+
+    static RegisterResponse.UserResponse presentUser(SignUpOutputData.UserOutputData data) {
+        return new RegisterResponse.UserResponse(
+                data.id(),
+                data.name(),
+                data.email(),
+                data.username(),
+                presentRole(data.role()),
+                data.birthDate(),
+                data.cpfInitials(),
+                data.phoneNumberInitials(),
+                data.companyID()
+        );
+    }
+
+    static RegisterResponse.RoleResponse presentRole(SignUpOutputData.RoleOutputData data) {
+        return new RegisterResponse.RoleResponse(
                 data.code(),
                 data.description()
         );

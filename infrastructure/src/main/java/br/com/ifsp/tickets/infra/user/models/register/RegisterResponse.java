@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.infra.user.models;
+package br.com.ifsp.tickets.infra.user.models.register;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record LoginResponse(
+public record RegisterResponse(
         @JsonProperty("token") String token,
         @JsonProperty("user") UserResponse user
 ) {

@@ -94,7 +94,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public IAuthUtils authService(@Value("${security.jwt.secret-key}") String secretKey) {
+    public IAuthUtils authUtils(@Value("${security.jwt.secret-key}") String secretKey) {
         return new AuthUtils(passwordEncoder(), secretKey);
     }
 

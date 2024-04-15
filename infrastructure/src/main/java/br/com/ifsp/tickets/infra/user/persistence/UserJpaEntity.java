@@ -1,7 +1,6 @@
 package br.com.ifsp.tickets.infra.user.persistence;
 
 import br.com.ifsp.tickets.domain.company.CompanyID;
-import br.com.ifsp.tickets.domain.user.RegistrationSource;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
 import br.com.ifsp.tickets.domain.user.vo.CPF;
@@ -29,8 +28,6 @@ public class UserJpaEntity implements UserDetails, Serializable {
     @Id
     @Column(name = "id", nullable = false, unique = true)
     private UUID id;
-    @Column(name = "registration_source", nullable = false)
-    private RegistrationSource registrationSource;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "email", nullable = false, unique = true)
@@ -56,9 +53,8 @@ public class UserJpaEntity implements UserDetails, Serializable {
     @Transient
     private Role role;
 
-    public UserJpaEntity(UUID id, RegistrationSource registrationSource, String name, String email, String phoneNumber, String username, String password, String cpf, Date birthDate, Date passwordDate, boolean active, UUID companyID, Integer roleId) {
+    public UserJpaEntity(UUID id, String name, String email, String phoneNumber, String username, String password, String cpf, Date birthDate, Date passwordDate, boolean active, UUID companyID, Integer roleId) {
         this.id = id;
-        this.registrationSource = registrationSource;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -76,7 +72,6 @@ public class UserJpaEntity implements UserDetails, Serializable {
     public static UserJpaEntity from(User user) {
         return new UserJpaEntity(
                 user.getId().getValue(),
-                user.getRegistrationSource(),
                 user.getName(),
                 user.getEmail().getValue(),
                 user.getPhoneNumber().getValue(),
@@ -93,7 +88,6 @@ public class UserJpaEntity implements UserDetails, Serializable {
     public User toAggregate() {
         return User.with(
                 UserID.with(this.id),
-                this.registrationSource,
                 this.name,
                 this.role,
                 new Email(this.email),

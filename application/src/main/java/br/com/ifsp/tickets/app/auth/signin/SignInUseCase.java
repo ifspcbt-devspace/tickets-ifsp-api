@@ -9,12 +9,12 @@ import br.com.ifsp.tickets.domain.user.vo.Email;
 
 public class SignInUseCase implements ISignInUseCase {
 
-    private final IAuthUtils authService;
+    private final IAuthUtils authUtils;
     private final IAuthManager authManager;
     private final IUserGateway userGateway;
 
-    public SignInUseCase(IAuthUtils authService, IAuthManager authManager, IUserGateway userGateway) {
-        this.authService = authService;
+    public SignInUseCase(IAuthUtils authUtils, IAuthManager authManager, IUserGateway userGateway) {
+        this.authUtils = authUtils;
         this.authManager = authManager;
         this.userGateway = userGateway;
     }
@@ -27,7 +27,7 @@ public class SignInUseCase implements ISignInUseCase {
 
         this.authManager.auth(user.getUsername(), anIn.password());
 
-        final String token = this.authService.generateToken(user.getId().toString());
+        final String token = this.authUtils.generateToken(user.getId().toString());
 
         return SignInOutputData.from(user, token);
     }

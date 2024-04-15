@@ -1,9 +1,9 @@
-package br.com.ifsp.tickets.infra.api;
+package br.com.ifsp.tickets.infra.api.controllers;
 
 import br.com.ifsp.tickets.domain.shared.exceptions.DomainException;
 import br.com.ifsp.tickets.domain.shared.exceptions.IllegalCommandField;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
-import br.com.ifsp.tickets.domain.shared.exceptions.NotificationException;
+import br.com.ifsp.tickets.domain.shared.exceptions.ValidationException;
 import br.com.ifsp.tickets.domain.shared.validation.Error;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,8 +22,8 @@ import java.util.List;
 @Slf4j
 public class ExceptionController extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(NotificationException.class)
-    public ResponseEntity<CustomErrorResponse> handleNotificationException(NotificationException ex, HttpServletRequest request) {
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<CustomErrorResponse> handleNotificationException(ValidationException ex, HttpServletRequest request) {
         final CustomErrorResponse errorResponse = new CustomErrorResponse(
                 ex.getMessage(),
                 HttpStatus.BAD_REQUEST.value(),

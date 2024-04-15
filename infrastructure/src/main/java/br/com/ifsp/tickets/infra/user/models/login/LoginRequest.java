@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.infra.user.models;
+package br.com.ifsp.tickets.infra.user.models.login;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
