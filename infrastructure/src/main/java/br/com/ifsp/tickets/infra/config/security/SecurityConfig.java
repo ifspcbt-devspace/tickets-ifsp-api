@@ -42,33 +42,13 @@ public class SecurityConfig {
             "/actuator/**",
             "/health/**",
 //          Api endpoints
-            "/v1/sign/**",
-            "/v1/login",
+            "/v1/auth/**",
     };
 
     private final CustomUserDetailsService customUserDetailsService;
     private final AuthEntryPointJwt authEntryPointJwt;
     private final UserRepository userRepository;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, IAuthUtils authService) throws Exception {
-        final CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
-        cors.addAllowedMethod(HttpMethod.POST);
-        cors.addAllowedMethod(HttpMethod.PUT);
-        cors.addAllowedMethod(HttpMethod.PATCH);
-        cors.addAllowedMethod(HttpMethod.GET);
-        cors.addAllowedMethod(HttpMethod.DELETE);
-        return httpSecurity
-                .addFilterAfter(new JwtAuthFilter(authService, customUserDetailsService), UsernamePasswordAuthenticationFilter.class)
-                .cors(crs -> crs.configurationSource(request -> cors))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .anyRequest().authenticated())
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(config -> config.authenticationEntryPoint(this.authEntryPointJwt))
-                .build();
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -96,6 +76,27 @@ public class SecurityConfig {
     @Bean
     public IAuthUtils authUtils(@Value("${security.jwt.secret-key}") String secretKey) {
         return new AuthUtils(passwordEncoder(), secretKey);
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, IAuthUtils authService, AuthenticationProvider authenticationProvider) throws Exception {
+        final CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
+        cors.addAllowedMethod(HttpMethod.POST);
+        cors.addAllowedMethod(HttpMethod.PUT);
+        cors.addAllowedMethod(HttpMethod.PATCH);
+        cors.addAllowedMethod(HttpMethod.GET);
+        cors.addAllowedMethod(HttpMethod.DELETE);
+        return httpSecurity
+                .addFilterAfter(new JwtAuthFilter(authService, customUserDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .cors(crs -> crs.configurationSource(request -> cors))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .anyRequest().authenticated())
+                .csrf(AbstractHttpConfigurer::disable)
+                .authenticationProvider(authenticationProvider)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(config -> config.authenticationEntryPoint(this.authEntryPointJwt))
+                .build();
     }
 
 }

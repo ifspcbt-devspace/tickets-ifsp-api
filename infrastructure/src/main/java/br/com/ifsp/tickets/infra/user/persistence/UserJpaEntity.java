@@ -7,7 +7,10 @@ import br.com.ifsp.tickets.domain.user.vo.CPF;
 import br.com.ifsp.tickets.domain.user.vo.Email;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,8 +18,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -41,19 +44,17 @@ public class UserJpaEntity implements UserDetails, Serializable {
     @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
     @Column(name = "birth_date")
-    private Date birthDate;
+    private LocalDate birthDate;
     @Column(name = "password_date")
-    private Date passwordDate;
+    private LocalDate passwordDate;
     @Column(name = "active", nullable = false)
     private boolean active;
     @Column(name = "company_id")
     private UUID companyID;
     @Column(name = "role_id", nullable = false)
     private Integer roleId;
-    @Transient
-    private Role role;
 
-    public UserJpaEntity(UUID id, String name, String email, String phoneNumber, String username, String password, String cpf, Date birthDate, Date passwordDate, boolean active, UUID companyID, Integer roleId) {
+    public UserJpaEntity(UUID id, String name, String email, String phoneNumber, String username, String password, String cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, UUID companyID, Integer roleId) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -66,7 +67,6 @@ public class UserJpaEntity implements UserDetails, Serializable {
         this.active = active;
         this.companyID = companyID;
         this.roleId = roleId;
-        this.role = Role.fromCode(roleId);
     }
 
     public static UserJpaEntity from(User user) {
@@ -89,7 +89,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
         return User.with(
                 UserID.with(this.id),
                 this.name,
-                this.role,
+                this.getRole(),
                 new Email(this.email),
                 new PhoneNumber(this.phoneNumber),
                 this.username,
@@ -102,6 +102,9 @@ public class UserJpaEntity implements UserDetails, Serializable {
         );
     }
 
+    public Role getRole() {
+        return Role.fromCode(this.roleId);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

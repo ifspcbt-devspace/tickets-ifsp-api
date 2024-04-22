@@ -12,7 +12,7 @@ import br.com.ifsp.tickets.domain.user.vo.role.Role;
 import br.com.ifsp.tickets.domain.user.vo.role.RoleType;
 import lombok.Getter;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Getter
@@ -25,12 +25,12 @@ public class User extends Entity<UserID> {
     private String username;
     private String password;
     private CPF cpf;
-    private Date birthDate;
-    private Date passwordDate;
+    private LocalDate birthDate;
+    private LocalDate passwordDate;
     private boolean active;
     private CompanyID companyID;
 
-    protected User(UserID userID, String name, Role role, Email email, PhoneNumber phoneNumber, String username, String password, CPF cpf, Date birthDate, Date passwordDate, boolean active, CompanyID companyID) {
+    protected User(UserID userID, String name, Role role, Email email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, CompanyID companyID) {
         super(userID);
         this.name = name;
         this.role = role;
@@ -45,15 +45,15 @@ public class User extends Entity<UserID> {
         this.companyID = companyID == null ? new CompanyID(null) : companyID;
     }
 
-    public static User with(UserID userID, String name, Role role, Email email, PhoneNumber phoneNumber, String username, String password, CPF cpf, Date birthDate, Date passwordDate, boolean active, CompanyID companyID) {
+    public static User with(UserID userID, String name, Role role, Email email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, CompanyID companyID) {
         return new User(userID, name, role, email, phoneNumber, username, password, cpf, birthDate, passwordDate, active, companyID);
     }
 
-    public static User newUser(String name, Role role, Email email, PhoneNumber phoneNumber, String username, String password, CPF cpf, Date birthDate) {
-        return new User(UserID.unique(), name, role, email, phoneNumber, username, password, cpf, birthDate, new Date(), false, null);
+    public static User newUser(String name, Role role, Email email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate) {
+        return new User(UserID.unique(), name, role, email, phoneNumber, username, password, cpf, birthDate, LocalDate.now(), false, null);
     }
 
-    public void updateProfile(String name, CPF cpf, Date birthDate) {
+    public void updateProfile(String name, CPF cpf, LocalDate birthDate) {
         this.name = name;
         this.cpf = cpf;
         this.birthDate = birthDate;
@@ -100,7 +100,7 @@ public class User extends Entity<UserID> {
 
     public void changePassword(String password) {
         this.password = password;
-        this.passwordDate = new Date();
+        this.passwordDate = LocalDate.now();
     }
 
     @Override

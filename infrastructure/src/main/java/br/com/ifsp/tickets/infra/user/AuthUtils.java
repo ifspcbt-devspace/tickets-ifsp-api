@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
@@ -49,7 +51,7 @@ public class AuthUtils implements IAuthUtils {
 
     public boolean isTokenValid(String token, User userDetails) {
         final UUID uuid = this.getUuidFromToken(token);
-        if (userDetails.getPasswordDate() != null && userDetails.getPasswordDate().after(extractIssuedAt(token)))
+        if (userDetails.getPasswordDate() != null && userDetails.getPasswordDate().isAfter(extractIssuedAt(token)))
             return false;
         return uuid.equals(userDetails.getId().getValue()) && !isTokenExpired(token);
     }
@@ -83,8 +85,8 @@ public class AuthUtils implements IAuthUtils {
         return extractAllClaims(token).getExpiration();
     }
 
-    private Date extractIssuedAt(String token) {
-        return extractAllClaims(token).getIssuedAt();
+    private LocalDate extractIssuedAt(String token) {
+        return LocalDate.from(extractAllClaims(token).getIssuedAt().toInstant().atZone(ZoneId.of("GMT-3")));
     }
 
     private Claims extractAllClaims(String token) {

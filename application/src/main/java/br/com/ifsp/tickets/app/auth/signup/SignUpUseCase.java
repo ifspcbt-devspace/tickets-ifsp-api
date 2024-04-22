@@ -10,7 +10,7 @@ import br.com.ifsp.tickets.domain.user.vo.Email;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class SignUpUseCase implements ISignUpUseCase {
 
@@ -31,7 +31,7 @@ public class SignUpUseCase implements ISignUpUseCase {
         final CPF cpf = new CPF(anIn.cpf());
         final Email email = new Email(anIn.email());
         final PhoneNumber phoneNumber = new PhoneNumber(anIn.phoneNumber());
-        final Date birthDate = anIn.birthDate();
+        final LocalDate birthDate = anIn.birthDate();
         final String password = anIn.password();
         final String passwordEncoded = this.authUtils.encrypt(password);
 

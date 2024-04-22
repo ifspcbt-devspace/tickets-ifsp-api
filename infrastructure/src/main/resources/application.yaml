@@ -7,7 +7,7 @@ springdoc:
 
 security:
   jwt:
-    secret-key: classpath:app.pub
+    secret-key: ${JWT_SECRET_KEY}
 
 spring:
   mail:

@@ -3,8 +3,6 @@ package br.com.ifsp.tickets.infra.user.models.login;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record LoginResponse(
         @JsonProperty("token") String token,
@@ -17,7 +15,7 @@ public record LoginResponse(
             @JsonProperty("email") String email,
             @JsonProperty("username") String username,
             @JsonProperty("role") RoleResponse role,
-            @JsonProperty("birth_date") Date birthDate,
+            @JsonProperty("birth_date") String birthDate,
             @JsonProperty("cpf_initials") String cpfInitials,
             @JsonProperty("phone_number_initials") String phoneNumberInitials,
             @JsonProperty("company_id") String companyID

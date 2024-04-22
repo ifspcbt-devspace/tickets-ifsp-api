@@ -28,7 +28,7 @@ public class PhoneNumber extends ValueObject {
             throw new IllegalPhoneNumberException(value);
         }
 
-        this.value = phoneNumber.getRawInput();
+        this.value = "" + phoneNumber.getNationalNumber();
     }
 
     public String getInitials() {

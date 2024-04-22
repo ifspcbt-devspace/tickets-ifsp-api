@@ -7,6 +7,8 @@ import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.vo.Email;
 
+import java.util.Optional;
+
 public class SignInUseCase implements ISignInUseCase {
 
     private final IAuthUtils authUtils;
@@ -21,8 +23,15 @@ public class SignInUseCase implements ISignInUseCase {
 
     @Override
     public SignInOutputData execute(SignInInputData anIn) {
-        final User user = this.userGateway.findByUsername(anIn.login())
-                .or(() -> this.userGateway.findByEmail(new Email(anIn.login())))
+        final User user = this.userGateway
+                .findByUsername(anIn.login())
+                .or(() -> {
+                    try {
+                        return this.userGateway.findByEmail(new Email(anIn.login()));
+                    } catch (Exception e) {
+                        return Optional.empty();
+                    }
+                })
                 .orElseThrow(() -> NotFoundException.with("User not found with login: " + anIn.login()));
 
         this.authManager.auth(user.getUsername(), anIn.password());

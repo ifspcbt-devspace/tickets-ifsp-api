@@ -5,6 +5,8 @@ import br.com.ifsp.tickets.app.auth.signup.SignUpOutputData;
 import br.com.ifsp.tickets.infra.user.models.login.LoginResponse;
 import br.com.ifsp.tickets.infra.user.models.register.RegisterResponse;
 
+import java.time.format.DateTimeFormatter;
+
 public interface AuthApiPresenter {
 
     static LoginResponse present(SignInOutputData data) {
@@ -12,13 +14,14 @@ public interface AuthApiPresenter {
     }
 
     static LoginResponse.UserResponse presentUser(SignInOutputData.UserOutputData data) {
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return new LoginResponse.UserResponse(
                 data.id(),
                 data.name(),
                 data.email(),
                 data.username(),
                 presentRole(data.role()),
-                data.birthDate(),
+                formatter.format(data.birthDate()),
                 data.cpfInitials(),
                 data.phoneNumberInitials(),
                 data.companyID()
@@ -37,13 +40,14 @@ public interface AuthApiPresenter {
     }
 
     static RegisterResponse.UserResponse presentUser(SignUpOutputData.UserOutputData data) {
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return new RegisterResponse.UserResponse(
                 data.id(),
                 data.name(),
                 data.email(),
                 data.username(),
                 presentRole(data.role()),
-                data.birthDate(),
+                formatter.format(data.birthDate()),
                 data.cpfInitials(),
                 data.phoneNumberInitials(),
                 data.companyID()
