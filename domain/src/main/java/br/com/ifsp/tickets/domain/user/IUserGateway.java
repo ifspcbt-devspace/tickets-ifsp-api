@@ -16,6 +16,8 @@ public interface IUserGateway {
 
     Optional<User> findByUsername(String username);
 
+    Optional<User> findByUsernameOrEmail(String login);
+
     Optional<User> findByCPF(CPF cpf);
 
     Optional<User> findById(UserID id);

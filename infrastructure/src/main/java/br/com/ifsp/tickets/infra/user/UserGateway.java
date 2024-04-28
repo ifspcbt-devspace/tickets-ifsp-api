@@ -43,6 +43,11 @@ public class UserGateway implements IUserGateway {
     }
 
     @Override
+    public Optional<User> findByUsernameOrEmail(String login) {
+        return this.userRepository.findByUsernameOrEmail(login).map(UserJpaEntity::toAggregate);
+    }
+
+    @Override
     public Optional<User> findByCPF(CPF cpf) {
         return this.userRepository.findByCpf(cpf.getValue()).map(UserJpaEntity::toAggregate);
     }
