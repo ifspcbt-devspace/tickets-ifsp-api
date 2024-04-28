@@ -6,7 +6,7 @@ import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.vo.CPF;
-import br.com.ifsp.tickets.domain.user.vo.Email;
+import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
 
@@ -29,13 +29,13 @@ public class SignUpUseCase implements ISignUpUseCase {
         final String name = anIn.name();
         final String username = anIn.username();
         final CPF cpf = new CPF(anIn.cpf());
-        final Email email = new Email(anIn.email());
+        final EmailAddress email = new EmailAddress(anIn.email());
         final PhoneNumber phoneNumber = new PhoneNumber(anIn.phoneNumber());
         final LocalDate birthDate = anIn.birthDate();
         final String password = anIn.password();
         final String passwordEncoded = this.authUtils.encrypt(password);
 
-        final User user = User.newUser(
+        final User user = User.create(
                 name,
                 Role.CUSTOMER,
                 email,

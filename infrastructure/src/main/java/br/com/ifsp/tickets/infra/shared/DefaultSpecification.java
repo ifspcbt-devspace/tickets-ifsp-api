@@ -17,7 +17,6 @@ public class DefaultSpecification<T> implements Specification<T> {
     }
 
     @Override
-
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         final SearchOperation operation = SearchOperation.getSimpleOperation(searchFilter.operation());
 

@@ -6,11 +6,11 @@ import br.com.ifsp.tickets.domain.shared.utils.ValidationUtils;
 import lombok.Getter;
 
 @Getter
-public class Email extends ValueObject {
+public class EmailAddress extends ValueObject {
 
     private final String value;
 
-    public Email(String value) {
+    public EmailAddress(String value) {
         if (value == null || value.isBlank()) {
             throw new IllegalEmailException(value);
         }
@@ -26,7 +26,7 @@ public class Email extends ValueObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Email email = (Email) o;
+        EmailAddress email = (EmailAddress) o;
 
         return value.equals(email.value);
     }

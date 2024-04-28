@@ -6,7 +6,7 @@ import br.com.ifsp.tickets.domain.shared.Entity;
 import br.com.ifsp.tickets.domain.shared.exceptions.IllegalEntityIdException;
 import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.user.vo.CPF;
-import br.com.ifsp.tickets.domain.user.vo.Email;
+import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
 import br.com.ifsp.tickets.domain.user.vo.role.RoleType;
@@ -20,7 +20,7 @@ public class User extends Entity<UserID> {
 
     private final Role role;
     private String name;
-    private Email email;
+    private EmailAddress email;
     private PhoneNumber phoneNumber;
     private String username;
     private String password;
@@ -30,7 +30,7 @@ public class User extends Entity<UserID> {
     private boolean active;
     private CompanyID companyID;
 
-    protected User(UserID userID, String name, Role role, Email email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, CompanyID companyID) {
+    protected User(UserID userID, String name, Role role, EmailAddress email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, CompanyID companyID) {
         super(userID);
         this.name = name;
         this.role = role;
@@ -45,11 +45,11 @@ public class User extends Entity<UserID> {
         this.companyID = companyID == null ? new CompanyID(null) : companyID;
     }
 
-    public static User with(UserID userID, String name, Role role, Email email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, CompanyID companyID) {
+    public static User with(UserID userID, String name, Role role, EmailAddress email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, CompanyID companyID) {
         return new User(userID, name, role, email, phoneNumber, username, password, cpf, birthDate, passwordDate, active, companyID);
     }
 
-    public static User newUser(String name, Role role, Email email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate) {
+    public static User create(String name, Role role, EmailAddress email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate) {
         return new User(UserID.unique(), name, role, email, phoneNumber, username, password, cpf, birthDate, LocalDate.now(), false, null);
     }
 
@@ -71,7 +71,7 @@ public class User extends Entity<UserID> {
     }
 
     public void changeEmail(String email) {
-        this.email = new Email(email);
+        this.email = new EmailAddress(email);
     }
 
     public void changePhoneNumber(String phoneNumber) {
@@ -84,10 +84,6 @@ public class User extends Entity<UserID> {
 
     public boolean isCompanyManager() {
         return this.role.getRoleType() == RoleType.COMPANY_MANAGER;
-    }
-
-    public boolean login(String password, IPasswordEncoder passwordEncoder) {
-        return passwordEncoder.matches(password, this.password);
     }
 
     public void block() {

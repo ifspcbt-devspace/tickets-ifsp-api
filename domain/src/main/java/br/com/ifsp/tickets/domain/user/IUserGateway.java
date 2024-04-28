@@ -3,7 +3,7 @@ package br.com.ifsp.tickets.domain.user;
 import br.com.ifsp.tickets.domain.shared.search.AdvancedSearchQuery;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.user.vo.CPF;
-import br.com.ifsp.tickets.domain.user.vo.Email;
+import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 
 import java.util.Optional;
@@ -12,7 +12,7 @@ public interface IUserGateway {
 
     User create(User user);
 
-    Optional<User> findByEmail(Email email);
+    Optional<User> findByEmail(EmailAddress email);
 
     Optional<User> findByUsername(String username);
 
@@ -30,7 +30,7 @@ public interface IUserGateway {
 
     boolean existsById(UserID id);
 
-    boolean existsByEmail(Email email);
+    boolean existsByEmail(EmailAddress email);
 
     boolean existsByUsername(String username);
 

@@ -6,6 +6,10 @@ public interface IValidationHandler {
 
     IValidationHandler append(Error anError);
 
+    default IValidationHandler append(String aMessage) {
+        return append(new Error(aMessage));
+    }
+
     IValidationHandler append(IValidationHandler anHandler);
 
     <T> T validate(Validation<T> aValidation);

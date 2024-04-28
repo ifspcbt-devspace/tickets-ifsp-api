@@ -35,4 +35,10 @@ public class AuthController implements AuthAPI {
         final SignUpOutputData output = this.authService.register(input);
         return ResponseEntity.ok(AuthApiPresenter.present(output));
     }
+
+    @Override
+    public ResponseEntity<Void> forgotPassword(String login) {
+        this.authService.requestRecovery(login);
+        return ResponseEntity.noContent().build();
+    }
 }

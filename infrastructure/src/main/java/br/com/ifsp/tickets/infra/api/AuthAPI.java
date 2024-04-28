@@ -6,6 +6,7 @@ import br.com.ifsp.tickets.infra.user.models.register.RegisterRequest;
 import br.com.ifsp.tickets.infra.user.models.register.RegisterResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,4 +19,7 @@ public interface AuthAPI {
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request);
+
+    @PostMapping(value = "/recovery/{login}")
+    ResponseEntity<Void> forgotPassword(@PathVariable String login);
 }

@@ -4,7 +4,7 @@ import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
 import br.com.ifsp.tickets.domain.user.vo.CPF;
-import br.com.ifsp.tickets.domain.user.vo.Email;
+import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
 import jakarta.persistence.Column;
@@ -90,7 +90,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
                 UserID.with(this.id),
                 this.name,
                 this.getRole(),
-                new Email(this.email),
+                new EmailAddress(this.email),
                 new PhoneNumber(this.phoneNumber),
                 this.username,
                 this.password,

@@ -6,7 +6,7 @@ import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
 import br.com.ifsp.tickets.domain.user.vo.CPF;
-import br.com.ifsp.tickets.domain.user.vo.Email;
+import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.infra.user.persistence.UserJpaEntity;
 import br.com.ifsp.tickets.infra.user.persistence.UserRepository;
@@ -33,7 +33,7 @@ public class UserGateway implements IUserGateway {
     }
 
     @Override
-    public Optional<User> findByEmail(Email email) {
+    public Optional<User> findByEmail(EmailAddress email) {
         return this.userRepository.findByEmail(email.getValue()).map(UserJpaEntity::toAggregate);
     }
 
@@ -95,7 +95,7 @@ public class UserGateway implements IUserGateway {
     }
 
     @Override
-    public boolean existsByEmail(Email email) {
+    public boolean existsByEmail(EmailAddress email) {
         return this.userRepository.existsByEmail(email.getValue());
     }
 
