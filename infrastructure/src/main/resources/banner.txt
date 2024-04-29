@@ -5,7 +5,7 @@
    ##     ##  ##       ##  ##   ##          ##          ##                ##  ##             ## ##                      ######### ##         ##
    ##     ##  ##    ## ##   ##  ##          ##    ##    ##                ##  ##       ##    ## ##                      ##     ## ##         ##
    ##    ####  ######  ##    ## ########    ##     ######                #### ##        ######  ##                      ##     ## ##        ####
- Application: ${application.title}
- Version: ${application.formatted-version}
+ Application: TicketsIFSP-API
+ Version: v1.0.0
  Authors:
    - Leonardo

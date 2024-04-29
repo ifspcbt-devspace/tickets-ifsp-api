@@ -28,8 +28,9 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: "10s"
   jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
+    date-format: dd/MM/yyyy HH:mm:ss
     time-zone: America/Sao_Paulo
+    locale: br
   jpa:
     open-in-view: false
     hibernate:
@@ -61,6 +62,3 @@ server:
       charset: UTF-8
       enabled: true
       force: true
-application:
-  formatted-version: v1.0.0
-  title: TicketsIFSP-API
