@@ -29,12 +29,20 @@ public class RecoveryRequestUseCase implements IRecoveryRequestUseCase {
     }
 
     @Override
-    public void execute(String aLogin) {
-        final User user = this.userGateway.findByUsernameOrEmail(aLogin).orElseThrow(() -> NotFoundException.with("User not found with login: " + aLogin));
+    public void execute(RecoveryRequestCommand aCommand) {
+        final String login = aCommand.login();
+        final String ipAddress = aCommand.ipAddress();
+        final String userAgent = aCommand.userAgent();
+
+        final User user = this.userGateway.findByUsernameOrEmail(login).orElseThrow(() -> NotFoundException.with("User not found with login: " + login));
         if (this.passwordRecoveryTokenGateway.existsNonExpiredTokenByUser(user)) {
             this.passwordRecoveryTokenGateway.deleteNonExpiredTokenByUser(user);
+            /*
+            todo não invalidar, mas sim retornar um erro de que já foi solicitada a recuperação
+             para evitar que um usuário fique recebendo vários e-mails
+             */
         }
-        final PasswordRecovery passwordRecovery = PasswordRecovery.create(user);
+        final PasswordRecovery passwordRecovery = PasswordRecovery.create(user, ipAddress, userAgent);
 
         final Notification notification = Notification.create();
         passwordRecovery.validate(notification);

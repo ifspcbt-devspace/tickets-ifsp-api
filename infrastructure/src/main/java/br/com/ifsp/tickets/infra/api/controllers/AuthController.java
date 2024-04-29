@@ -1,6 +1,7 @@
 package br.com.ifsp.tickets.infra.api.controllers;
 
 import br.com.ifsp.tickets.app.auth.AuthService;
+import br.com.ifsp.tickets.app.auth.recovery.request.RecoveryRequestCommand;
 import br.com.ifsp.tickets.app.auth.signin.SignInInputData;
 import br.com.ifsp.tickets.app.auth.signin.SignInOutputData;
 import br.com.ifsp.tickets.app.auth.signup.SignUpInputData;
@@ -11,6 +12,7 @@ import br.com.ifsp.tickets.infra.user.models.login.LoginResponse;
 import br.com.ifsp.tickets.infra.user.models.register.RegisterRequest;
 import br.com.ifsp.tickets.infra.user.models.register.RegisterResponse;
 import br.com.ifsp.tickets.infra.user.presenters.AuthApiPresenter;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +39,9 @@ public class AuthController implements AuthAPI {
     }
 
     @Override
-    public ResponseEntity<Void> forgotPassword(String login) {
-        this.authService.requestRecovery(login);
+    public ResponseEntity<Void> forgotPassword(String login, HttpServletRequest request) {
+        final RecoveryRequestCommand command = RecoveryRequestCommand.of(login, request.getRemoteAddr(), request.getHeader("User-Agent"));
+        this.authService.requestRecovery(command);
         return ResponseEntity.noContent().build();
     }
 }

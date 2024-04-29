@@ -4,6 +4,7 @@ import br.com.ifsp.tickets.infra.user.models.login.LoginRequest;
 import br.com.ifsp.tickets.infra.user.models.login.LoginResponse;
 import br.com.ifsp.tickets.infra.user.models.register.RegisterRequest;
 import br.com.ifsp.tickets.infra.user.models.register.RegisterResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,5 +22,5 @@ public interface AuthAPI {
     ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request);
 
     @PostMapping(value = "/recovery/{login}")
-    ResponseEntity<Void> forgotPassword(@PathVariable String login);
+    ResponseEntity<Void> forgotPassword(@PathVariable String login, HttpServletRequest request);
 }

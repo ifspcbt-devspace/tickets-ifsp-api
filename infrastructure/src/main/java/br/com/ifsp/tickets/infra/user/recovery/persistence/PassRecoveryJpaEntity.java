@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.infra.user.recovery;
+package br.com.ifsp.tickets.infra.user.recovery.persistence;
 
 import br.com.ifsp.tickets.domain.user.recovery.PasswordRecovery;
 import br.com.ifsp.tickets.domain.user.recovery.PasswordRecoveryID;
@@ -26,6 +26,10 @@ public class PassRecoveryJpaEntity implements Serializable {
     private UserJpaEntity user;
     @Column(name = "token", nullable = false, unique = true, updatable = false)
     private String token;
+    @Column(name = "ip_address", nullable = false, updatable = false)
+    private String ipAddress;
+    @Column(name = "agent", nullable = false, updatable = false)
+    private String agent;
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
     @Column(name = "expires_at", nullable = false, updatable = false)
@@ -35,10 +39,12 @@ public class PassRecoveryJpaEntity implements Serializable {
     @Column(name = "used", nullable = false)
     private boolean used;
 
-    public PassRecoveryJpaEntity(UUID id, UserJpaEntity user, String token, LocalDateTime createdAt, LocalDateTime expiresAt, LocalDateTime usedAt, boolean used) {
+    public PassRecoveryJpaEntity(UUID id, UserJpaEntity user, String token, String ipAddress, String agent, LocalDateTime createdAt, LocalDateTime expiresAt, LocalDateTime usedAt, boolean used) {
         this.id = id;
         this.user = user;
         this.token = token;
+        this.ipAddress = ipAddress;
+        this.agent = agent;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
         this.usedAt = usedAt;
@@ -50,17 +56,19 @@ public class PassRecoveryJpaEntity implements Serializable {
                 passRecovery.getId().getValue(),
                 UserJpaEntity.from(passRecovery.getUser()),
                 passRecovery.getToken(),
+                passRecovery.getIpAddress(),
+                passRecovery.getAgent(),
                 passRecovery.getCreatedAt(),
                 passRecovery.getExpiresAt(),
-                passRecovery.getUsedAt(),
-                passRecovery.isUsed()
-        );
+                passRecovery.getUsedAt(), passRecovery.isUsed());
     }
 
     public PasswordRecovery toAggregate() {
         return new PasswordRecovery(
                 new PasswordRecoveryID(this.getId()),
                 this.getUser().toAggregate(),
+                this.getIpAddress(),
+                this.getAgent(),
                 this.getToken(),
                 this.getCreatedAt(),
                 this.getUsedAt(),

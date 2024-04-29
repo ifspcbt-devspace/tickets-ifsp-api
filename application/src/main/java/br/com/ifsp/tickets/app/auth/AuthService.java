@@ -1,6 +1,7 @@
 package br.com.ifsp.tickets.app.auth;
 
 import br.com.ifsp.tickets.app.auth.recovery.request.IRecoveryRequestUseCase;
+import br.com.ifsp.tickets.app.auth.recovery.request.RecoveryRequestCommand;
 import br.com.ifsp.tickets.app.auth.signin.ISignInUseCase;
 import br.com.ifsp.tickets.app.auth.signin.SignInInputData;
 import br.com.ifsp.tickets.app.auth.signin.SignInOutputData;
@@ -20,8 +21,8 @@ public class AuthService {
         this.recoveryRequestUseCase = recoveryRequestUseCase;
     }
 
-    public void requestRecovery(String login) {
-        this.recoveryRequestUseCase.execute(login);
+    public void requestRecovery(RecoveryRequestCommand inputData) {
+        this.recoveryRequestUseCase.execute(inputData);
     }
 
     public SignInOutputData login(SignInInputData inputData) {

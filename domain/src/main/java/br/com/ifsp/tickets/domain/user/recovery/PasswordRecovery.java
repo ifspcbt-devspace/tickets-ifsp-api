@@ -16,15 +16,19 @@ public class PasswordRecovery extends AggregateRoot<PasswordRecoveryID> {
     private static final String TOKEN_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     private final User user;
+    private final String ipAddress;
+    private final String agent;
     private final String token;
     private final LocalDateTime createdAt;
     private final LocalDateTime expiresAt;
     private LocalDateTime usedAt;
     private boolean used;
 
-    public PasswordRecovery(PasswordRecoveryID passwordRecoveryID, User user, String token, LocalDateTime createdAt, LocalDateTime usedAt, LocalDateTime expiresAt, boolean used) {
+    public PasswordRecovery(PasswordRecoveryID passwordRecoveryID, User user, String ipAddress, String agent, String token, LocalDateTime createdAt, LocalDateTime usedAt, LocalDateTime expiresAt, boolean used) {
         super(passwordRecoveryID);
         this.user = user;
+        this.ipAddress = ipAddress;
+        this.agent = agent;
         this.token = token;
         this.createdAt = createdAt;
         this.usedAt = usedAt;
@@ -40,11 +44,11 @@ public class PasswordRecovery extends AggregateRoot<PasswordRecoveryID> {
         return token.toString();
     }
 
-    public static PasswordRecovery create(User user) {
+    public static PasswordRecovery create(User user, String address, String agent) {
         final LocalDateTime createdAt = LocalDateTime.now();
         final LocalDateTime expiresAt = createdAt.plusSeconds(SECONDS_TO_EXPIRE);
         final String token = generateToken();
-        return new PasswordRecovery(PasswordRecoveryID.unique(), user, token, createdAt, null, expiresAt, false);
+        return new PasswordRecovery(PasswordRecoveryID.unique(), user, address, agent, token, createdAt, null, expiresAt, false);
     }
 
     public void use() {
