@@ -4,6 +4,9 @@ import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
 import br.com.ifsp.tickets.domain.communication.message.Message;
 import br.com.ifsp.tickets.domain.communication.message.type.MessageSubject;
 import br.com.ifsp.tickets.domain.communication.message.type.MessageType;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,6 +27,7 @@ import java.util.Scanner;
 @ComponentScan("br.com.ifsp.tickets.infra")
 @PropertySource("classpath:.env")
 @Slf4j
+@OpenAPIDefinition(info = @Info(title = "Tickets API", version = "v1", description = "Tickets API Documentation", contact = @Contact(name = "Leonardo da Silva", email = "oproprioleonardo@gmail.com", url = "https://linktr.ee/_oleonardosilva")))
 public class WebServerConfig {
 
     private final ResourceLoader resourceLoader;

@@ -21,7 +21,7 @@ public class PassRecoveryJpaEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", nullable = false)
     private UserJpaEntity user;
     @Column(name = "token", nullable = false, unique = true, updatable = false)

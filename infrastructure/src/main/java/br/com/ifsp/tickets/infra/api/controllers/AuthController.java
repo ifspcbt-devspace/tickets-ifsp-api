@@ -1,6 +1,7 @@
 package br.com.ifsp.tickets.infra.api.controllers;
 
 import br.com.ifsp.tickets.app.auth.AuthService;
+import br.com.ifsp.tickets.app.auth.recovery.change.RecoveryInput;
 import br.com.ifsp.tickets.app.auth.recovery.request.RecoveryRequestInput;
 import br.com.ifsp.tickets.app.auth.signin.SignInInput;
 import br.com.ifsp.tickets.app.auth.signin.SignInOutput;
@@ -12,6 +13,7 @@ import br.com.ifsp.tickets.infra.user.models.login.LoginResponse;
 import br.com.ifsp.tickets.infra.user.models.register.RegisterRequest;
 import br.com.ifsp.tickets.infra.user.models.register.RegisterResponse;
 import br.com.ifsp.tickets.infra.user.presenters.AuthApiPresenter;
+import br.com.ifsp.tickets.infra.user.recovery.models.RecoveryRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +42,15 @@ public class AuthController implements AuthAPI {
 
     @Override
     public ResponseEntity<Void> forgotPassword(String login, HttpServletRequest request) {
-        final RecoveryRequestInput command = RecoveryRequestInput.of(login, request.getRemoteAddr(), request.getHeader("User-Agent"));
-        this.authService.requestRecovery(command);
+        final RecoveryRequestInput input = RecoveryRequestInput.of(login, request.getRemoteAddr(), request.getHeader("User-Agent"));
+        this.authService.requestRecovery(input);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> accountRecovery(RecoveryRequest request) {
+        final RecoveryInput input = RecoveryInput.of(request.token(), request.password());
+        this.authService.accountRecovery(input);
         return ResponseEntity.noContent().build();
     }
 }
