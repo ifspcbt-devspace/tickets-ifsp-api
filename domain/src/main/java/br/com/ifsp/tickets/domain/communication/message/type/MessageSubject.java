@@ -7,7 +7,9 @@ import java.util.Arrays;
 @Getter
 public enum MessageSubject {
 
-    PASSWORD_RECOVERY(1, "Recuperação de Senha");
+    PASSWORD_RECOVERY(1, "Recuperação de Senha"),
+    ACCOUNT_ACTIVATION(2, "Ativação de Conta"),;
+
     private final int key;
     private final String description;
 

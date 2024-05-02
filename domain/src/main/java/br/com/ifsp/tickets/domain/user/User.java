@@ -49,8 +49,8 @@ public class User extends Entity<UserID> {
         return new User(userID, name, role, email, phoneNumber, username, password, cpf, birthDate, passwordDate, active, companyID);
     }
 
-    public static User create(String name, Role role, EmailAddress email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate) {
-        return new User(UserID.unique(), name, role, email, phoneNumber, username, password, cpf, birthDate, LocalDate.now(), false, null);
+    public static User create(String name, Role role, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate) {
+        return new User(UserID.unique(), name, role, new EmailAddress(null), phoneNumber, username, password, cpf, birthDate, LocalDate.now(), false, null);
     }
 
     public void updateProfile(String name, CPF cpf, LocalDate birthDate) {
@@ -70,8 +70,8 @@ public class User extends Entity<UserID> {
         this.companyID = new CompanyID(null);
     }
 
-    public void changeEmail(String email) {
-        this.email = new EmailAddress(email);
+    public void changeEmail(EmailAddress email) {
+        this.email = email;
     }
 
     public void changePhoneNumber(String phoneNumber) {
@@ -86,11 +86,11 @@ public class User extends Entity<UserID> {
         return this.role.getRoleType() == RoleType.COMPANY_MANAGER;
     }
 
-    public void block() {
+    public void disable() {
         this.active = false;
     }
 
-    public void unblock() {
+    public void enable() {
         this.active = true;
     }
 

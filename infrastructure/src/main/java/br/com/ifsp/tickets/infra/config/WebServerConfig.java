@@ -38,9 +38,13 @@ public class WebServerConfig {
 
         log.info("Creating default messages...");
         try {
-            final String content = this.loadFileContent("/communication/password-recovery.html");
-            final Message message = Message.create(MessageSubject.PASSWORD_RECOVERY, content, MessageType.HTML);
-            messageGateway.update(message);
+
+            String content = this.loadFileContent("/communication/password-recovery.html");
+            messageGateway.update(Message.create(MessageSubject.PASSWORD_RECOVERY, content, MessageType.HTML));
+
+            content = this.loadFileContent("/communication/account-activation.html");
+            messageGateway.update(Message.create(MessageSubject.ACCOUNT_ACTIVATION, content, MessageType.HTML));
+
             log.info("Default messages created!");
         } catch (IOException e) {
             log.error("Error loading file content", e);

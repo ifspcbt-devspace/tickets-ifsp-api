@@ -1,5 +1,6 @@
 package br.com.ifsp.tickets.app.auth;
 
+import br.com.ifsp.tickets.app.auth.activation.ActivationInput;
 import br.com.ifsp.tickets.app.auth.recovery.change.RecoveryInput;
 import br.com.ifsp.tickets.app.auth.recovery.request.RecoveryRequestInput;
 import br.com.ifsp.tickets.app.auth.signin.SignInInput;
@@ -8,6 +9,8 @@ import br.com.ifsp.tickets.app.auth.signup.SignUpInput;
 import br.com.ifsp.tickets.app.auth.signup.SignUpOutput;
 import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
+import br.com.ifsp.tickets.domain.user.email.IUpsertEmailGateway;
+import br.com.ifsp.tickets.domain.user.email.UpsertEmail;
 import br.com.ifsp.tickets.domain.user.recovery.IPasswordRecoveryGateway;
 import br.com.ifsp.tickets.domain.user.recovery.PasswordRecovery;
 import br.com.ifsp.tickets.infra.config.WebServerConfig;
@@ -34,6 +37,8 @@ class AuthServiceTest {
     IUserGateway userGateway;
     @Autowired
     IPasswordRecoveryGateway passwordRecoveryGateway;
+    @Autowired
+    IUpsertEmailGateway upsertEmailGateway;
 
     @Test
     @DisplayName("Should register a new user")
@@ -52,27 +57,28 @@ class AuthServiceTest {
         final SignUpOutput output = this.authService.register(input);
 
         assertThat(output).isNotNull();
-        assertThat(output.token()).isNotNull();
-        assertThat(output.token()).isNotBlank();
-        final SignUpOutput.UserOutputData userOutput = output.user();
-        assertThat(userOutput).isNotNull();
-        assertThat(userOutput.id()).isNotNull();
-        assertThat(userOutput.id()).isNotBlank();
-        assertThat(userOutput.name()).isEqualTo("Leonardo da Silva");
-        assertThat(userOutput.email()).isEqualTo("l.6042silva@gmail.com");
-        assertThat(userOutput.username()).isEqualTo("oleonardosilva");
-        assertThat(userOutput.role()).isNotNull();
-        assertThat(userOutput.role().code()).isEqualTo(4);
-        assertThat(userOutput.role().description()).isEqualTo("Consumidor");
-        assertThat(userOutput.birthDate()).isEqualTo(LocalDate.of(2006, 10, 18));
-        assertThat(userOutput.cpfInitials()).isNotBlank();
-        assertThat(userOutput.phoneNumberInitials()).isNotBlank();
-        assertThat(userOutput.companyID()).isNull();
+        assertThat(output.id()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Should activate a user")
+    @Order(2)
+    void activate() {
+        final User user = this.userGateway.findByUsername("oleonardosilva").orElse(null);
+        assertThat(user).isNotNull();
+        UpsertEmail upsertEmail = this.upsertEmailGateway.findByUserId(user.getId()).orElse(null);
+        assertThat(upsertEmail).isNotNull();
+        final String token = upsertEmail.getToken();
+        final ActivationInput input = ActivationInput.of(token);
+        this.authService.activate(input);
+
+        upsertEmail = this.upsertEmailGateway.findByUserId(user.getId()).orElse(null);
+        assertThat(upsertEmail).isNull();
     }
 
     @Test
     @DisplayName("Should login a user")
-    @Order(2)
+    @Order(3)
     void login() {
         final SignInInput input = SignInInput.of("oleonardosilva", "bora2222T");
         final SignInOutput output = this.authService.login(input);
@@ -86,26 +92,33 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("Should request password recovery and change password")
-    @Order(3)
+    @Order(4)
     void requestRecovery() {
         final RecoveryRequestInput input = RecoveryRequestInput.of("oleonardosilva", "127.0.0.1", "Mozilla/5.0");
         this.authService.requestRecovery(input);
         final User user = this.userGateway.findByUsername("oleonardosilva").orElse(null);
         assertThat(user).isNotNull();
-        boolean existsRequest = this.passwordRecoveryGateway.existsNonExpiredTokenByUser(user);
+        final boolean existsRequest = this.passwordRecoveryGateway.existsNonExpiredTokenByUser(user);
         assertThat(existsRequest).isTrue();
+    }
 
+    @Test
+    @DisplayName("Should change password")
+    @Order(5)
+    void changePassword() {
+        final User user = this.userGateway.findByUsername("oleonardosilva").orElse(null);
+        assertThat(user).isNotNull();
         final PasswordRecovery passwordRecovery = this.passwordRecoveryGateway.findByUserID(user.getId()).orElse(null);
         assertThat(passwordRecovery).isNotNull();
         final RecoveryInput recInput = RecoveryInput.of(passwordRecovery.getToken(), "novaSenha");
         this.authService.accountRecovery(recInput);
-        existsRequest = this.passwordRecoveryGateway.existsNonExpiredTokenByUser(user);
+        final boolean existsRequest = this.passwordRecoveryGateway.existsNonExpiredTokenByUser(user);
         assertThat(existsRequest).isFalse();
     }
 
     @Test
     @DisplayName("Should login a user with a new password")
-    @Order(4)
+    @Order(6)
     void loginWithNewPassword() {
         final SignInInput input = SignInInput.of("oleonardosilva", "novaSenha");
         final SignInOutput output = this.authService.login(input);

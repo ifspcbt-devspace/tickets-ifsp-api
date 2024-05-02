@@ -49,6 +49,8 @@ public class RecoveryRequestUseCase implements IRecoveryRequestUseCase {
         notification.throwPossibleErrors();
 
         this.passwordRecoveryTokenGateway.create(passwordRecovery);
+
+
         final Message message = this.messageGateway
                 .findBySubjectAndType(MessageSubject.PASSWORD_RECOVERY, MessageType.HTML)
                 .orElseThrow(() -> NotFoundException.with("Message not found with subject: " + MessageSubject.PASSWORD_RECOVERY + " and type: " + MessageType.HTML));

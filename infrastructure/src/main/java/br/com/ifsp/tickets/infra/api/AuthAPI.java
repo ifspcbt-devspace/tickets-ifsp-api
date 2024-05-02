@@ -1,10 +1,9 @@
 package br.com.ifsp.tickets.infra.api;
 
+import br.com.ifsp.tickets.infra.user.contexts.recovery.models.RecoveryRequest;
 import br.com.ifsp.tickets.infra.user.models.login.LoginRequest;
 import br.com.ifsp.tickets.infra.user.models.login.LoginResponse;
 import br.com.ifsp.tickets.infra.user.models.register.RegisterRequest;
-import br.com.ifsp.tickets.infra.user.models.register.RegisterResponse;
-import br.com.ifsp.tickets.infra.user.recovery.models.RecoveryRequest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,9 +22,13 @@ public interface AuthAPI {
     @ApiResponse(responseCode = "200", description = "User logged in successfully")
     ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request);
 
-    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponse(responseCode = "200", description = "User registered successfully")
-    ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request);
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponse(responseCode = "201", description = "User registered successfully")
+    ResponseEntity<Void> register(@RequestBody RegisterRequest request);
+
+    @PostMapping(value = "/activate/{token}")
+    @ApiResponse(responseCode = "204", description = "User activated successfully")
+    ResponseEntity<Void> activate(@PathVariable String token);
 
     @PostMapping(value = "/recovery/{login}")
     @ApiResponse(responseCode = "204", description = "Recovery request sent successfully")

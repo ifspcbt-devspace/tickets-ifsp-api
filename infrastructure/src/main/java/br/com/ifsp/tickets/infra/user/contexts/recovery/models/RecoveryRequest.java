@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.infra.user.recovery.models;
+package br.com.ifsp.tickets.infra.user.contexts.recovery.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

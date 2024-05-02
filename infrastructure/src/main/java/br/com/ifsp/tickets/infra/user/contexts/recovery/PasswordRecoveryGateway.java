@@ -1,12 +1,12 @@
-package br.com.ifsp.tickets.infra.user.recovery;
+package br.com.ifsp.tickets.infra.user.contexts.recovery;
 
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
 import br.com.ifsp.tickets.domain.user.recovery.IPasswordRecoveryGateway;
 import br.com.ifsp.tickets.domain.user.recovery.PasswordRecovery;
 import br.com.ifsp.tickets.infra.user.persistence.UserJpaEntity;
-import br.com.ifsp.tickets.infra.user.recovery.persistence.PassRecoveryJpaEntity;
-import br.com.ifsp.tickets.infra.user.recovery.persistence.PasswordRecoveryRepository;
+import br.com.ifsp.tickets.infra.user.contexts.recovery.persistence.PassRecoveryJpaEntity;
+import br.com.ifsp.tickets.infra.user.contexts.recovery.persistence.PasswordRecoveryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

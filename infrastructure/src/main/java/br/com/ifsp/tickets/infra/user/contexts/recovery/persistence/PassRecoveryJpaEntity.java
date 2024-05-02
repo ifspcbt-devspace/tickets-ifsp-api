@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.infra.user.recovery.persistence;
+package br.com.ifsp.tickets.infra.user.contexts.recovery.persistence;
 
 import br.com.ifsp.tickets.domain.user.recovery.PasswordRecovery;
 import br.com.ifsp.tickets.domain.user.recovery.PasswordRecoveryID;

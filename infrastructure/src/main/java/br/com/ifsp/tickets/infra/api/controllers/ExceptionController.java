@@ -29,7 +29,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getErrors().stream().map(ErrorResponse::from).toList()
         );
-        log.error(ex.getMessage(), ex.getCause());
+        log.warn(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.badRequest().body(errorResponse);
     }
@@ -41,7 +41,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getErrors().stream().map(ErrorResponse::from).toList()
         );
-        log.error(ex.getMessage(), ex.getCause());
+        log.warn(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.badRequest().body(errorResponse);
     }
@@ -53,7 +53,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.NOT_FOUND.value(),
                 null
         );
-        log.error(ex.getMessage(), ex.getCause());
+        log.warn(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
@@ -65,7 +65,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.UNAUTHORIZED.value(),
                 null
         );
-        log.error(ex.getMessage(), ex.getCause());
+        log.warn(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
@@ -77,7 +77,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 null
         );
-        log.error(ex.getMessage(), ex.getCause());
+        log.warn(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.badRequest().body(errorResponse);
     }

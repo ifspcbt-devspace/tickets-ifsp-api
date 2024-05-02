@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.infra.user.recovery.persistence;
+package br.com.ifsp.tickets.infra.user.contexts.recovery.persistence;
 
 import br.com.ifsp.tickets.infra.user.persistence.UserJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

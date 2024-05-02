@@ -12,7 +12,8 @@ public class EmailAddress extends ValueObject {
 
     public EmailAddress(String value) {
         if (value == null || value.isBlank()) {
-            throw new IllegalEmailException(value);
+            this.value = null;
+            return;
         }
 
         if (!ValidationUtils.isValidEmail(value)) {
@@ -26,7 +27,7 @@ public class EmailAddress extends ValueObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EmailAddress email = (EmailAddress) o;
+        final EmailAddress email = (EmailAddress) o;
 
         return value.equals(email.value);
     }

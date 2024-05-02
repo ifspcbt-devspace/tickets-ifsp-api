@@ -1,6 +1,7 @@
 package br.com.ifsp.tickets.infra.api.controllers;
 
 import br.com.ifsp.tickets.app.auth.AuthService;
+import br.com.ifsp.tickets.app.auth.activation.ActivationInput;
 import br.com.ifsp.tickets.app.auth.recovery.change.RecoveryInput;
 import br.com.ifsp.tickets.app.auth.recovery.request.RecoveryRequestInput;
 import br.com.ifsp.tickets.app.auth.signin.SignInInput;
@@ -11,14 +12,15 @@ import br.com.ifsp.tickets.infra.api.AuthAPI;
 import br.com.ifsp.tickets.infra.user.models.login.LoginRequest;
 import br.com.ifsp.tickets.infra.user.models.login.LoginResponse;
 import br.com.ifsp.tickets.infra.user.models.register.RegisterRequest;
-import br.com.ifsp.tickets.infra.user.models.register.RegisterResponse;
 import br.com.ifsp.tickets.infra.user.presenters.AuthApiPresenter;
-import br.com.ifsp.tickets.infra.user.recovery.models.RecoveryRequest;
+import br.com.ifsp.tickets.infra.user.contexts.recovery.models.RecoveryRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -34,10 +36,17 @@ public class AuthController implements AuthAPI {
     }
 
     @Override
-    public ResponseEntity<RegisterResponse> register(RegisterRequest request) {
+    public ResponseEntity<Void> register(RegisterRequest request) {
         final SignUpInput input = SignUpInput.of(request.name(), request.email(), request.username(), request.password(), request.getBirthDate(), request.cpf(), request.phoneNumber());
         final SignUpOutput output = this.authService.register(input);
-        return ResponseEntity.ok(AuthApiPresenter.present(output));
+        return ResponseEntity.created(URI.create("/v1/users/" + output.id())).build();
+    }
+
+    @Override
+    public ResponseEntity<Void> activate(String token) {
+        final ActivationInput input = ActivationInput.of(token);
+        this.authService.activate(input);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
