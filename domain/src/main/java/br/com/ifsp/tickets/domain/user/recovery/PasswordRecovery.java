@@ -51,12 +51,12 @@ public class PasswordRecovery extends AggregateRoot<PasswordRecoveryID> {
         return new PasswordRecovery(PasswordRecoveryID.unique(), user, address, agent, token, createdAt, null, expiresAt, false);
     }
 
-    public void use(String password) {
+    public void use(String encodedPassword) {
         if (this.used) throw new ArealdyUsedTokenException();
         if (this.expiresAt.isBefore(LocalDateTime.now())) throw new ExpiredTokenException(this.expiresAt);
         this.used = true;
         this.usedAt = LocalDateTime.now();
-        this.user.changePassword(password);
+        this.user.changePassword(encodedPassword);
     }
 
     @Override
