@@ -23,7 +23,7 @@ public class AuthServiceFactory {
             final SignInUseCase signInUseCase = new SignInUseCase(authUtils, authManager, userGateway);
             final SignUpUseCase signUpUseCase = new SignUpUseCase(userGateway, authUtils, authManager);
             final RecoveryRequestUseCase recoveryRequestUseCase = new RecoveryRequestUseCase(emailGateway, messageGateway, userGateway, passwordRecoveryTokenGateway);
-            final RecoveryUseCase recoveryUseCase = new RecoveryUseCase(passwordRecoveryTokenGateway, userGateway);
+            final RecoveryUseCase recoveryUseCase = new RecoveryUseCase(passwordRecoveryTokenGateway, authUtils, userGateway);
             authService = new AuthService(signInUseCase, signUpUseCase, recoveryRequestUseCase, recoveryUseCase);
         }
         return authService;

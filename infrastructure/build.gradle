@@ -34,6 +34,7 @@ repositories {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":application"))
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -62,6 +63,10 @@ dependencies {
 bootJar {
     archiveFileName.set("tickets-ifsp-api.${archiveExtension.get()}")
     destinationDirectory.set(rootProject.getLayout().getBuildDirectory().dir('/libs').get())
+}
+
+test {
+    useJUnitPlatform()
 }
 
 springBoot {

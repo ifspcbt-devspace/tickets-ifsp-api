@@ -1,6 +1,7 @@
 package br.com.ifsp.tickets.infra.user.recovery;
 
 import br.com.ifsp.tickets.domain.user.User;
+import br.com.ifsp.tickets.domain.user.UserID;
 import br.com.ifsp.tickets.domain.user.recovery.IPasswordRecoveryGateway;
 import br.com.ifsp.tickets.domain.user.recovery.PasswordRecovery;
 import br.com.ifsp.tickets.infra.user.persistence.UserJpaEntity;
@@ -31,12 +32,17 @@ public class PasswordRecoveryGateway implements IPasswordRecoveryGateway {
 
     @Override
     public boolean existsNonExpiredTokenByUser(User user) {
-        return this.repository.existsByUserAndExpiresAtAfter(UserJpaEntity.from(user), LocalDateTime.now());
+        return this.repository.existsByUserAndExpiresAtAfterAndUsedIsFalse(UserJpaEntity.from(user), LocalDateTime.now());
     }
 
     @Override
     public Optional<PasswordRecovery> findByToken(String token) {
         return this.repository.findByToken(token).map(PassRecoveryJpaEntity::toAggregate);
+    }
+
+    @Override
+    public Optional<PasswordRecovery> findByUserID(UserID userID) {
+        return this.repository.findByUserId(userID.getValue()).map(PassRecoveryJpaEntity::toAggregate);
     }
 
     @Override

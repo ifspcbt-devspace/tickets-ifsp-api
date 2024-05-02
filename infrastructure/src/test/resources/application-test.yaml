@@ -1,0 +1,64 @@
+springdoc:
+  api-docs:
+    enabled: true
+    path: /docs/api-docs
+  swagger-ui:
+    path: /docs/swagger.html
+
+security:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+
+spring:
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  threads:
+    virtual:
+      enabled: true
+  lifecycle:
+    timeout-per-shutdown-phase: "10s"
+  jackson:
+    date-format: dd/MM/yyyy HH:mm:ss
+    time-zone: America/Sao_Paulo
+    locale: br
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    hikari:
+      maxLifetime: '2000000'
+      poolName: SpringBootHikariCP
+      connectionTimeout: '30000'
+      idleTimeout: '30000'
+      minimumIdle: '5'
+      maximumPoolSize: '20'
+      schema: public
+    url: ${DATASOURCE_URL}
+    type: com.zaxxer.hikari.HikariDataSource
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+    include-exception: false
+  port: 8091
+  shutdown: graceful
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
