@@ -25,7 +25,7 @@ public class SignUpUseCase implements ISignUpUseCase {
     }
 
     @Override
-    public SignUpOutputData execute(SignUpInputData anIn) {
+    public SignUpOutput execute(SignUpInput anIn) {
         final String name = anIn.name();
         final String username = anIn.username();
         final CPF cpf = new CPF(anIn.cpf());
@@ -64,6 +64,6 @@ public class SignUpUseCase implements ISignUpUseCase {
 
         final String jwtToken = this.authUtils.generateToken(user.getId().getValue().toString());
 
-        return SignUpOutputData.from(jwtToken, user);
+        return SignUpOutput.from(jwtToken, user);
     }
 }

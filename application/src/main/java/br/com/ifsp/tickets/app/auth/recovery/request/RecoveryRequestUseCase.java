@@ -29,7 +29,7 @@ public class RecoveryRequestUseCase implements IRecoveryRequestUseCase {
     }
 
     @Override
-    public void execute(RecoveryRequestCommand aCommand) {
+    public void execute(RecoveryRequestInput aCommand) {
         final String login = aCommand.login();
         final String ipAddress = aCommand.ipAddress();
         final String userAgent = aCommand.userAgent();

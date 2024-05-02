@@ -2,12 +2,12 @@ package br.com.ifsp.tickets.app.auth.signin;
 
 import br.com.ifsp.tickets.domain.shared.exceptions.IllegalCommandField;
 
-public record SignInInputData(
+public record SignInInput(
         String login,
         String password
 ) {
 
-    public SignInInputData {
+    public SignInInput {
         if (login == null || login.isBlank()) {
             throw new IllegalCommandField("field 'login' cannot be null or empty");
         }
@@ -17,8 +17,8 @@ public record SignInInputData(
         }
     }
 
-    public static SignInInputData of(String login, String password) {
-        return new SignInInputData(login, password);
+    public static SignInInput of(String login, String password) {
+        return new SignInInput(login, password);
     }
 
 }

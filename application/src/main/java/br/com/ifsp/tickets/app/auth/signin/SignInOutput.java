@@ -5,13 +5,13 @@ import br.com.ifsp.tickets.domain.user.vo.role.Role;
 
 import java.time.LocalDate;
 
-public record SignInOutputData(
+public record SignInOutput(
         String token,
         UserOutputData user
 ) {
 
-    public static SignInOutputData from(User user, String token) {
-        return new SignInOutputData(
+    public static SignInOutput from(User user, String token) {
+        return new SignInOutput(
                 token,
                 UserOutputData.from(user)
         );

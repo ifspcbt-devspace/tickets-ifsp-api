@@ -19,12 +19,12 @@ public class SignInUseCase implements ISignInUseCase {
     }
 
     @Override
-    public SignInOutputData execute(SignInInputData anIn) {
+    public SignInOutput execute(SignInInput anIn) {
         final User user = this.userGateway.findByUsernameOrEmail(anIn.login())
                 .orElseThrow(() -> NotFoundException.with("User not found with login: " + anIn.login()));
 
         this.authManager.auth(user.getUsername(), anIn.password());
         final String token = this.authUtils.generateToken(user.getId().toString());
-        return SignInOutputData.from(user, token);
+        return SignInOutput.from(user, token);
     }
 }

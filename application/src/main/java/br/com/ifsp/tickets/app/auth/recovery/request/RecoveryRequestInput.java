@@ -1,12 +1,12 @@
 package br.com.ifsp.tickets.app.auth.recovery.request;
 
-public record RecoveryRequestCommand(
+public record RecoveryRequestInput(
         String login,
         String ipAddress,
         String userAgent
 ) {
 
-    public RecoveryRequestCommand {
+    public RecoveryRequestInput {
         if (login == null || login.isBlank())
             throw new IllegalArgumentException("'login' is required");
         if (ipAddress == null || ipAddress.isBlank())
@@ -15,8 +15,8 @@ public record RecoveryRequestCommand(
             throw new IllegalArgumentException("'user_agent' is required");
     }
 
-    public static RecoveryRequestCommand of(String login, String ipAddress, String userAgent) {
-        return new RecoveryRequestCommand(login, ipAddress, userAgent);
+    public static RecoveryRequestInput of(String login, String ipAddress, String userAgent) {
+        return new RecoveryRequestInput(login, ipAddress, userAgent);
     }
 
 
