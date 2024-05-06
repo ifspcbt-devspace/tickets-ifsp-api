@@ -12,6 +12,29 @@ public record SignUpInput(
         String phoneNumber
 ) {
 
+    public SignUpInput {
+        if (name == null || name.isBlank())
+            throw new IllegalArgumentException("field 'name' cannot be null or empty");
+
+        if (email == null || email.isBlank())
+            throw new IllegalArgumentException("field 'email' cannot be null or empty");
+
+        if (username == null || username.isBlank())
+            throw new IllegalArgumentException("field 'username' cannot be null or empty");
+
+        if (password == null || password.isBlank())
+            throw new IllegalArgumentException("field 'password' cannot be null or empty");
+
+        if (birthDate == null)
+            throw new IllegalArgumentException("field 'birth_date' cannot be null");
+
+        if (cpf == null || cpf.isBlank())
+            throw new IllegalArgumentException("field 'cpf' cannot be null or empty");
+
+        if (phoneNumber == null || phoneNumber.isBlank())
+            throw new IllegalArgumentException("field 'phone_number' cannot be null or empty");
+    }
+
     public static SignUpInput of(String name, String email, String username, String password, LocalDate birthDate, String cpf, String phoneNumber) {
         return new SignUpInput(name, email, username, password, birthDate, cpf, phoneNumber);
     }

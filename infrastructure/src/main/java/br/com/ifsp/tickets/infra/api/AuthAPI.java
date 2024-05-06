@@ -1,10 +1,11 @@
 package br.com.ifsp.tickets.infra.api;
 
-import br.com.ifsp.tickets.infra.user.contexts.recovery.models.RecoveryRequest;
-import br.com.ifsp.tickets.infra.user.models.login.LoginRequest;
-import br.com.ifsp.tickets.infra.user.models.login.LoginResponse;
-import br.com.ifsp.tickets.infra.user.models.register.RegisterRequest;
+import br.com.ifsp.tickets.infra.contexts.user.contexts.recovery.models.RecoveryRequest;
+import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginRequest;
+import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginResponse;
+import br.com.ifsp.tickets.infra.contexts.user.models.register.RegisterRequest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
@@ -19,22 +20,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface AuthAPI {
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponse(responseCode = "200", description = "User logged in successfully")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User logged in successfully"),
+            @ApiResponse(responseCode = "401", description = "Invalid credentials")
+    })
     ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request);
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponse(responseCode = "201", description = "User registered successfully")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User registered successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
     ResponseEntity<Void> register(@RequestBody RegisterRequest request);
 
     @PostMapping(value = "/activate/{token}")
-    @ApiResponse(responseCode = "204", description = "User activated successfully")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User activated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid token")
+    })
     ResponseEntity<Void> activate(@PathVariable String token);
 
     @PostMapping(value = "/recovery/{login}")
-    @ApiResponse(responseCode = "204", description = "Recovery request sent successfully")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Recovery request sent successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid login")
+    })
     ResponseEntity<Void> forgotPassword(@PathVariable String login, HttpServletRequest request);
 
     @PostMapping(value = "/recovery/change")
-    @ApiResponse(responseCode = "204", description = "Password changed successfully")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Password changed successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
     ResponseEntity<Void> accountRecovery(@RequestBody RecoveryRequest request);
 }

@@ -1,7 +1,7 @@
 package br.com.ifsp.tickets.infra.config.security.service;
 
 import br.com.ifsp.tickets.domain.user.User;
-import br.com.ifsp.tickets.infra.user.persistence.UserRepository;
+import br.com.ifsp.tickets.infra.contexts.user.persistence.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

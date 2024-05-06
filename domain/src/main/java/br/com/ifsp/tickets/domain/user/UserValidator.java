@@ -17,6 +17,7 @@ public class UserValidator extends Validator {
         this.validateEmail();
         this.validatePassword();
         this.validateName();
+        this.validateBio();
         this.validateUsername();
         this.validatePhoneNumber();
         this.validateCPF();
@@ -37,11 +38,24 @@ public class UserValidator extends Validator {
     private void validateName() {
         if (user.getName() == null || user.getName().isBlank())
             error("Name is required");
+        if (user.getName() != null && user.getName().length() < 3)
+            error("Name must have at least 3 characters");
+        if (user.getName() != null && user.getName().length() > 100)
+            error("Name must have at most 100 characters");
     }
 
     private void validateUsername() {
         if (user.getUsername() == null || user.getUsername().isBlank())
             error("Username is required");
+        if (user.getUsername() != null && user.getUsername().length() < 3)
+            error("Username must have at least 3 characters");
+        if (user.getUsername() != null && user.getUsername().length() > 16)
+            error("Username must have at most 16 characters");
+    }
+
+    private void validateBio() {
+        if (user.getBio() != null && user.getBio().length() > 255)
+            error("Bio must have at most 255 characters");
     }
 
     private void validatePhoneNumber() {

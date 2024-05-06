@@ -1,9 +1,6 @@
 package br.com.ifsp.tickets.infra.api.controllers;
 
-import br.com.ifsp.tickets.domain.shared.exceptions.DomainException;
-import br.com.ifsp.tickets.domain.shared.exceptions.IllegalCommandField;
-import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
-import br.com.ifsp.tickets.domain.shared.exceptions.ValidationException;
+import br.com.ifsp.tickets.domain.shared.exceptions.*;
 import br.com.ifsp.tickets.domain.shared.validation.Error;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.naming.AuthenticationException;
 import java.util.List;
+import java.util.stream.Stream;
 
 @ControllerAdvice
 @Slf4j
@@ -29,7 +27,17 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getErrors().stream().map(ErrorResponse::from).toList()
         );
-        log.warn(ex.getMessage(), ex.getCause());
+
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<CustomErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
+        final CustomErrorResponse errorResponse = new CustomErrorResponse(
+                "Illegal json attribute value",
+                HttpStatus.BAD_REQUEST.value(),
+                Stream.of(new Error(ex.getMessage())).map(ErrorResponse::from).toList()
+        );
 
         return ResponseEntity.badRequest().body(errorResponse);
     }
@@ -41,7 +49,6 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getErrors().stream().map(ErrorResponse::from).toList()
         );
-        log.warn(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.badRequest().body(errorResponse);
     }
@@ -53,7 +60,6 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.NOT_FOUND.value(),
                 null
         );
-        log.warn(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
@@ -65,9 +71,19 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.UNAUTHORIZED.value(),
                 null
         );
-        log.warn(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    @ExceptionHandler(IllegalResourceAccess.class)
+    public ResponseEntity<CustomErrorResponse> handleIllegalResourceAccess(IllegalResourceAccess ex, HttpServletRequest request) {
+        final CustomErrorResponse errorResponse = new CustomErrorResponse(
+                ex.getMessage(),
+                HttpStatus.FORBIDDEN.value(),
+                null
+        );
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
 
     @ExceptionHandler(DomainException.class)

@@ -8,6 +8,7 @@ import lombok.Getter;
 public class Address extends ValueObject {
 
     private final String street;
+    private final String complement;
     private final String number;
     private final String neighborhood;
     private final String city;
@@ -15,7 +16,7 @@ public class Address extends ValueObject {
     private final String country;
     private final String zipCode;
 
-    public Address(String street, String number, String neighborhood, String city, String state, String country, String zipCode) {
+    public Address(String street, String complement, String number, String neighborhood, String city, String state, String country, String zipCode) {
         if (street == null || street.isBlank())
             throw new IllegalAddressException("Street is required");
 
@@ -38,12 +39,17 @@ public class Address extends ValueObject {
             throw new IllegalAddressException("ZipCode is required");
 
         this.street = street;
+        this.complement = complement;
         this.number = number;
         this.neighborhood = neighborhood;
         this.city = city;
         this.state = state;
         this.country = country;
         this.zipCode = zipCode;
+    }
+
+    public static Address with(String street, String complement, String number, String neighborhood, String city, String state, String country, String zipCode) {
+        return new Address(street, complement, number, neighborhood, city, state, country, zipCode);
     }
 
     @Override
@@ -54,6 +60,7 @@ public class Address extends ValueObject {
         Address address = (Address) o;
 
         if (!street.equals(address.street)) return false;
+        if (!complement.equals(address.complement)) return false;
         if (!number.equals(address.number)) return false;
         if (!neighborhood.equals(address.neighborhood)) return false;
         if (!city.equals(address.city)) return false;
@@ -66,6 +73,7 @@ public class Address extends ValueObject {
     public int hashCode() {
         int result = street.hashCode();
         result = 31 * result + number.hashCode();
+        result = 31 * result + complement.hashCode();
         result = 31 * result + neighborhood.hashCode();
         result = 31 * result + city.hashCode();
         result = 31 * result + state.hashCode();

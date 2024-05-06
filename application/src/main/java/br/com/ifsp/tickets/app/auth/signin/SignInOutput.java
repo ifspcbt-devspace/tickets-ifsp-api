@@ -20,6 +20,7 @@ public record SignInOutput(
     public record UserOutputData(
             String id,
             String name,
+            String bio,
             String email,
             String username,
             RoleOutputData role,
@@ -32,6 +33,7 @@ public record SignInOutput(
             return new UserOutputData(
                     user.getId().getValue().toString(),
                     user.getName(),
+                    user.getBio(),
                     user.getEmail().getValue(),
                     user.getUsername(),
                     RoleOutputData.from(user.getRole()),
