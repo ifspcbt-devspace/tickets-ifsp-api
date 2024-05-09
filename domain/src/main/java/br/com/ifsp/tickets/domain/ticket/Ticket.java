@@ -20,6 +20,7 @@ public class Ticket extends Entity<TicketID> {
 
     private final UserID userID;
     private final EventID eventID;
+    private final String description;
     private final Date validIn;
     private final Date expiredIn;
     private final LocalDateTime createdAt;
@@ -27,10 +28,11 @@ public class Ticket extends Entity<TicketID> {
     private TicketCode code;
     private LocalDateTime lastTimeConsumed;
 
-    public Ticket(TicketID ticketID, UserID userID, EventID eventID, TicketStatus status, TicketCode code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+    public Ticket(TicketID ticketID, UserID userID, EventID eventID, String description, TicketStatus status, TicketCode code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         super(ticketID);
         this.userID = userID;
         this.eventID = eventID;
+        this.description = description;
         this.status = status;
         this.code = code;
         this.validIn = validIn;
@@ -39,12 +41,12 @@ public class Ticket extends Entity<TicketID> {
         this.lastTimeConsumed = lastTimeConsumed;
     }
 
-    public static Ticket with(TicketID ticketID, UserID userID, EventID eventID, TicketStatus status, TicketCode code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
-        return new Ticket(ticketID, userID, eventID, status, code, validIn, expiredIn, createdAt, lastTimeConsumed);
+    public static Ticket with(TicketID ticketID, UserID userID, EventID eventID, String description, TicketStatus status, TicketCode code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+        return new Ticket(ticketID, userID, eventID, description, status, code, validIn, expiredIn, createdAt, lastTimeConsumed);
     }
 
-    public static Ticket newTicket(UserID userID, Event event, Date validIn, Date expiredIn) {
-        return new Ticket(TicketID.unique(), userID, event.getId(), TicketStatus.AVAILABLE, TicketCode.generate(), validIn, expiredIn, LocalDateTime.now(ZoneId.of("GMT-3")), null);
+    public static Ticket newTicket(UserID userID, Event event, String description, Date validIn, Date expiredIn) {
+        return new Ticket(TicketID.unique(), userID, event.getId(), description, TicketStatus.AVAILABLE, TicketCode.generate(), validIn, expiredIn, LocalDateTime.now(ZoneId.of("GMT-3")), null);
     }
 
     public void generateNewCode() {

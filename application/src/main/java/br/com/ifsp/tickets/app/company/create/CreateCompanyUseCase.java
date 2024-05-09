@@ -43,7 +43,7 @@ public class CreateCompanyUseCase implements ICreateCompanyUseCase {
 
         final Address address = Address.with(street, complement, number, neighborhood, city, state, "Brasil", zipCode);
 
-        final Company company = Company.newCompany(
+        Company company = Company.newCompany(
                 name,
                 description,
                 cnpj,
@@ -54,7 +54,9 @@ public class CreateCompanyUseCase implements ICreateCompanyUseCase {
         final Notification notification = Notification.create();
         company.validate(notification);
         notification.throwPossibleErrors();
-
-        return CreateCompanyOutput.from(this.companyGateway.create(company));
+        company = this.companyGateway.create(company);
+        user.joinCompany(company.getId());
+        this.userGateway.update(user);
+        return CreateCompanyOutput.from(company);
     }
 }

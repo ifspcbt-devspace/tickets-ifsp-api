@@ -3,6 +3,7 @@ package br.com.ifsp.tickets.domain.ticket;
 import br.com.ifsp.tickets.domain.shared.Identifier;
 import br.com.ifsp.tickets.domain.shared.utils.UUIDUtils;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class TicketID extends Identifier<UUID> {
@@ -30,4 +31,17 @@ public class TicketID extends Identifier<UUID> {
         return this.value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TicketID ticketID = (TicketID) o;
+        return Objects.equals(value, ticketID.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
 }

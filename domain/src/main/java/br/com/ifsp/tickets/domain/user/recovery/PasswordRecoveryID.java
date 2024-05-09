@@ -3,6 +3,7 @@ package br.com.ifsp.tickets.domain.user.recovery;
 import br.com.ifsp.tickets.domain.shared.Identifier;
 import br.com.ifsp.tickets.domain.shared.utils.UUIDUtils;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class PasswordRecoveryID extends Identifier<UUID> {
@@ -24,5 +25,19 @@ public class PasswordRecoveryID extends Identifier<UUID> {
     @Override
     public UUID getValue() {
         return this.uuid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PasswordRecoveryID that = (PasswordRecoveryID) o;
+        return Objects.equals(uuid, that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(uuid);
     }
 }
