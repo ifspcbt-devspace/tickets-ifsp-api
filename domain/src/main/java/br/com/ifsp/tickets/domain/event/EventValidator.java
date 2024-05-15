@@ -36,7 +36,7 @@ public class EventValidator extends Validator {
     }
 
     public void validateInitialDate() {
-        if (this.event.getInitialDate() == null) {
+        if (this.event.getInitDate() == null) {
             error("InitialDate is required");
         }
     }
@@ -44,7 +44,7 @@ public class EventValidator extends Validator {
     public void validateEndDate() {
         if (this.event.getEndDate() == null) {
             error("EndDate is required");
-        } else if (this.event.getEndDate().before(this.event.getInitialDate())) {
+        } else if (this.event.getEndDate().before(this.event.getInitDate())) {
             error("EndDate must be after InitialDate");
         }
     }
@@ -62,7 +62,8 @@ public class EventValidator extends Validator {
     }
 
     public void validateMaxTickets() {
-        if (this.event.getMaxTickets() <= 0) {
+        final EventConfig config = this.event.getConfiguration(EventConfigKey.MAX_AVAILABLE_TICKETS);
+        if (config == null || config.getValueAsInteger() <= 0) {
             error("MaxTickets is required and must be greater than 0");
         }
     }

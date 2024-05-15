@@ -3,7 +3,7 @@ package br.com.ifsp.tickets.app.company.delete;
 import br.com.ifsp.tickets.domain.company.Company;
 import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
-import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccess;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccessException;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.vo.role.PermissionType;
@@ -26,7 +26,7 @@ public class DeleteCompanyUseCase implements IDeleteCompanyUseCase {
         final List<PermissionType> permissions = authenticatedUser.getRole().getPermissions();
 
         if (!permissions.contains(PermissionType.MANAGE_COMPANIES) && !company.isOwner(authenticatedUser))
-            throw new IllegalResourceAccess("User does not have permission to delete this company");
+            throw new IllegalResourceAccessException("User does not have permission to delete this company");
 
         // TODO - lidar com os tickets, eventos e usuários associados a essa empresa
         this.companyGateway.delete(company);

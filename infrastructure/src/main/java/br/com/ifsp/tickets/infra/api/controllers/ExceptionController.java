@@ -75,8 +75,8 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
-    @ExceptionHandler(IllegalResourceAccess.class)
-    public ResponseEntity<CustomErrorResponse> handleIllegalResourceAccess(IllegalResourceAccess ex, HttpServletRequest request) {
+    @ExceptionHandler(IllegalResourceAccessException.class)
+    public ResponseEntity<CustomErrorResponse> handleIllegalResourceAccess(IllegalResourceAccessException ex, HttpServletRequest request) {
         final CustomErrorResponse errorResponse = new CustomErrorResponse(
                 ex.getMessage(),
                 HttpStatus.FORBIDDEN.value(),

@@ -8,7 +8,7 @@ import br.com.ifsp.tickets.app.company.update.UpdateCompanyOutput;
 import br.com.ifsp.tickets.domain.company.Company;
 import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
-import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccess;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccessException;
 import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
@@ -147,7 +147,7 @@ public class CompanyServiceTest {
         CreateCompanyOutput output = null;
         try {
              output = companyService.create(input);
-        } catch (IllegalResourceAccess e) {
+        } catch (IllegalResourceAccessException e) {
             assertThat(e).isNotNull();
         }
         assertThat(output).isNull();

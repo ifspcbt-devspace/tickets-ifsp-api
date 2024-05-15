@@ -4,11 +4,13 @@ import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
 
+import java.util.Optional;
+
 public interface IEventGateway {
 
     Event create(Event event);
 
-    Event findById(EventID id);
+    Optional<Event> findById(EventID id);
 
     Pagination<Event> findAllByCompanyID(CompanyID id);
 

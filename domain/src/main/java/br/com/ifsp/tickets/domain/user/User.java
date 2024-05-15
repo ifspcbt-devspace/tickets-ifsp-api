@@ -8,6 +8,7 @@ import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.user.vo.CPF;
 import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
+import br.com.ifsp.tickets.domain.user.vo.role.PermissionType;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
 import br.com.ifsp.tickets.domain.user.vo.role.RoleType;
 import lombok.Getter;
@@ -87,6 +88,14 @@ public class User extends AggregateRoot<UserID> {
 
     public boolean isCompanyManager() {
         return this.role.getRoleType() == RoleType.COMPANY_MANAGER;
+    }
+
+    public boolean canManageCompany() {
+        return this.role.getPermissions().contains(PermissionType.MANAGE_A_COMPANY);
+    }
+
+    public boolean hasCompany() {
+        return this.companyID != null && this.companyID.getValue() != null;
     }
 
     public void disable() {

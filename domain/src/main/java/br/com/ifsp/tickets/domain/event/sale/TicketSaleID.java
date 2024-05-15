@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.domain.event;
+package br.com.ifsp.tickets.domain.event.sale;
 
 import br.com.ifsp.tickets.domain.shared.Identifier;
 import br.com.ifsp.tickets.domain.shared.utils.UUIDUtils;
@@ -6,24 +6,24 @@ import br.com.ifsp.tickets.domain.shared.utils.UUIDUtils;
 import java.util.Objects;
 import java.util.UUID;
 
-public class EventID extends Identifier<UUID> {
+public class TicketSaleID extends Identifier<UUID> {
 
     private final UUID value;
 
-    public EventID(UUID value) {
+    public TicketSaleID(UUID value) {
         this.value = value;
     }
 
-    public static EventID with(String value) {
-        return new EventID(UUIDUtils.getFromString(value));
+    public static TicketSaleID with(String value) {
+        return new TicketSaleID(UUIDUtils.getFromString(value));
     }
 
-    public static EventID with(UUID value) {
-        return new EventID(value);
+    public static TicketSaleID with(UUID value) {
+        return new TicketSaleID(value);
     }
 
-    public static EventID unique() {
-        return new EventID(UUID.randomUUID());
+    public static TicketSaleID unique() {
+        return new TicketSaleID(UUID.randomUUID());
     }
 
     @Override
@@ -36,8 +36,8 @@ public class EventID extends Identifier<UUID> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EventID eventID = (EventID) o;
-        return Objects.equals(value, eventID.value);
+        TicketSaleID that = (TicketSaleID) o;
+        return Objects.equals(value, that.value);
     }
 
     @Override

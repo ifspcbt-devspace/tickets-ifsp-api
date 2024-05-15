@@ -3,14 +3,13 @@ package br.com.ifsp.tickets.app.company.create;
 import br.com.ifsp.tickets.domain.company.Company;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
 import br.com.ifsp.tickets.domain.company.vo.CNPJ;
-import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccess;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccessException;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
 import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import br.com.ifsp.tickets.domain.shared.vo.Address;
 import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
-import br.com.ifsp.tickets.domain.user.vo.role.PermissionType;
 
 public class CreateCompanyUseCase implements ICreateCompanyUseCase {
 
@@ -27,8 +26,8 @@ public class CreateCompanyUseCase implements ICreateCompanyUseCase {
         final UserID userID = UserID.with(anIn.ownerId());
         final User user = this.userGateway.findById(userID).orElseThrow(() -> NotFoundException.with(User.class, userID));
 
-        if (!user.getRole().getPermissions().contains(PermissionType.MANAGE_A_COMPANY))
-            throw new IllegalResourceAccess();
+        if (!user.canManageCompany())
+            throw new IllegalResourceAccessException();
 
         final String name = anIn.name();
         final String description = anIn.description();

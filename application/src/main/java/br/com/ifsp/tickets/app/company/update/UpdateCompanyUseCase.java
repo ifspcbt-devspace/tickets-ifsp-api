@@ -4,7 +4,7 @@ import br.com.ifsp.tickets.domain.company.Company;
 import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
 import br.com.ifsp.tickets.domain.company.vo.CNPJ;
-import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccess;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccessException;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
 import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import br.com.ifsp.tickets.domain.user.User;
@@ -28,7 +28,7 @@ public class UpdateCompanyUseCase implements IUpdateCompanyUseCase {
         final Company company = this.companyGateway.findById(companyID).orElseThrow(() -> NotFoundException.with(Company.class, companyID));
 
         if (!user.getRole().getPermissions().contains(PermissionType.MANAGE_COMPANIES) && !company.isOwner(user))
-            throw new IllegalResourceAccess("User does not have permission to update this company");
+            throw new IllegalResourceAccessException("User does not have permission to update this company");
 
         company.updateCompanyInfo(name, description, cnpj);
 

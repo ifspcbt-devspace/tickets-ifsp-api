@@ -1,56 +1,79 @@
 package br.com.ifsp.tickets.domain.event;
 
 import br.com.ifsp.tickets.domain.company.CompanyID;
-import br.com.ifsp.tickets.domain.shared.Entity;
+import br.com.ifsp.tickets.domain.shared.AggregateRoot;
 import br.com.ifsp.tickets.domain.shared.exceptions.ChangeEventStatusException;
 import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.shared.vo.Address;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Getter
-public class Event extends Entity<EventID> {
+public class Event extends AggregateRoot<EventID> {
 
     private final CompanyID companyID;
     private final List<String> attachmentPaths;
+    private final List<EventConfig> configuration;
     private String name;
     private String description;
-    private Date initialDate;
+    private Date initDate;
     private Date endDate;
     private Address address;
     private EventStatus status;
-    private int maxTickets;
 
-    public Event(EventID eventID, String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, EventStatus status, int maxTickets, List<String> attachmentPaths) {
+    public Event(EventID eventID, String name, String description, Date initDate, Date endDate, Address address, CompanyID companyID, EventStatus status, List<String> attachmentPaths, List<EventConfig> configuration) {
         super(eventID);
         this.name = name;
         this.description = description;
-        this.initialDate = initialDate;
+        this.initDate = initDate;
         this.endDate = endDate;
         this.address = address;
         this.companyID = companyID;
         this.status = status;
-        this.maxTickets = maxTickets;
-        this.attachmentPaths = attachmentPaths == null ? List.of() : attachmentPaths;
+        this.attachmentPaths = attachmentPaths == null ? new ArrayList<>() : attachmentPaths;
+        this.configuration = configuration == null ? new ArrayList<>() : configuration;
     }
 
-    public static Event with(EventID eventID, String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, EventStatus status, int maxTickets, List<String> attachmentPaths) {
-        return new Event(eventID, name, description, initialDate, endDate, address, companyID, status, maxTickets, attachmentPaths);
+    public static Event with(EventID eventID, String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, EventStatus status, List<String> attachmentPaths, List<EventConfig> configuration) {
+        return new Event(eventID, name, description, initialDate, endDate, address, companyID, status, attachmentPaths, configuration);
     }
 
-    public static Event newEvent(String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, int maxTickets) {
-        return new Event(EventID.unique(), name, description, initialDate, endDate, address, companyID, EventStatus.SCHEDULED, maxTickets, null);
+    public static Event newEvent(String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, List<EventConfig> configuration) {
+        return new Event(EventID.unique(), name, description, initialDate, endDate, address, companyID, EventStatus.SCHEDULED, null, configuration);
     }
 
-    public void update(String name, String description, Date initialDate, Date endDate, Address address, int maxTickets) {
+    public void update(String name, String description, Date initialDate, Date endDate, List<EventConfig> configuration) {
         this.name = name;
         this.description = description;
-        this.initialDate = initialDate;
+        this.initDate = initialDate;
         this.endDate = endDate;
+        this.changeConfiguration(configuration);
+    }
+
+    public EventConfig getConfiguration(EventConfigKey key) {
+        return this.configuration.stream()
+                .filter(c -> c.getKey().equals(key))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void changeConfiguration(List<EventConfig> configuration) {
+        for (EventConfig config : configuration) {
+            this.configuration.stream()
+                    .filter(c -> c.getKey().equals(config.getKey()))
+                    .findFirst()
+                    .ifPresentOrElse(
+                            c -> c.update(config.getValue()),
+                            () -> this.configuration.add(config)
+                    );
+        }
+    }
+
+    public void changeAddress(Address address) {
         this.address = address;
-        this.maxTickets = maxTickets;
     }
 
     public void changeStatus(EventStatus status) {
