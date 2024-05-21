@@ -1,8 +1,11 @@
 package br.com.ifsp.tickets.infra.api;
 
+import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.infra.contexts.company.models.CompanyResponse;
 import br.com.ifsp.tickets.infra.contexts.company.models.CreateCompanyRequest;
+import br.com.ifsp.tickets.infra.contexts.company.models.SearchCompanyResponse;
 import br.com.ifsp.tickets.infra.contexts.company.models.UpdateCompanyRequest;
+import br.com.ifsp.tickets.infra.shared.search.AdvancedSearchRequest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +29,13 @@ public interface CompanyAPI {
             @ApiResponse(responseCode = "404", description = "Company not found"),
     })
     ResponseEntity<CompanyResponse> update(@PathVariable String id, @RequestBody UpdateCompanyRequest request);
+
+    @GetMapping(
+            value = "/search",
+            produces = "application/json")
+    ResponseEntity<Pagination<SearchCompanyResponse>> search(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                             @RequestParam(name = "perPage", required = false, defaultValue = "10") Integer perPage,
+                                                             @RequestBody AdvancedSearchRequest request);
 
     @GetMapping(value = "/{id}", produces = "application/json")
     @ApiResponses(value = {

@@ -67,11 +67,11 @@ public class UserGateway implements IUserGateway {
         final UserSpecificationBuilder builder = new UserSpecificationBuilder();
         sq.filters().forEach(builder::with);
         final Specification<UserJpaEntity> spec = builder.build();
-
+        final Sort orders = sq.sorts().stream().map(sort -> Sort.by(Sort.Direction.fromString(sort.direction()), sort.sort())).reduce(Sort::and).orElse(Sort.by(Sort.Order.asc("id")));
         final PageRequest request = PageRequest.of(
                 sq.page(),
                 sq.perPage(),
-                Sort.by(Sort.Direction.fromString(sq.direction()), sq.sort())
+                orders
         );
 
         final Page<User> userPage = this.userRepository.findAll(spec, request).map(UserJpaEntity::toAggregate);

@@ -1,6 +1,7 @@
 package br.com.ifsp.tickets.domain.event;
 
 import br.com.ifsp.tickets.domain.company.CompanyID;
+import br.com.ifsp.tickets.domain.shared.search.AdvancedSearchQuery;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
 
@@ -12,9 +13,9 @@ public interface IEventGateway {
 
     Optional<Event> findById(EventID id);
 
-    Pagination<Event> findAllByCompanyID(CompanyID id);
+    Pagination<Event> findAllByCompanyID(CompanyID id, SearchQuery sq);
 
-    Pagination<Event> findAll(SearchQuery sq);
+    Pagination<Event> findAll(AdvancedSearchQuery sq);
 
     Event update(Event event);
 

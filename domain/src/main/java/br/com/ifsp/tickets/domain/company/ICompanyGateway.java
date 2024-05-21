@@ -1,8 +1,8 @@
 package br.com.ifsp.tickets.domain.company;
 
 import br.com.ifsp.tickets.domain.company.vo.CNPJ;
+import br.com.ifsp.tickets.domain.shared.search.AdvancedSearchQuery;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
-import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
 
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ public interface ICompanyGateway {
 
     Optional<Company> findByCnpj(CNPJ cnpj);
 
-    Pagination<Company> findAll(SearchQuery sq);
+    Pagination<Company> findAll(AdvancedSearchQuery sq);
 
     Company update(Company company);
 

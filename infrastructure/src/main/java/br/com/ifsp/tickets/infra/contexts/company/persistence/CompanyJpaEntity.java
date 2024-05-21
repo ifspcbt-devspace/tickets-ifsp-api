@@ -4,6 +4,7 @@ import br.com.ifsp.tickets.domain.company.Company;
 import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.company.vo.CNPJ;
 import br.com.ifsp.tickets.domain.user.UserID;
+import br.com.ifsp.tickets.infra.shared.address.AddressJpaEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,7 +50,7 @@ public class CompanyJpaEntity implements Serializable {
                 company.getDescription(),
                 company.getCnpj().getValue(),
                 company.getOwnerID().getValue(),
-                AddressJpaEntity.from(company, company.getAddress())
+                AddressJpaEntity.from(company.getId(), company.getAddress())
         );
     }
 

@@ -1,9 +1,9 @@
-package br.com.ifsp.tickets.app.company.update;
+package br.com.ifsp.tickets.app.company.retrieve.get;
 
 import br.com.ifsp.tickets.app.shared.AddressOutput;
 import br.com.ifsp.tickets.domain.company.Company;
 
-public record UpdateCompanyOutput(
+public record CompanyOutput(
         String id,
         String name,
         String description,
@@ -11,8 +11,8 @@ public record UpdateCompanyOutput(
         AddressOutput address
 ) {
 
-    public static UpdateCompanyOutput from(Company company) {
-        return new UpdateCompanyOutput(
+    public static CompanyOutput from(Company company) {
+        return new CompanyOutput(
                 company.getId().getValue().toString(),
                 company.getName(),
                 company.getDescription(),

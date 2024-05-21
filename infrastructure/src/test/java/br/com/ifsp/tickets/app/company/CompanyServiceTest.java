@@ -3,12 +3,17 @@ package br.com.ifsp.tickets.app.company;
 import br.com.ifsp.tickets.app.company.create.CreateCompanyInput;
 import br.com.ifsp.tickets.app.company.create.CreateCompanyOutput;
 import br.com.ifsp.tickets.app.company.delete.DeleteCompanyInput;
+import br.com.ifsp.tickets.app.company.retrieve.search.SearchCompanyOutput;
 import br.com.ifsp.tickets.app.company.update.UpdateCompanyInput;
 import br.com.ifsp.tickets.app.company.update.UpdateCompanyOutput;
 import br.com.ifsp.tickets.domain.company.Company;
 import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
 import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccessException;
+import br.com.ifsp.tickets.domain.shared.search.AdvancedSearchQuery;
+import br.com.ifsp.tickets.domain.shared.search.Pagination;
+import br.com.ifsp.tickets.domain.shared.search.SearchFilter;
+import br.com.ifsp.tickets.domain.shared.search.SortSearch;
 import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
@@ -25,6 +30,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -146,7 +152,7 @@ public class CompanyServiceTest {
 
         CreateCompanyOutput output = null;
         try {
-             output = companyService.create(input);
+            output = companyService.create(input);
         } catch (IllegalResourceAccessException e) {
             assertThat(e).isNotNull();
         }
@@ -184,6 +190,23 @@ public class CompanyServiceTest {
     }
 
     @Order(6)
+    @DisplayName("Should search a company")
+    @Test
+    public void searchCompany() {
+        final AdvancedSearchQuery asq = AdvancedSearchQuery.of(
+                0,
+                10,
+                List.of(SortSearch.of("id", "asc")),
+                List.of(SearchFilter.of("name", "test", "ic", "any"))
+        );
+
+        Pagination<SearchCompanyOutput> search = companyService.search(asq);
+        assertThat(search).isNotNull();
+        assertThat(search.total()).isGreaterThan(0);
+        assertThat(search.items()).isNotEmpty();
+    }
+
+    @Order(7)
     @DisplayName("Should delete a company")
     @Test
     public void deleteCompany() {

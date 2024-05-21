@@ -4,15 +4,21 @@ import br.com.ifsp.tickets.app.company.CompanyService;
 import br.com.ifsp.tickets.app.company.create.CreateCompanyInput;
 import br.com.ifsp.tickets.app.company.create.CreateCompanyOutput;
 import br.com.ifsp.tickets.app.company.delete.DeleteCompanyInput;
-import br.com.ifsp.tickets.app.company.get.CompanyOutput;
+import br.com.ifsp.tickets.app.company.retrieve.get.CompanyOutput;
 import br.com.ifsp.tickets.app.company.update.UpdateCompanyInput;
 import br.com.ifsp.tickets.app.company.update.UpdateCompanyOutput;
+import br.com.ifsp.tickets.domain.shared.search.AdvancedSearchQuery;
+import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.infra.api.CompanyAPI;
 import br.com.ifsp.tickets.infra.contexts.company.models.CompanyResponse;
 import br.com.ifsp.tickets.infra.contexts.company.models.CreateCompanyRequest;
+import br.com.ifsp.tickets.infra.contexts.company.models.SearchCompanyResponse;
 import br.com.ifsp.tickets.infra.contexts.company.models.UpdateCompanyRequest;
 import br.com.ifsp.tickets.infra.contexts.company.presenters.CompanyApiPresenter;
 import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
+import br.com.ifsp.tickets.infra.shared.search.AdvancedSearchRequest;
+import br.com.ifsp.tickets.infra.shared.search.SearchFilterRequest;
+import br.com.ifsp.tickets.infra.shared.search.SortSearchRequest;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,8 +71,20 @@ public class CompanyController implements CompanyAPI {
     }
 
     @Override
+    public ResponseEntity<Pagination<SearchCompanyResponse>> search(Integer page, Integer perPage, AdvancedSearchRequest request) {
+        final AdvancedSearchQuery advancedSearchQuery = AdvancedSearchQuery.of(
+                page,
+                perPage,
+                request.sorts().stream().map(SortSearchRequest::toSortSearch).toList(),
+                request.filters().stream().map(SearchFilterRequest::toSearchFilter).toList()
+        );
+        final Pagination<SearchCompanyResponse> pagination = this.companyService.search(advancedSearchQuery).map(CompanyApiPresenter::present);
+        return ResponseEntity.ok(pagination);
+    }
+
+    @Override
     public ResponseEntity<CompanyResponse> get(String id) {
-        final CompanyOutput output = this.companyService.getCompanyById(id);
+        final CompanyOutput output = this.companyService.getById(id);
         return ResponseEntity.ok(CompanyApiPresenter.present(output));
     }
 

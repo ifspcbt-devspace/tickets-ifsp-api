@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.app.event.get;
+package br.com.ifsp.tickets.app.event.retrieve.get;
 
 import br.com.ifsp.tickets.app.IUseCase;
 

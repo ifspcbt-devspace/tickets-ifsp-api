@@ -4,12 +4,17 @@ import br.com.ifsp.tickets.domain.company.Company;
 import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
 import br.com.ifsp.tickets.domain.company.vo.CNPJ;
+import br.com.ifsp.tickets.domain.shared.search.AdvancedSearchQuery;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
-import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
 import br.com.ifsp.tickets.infra.contexts.company.persistence.CompanyJpaEntity;
 import br.com.ifsp.tickets.infra.contexts.company.persistence.CompanyRepository;
+import br.com.ifsp.tickets.infra.contexts.company.persistence.spec.CompanySpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -36,8 +41,25 @@ public class CompanyGateway implements ICompanyGateway {
     }
 
     @Override
-    public Pagination<Company> findAll(SearchQuery sq) {
-        return null;
+    public Pagination<Company> findAll(AdvancedSearchQuery sq) {
+        final CompanySpecificationBuilder specificationBuilder = new CompanySpecificationBuilder();
+        sq.filters().forEach(specificationBuilder::with);
+        final Specification<CompanyJpaEntity> specification = specificationBuilder.build();
+        final Sort orders = sq.sorts().stream().map(sort -> Sort.by(Sort.Direction.fromString(sort.direction()), sort.sort())).reduce(Sort::and).orElse(Sort.by(Sort.Order.asc("id")));
+        final PageRequest request = PageRequest.of(
+                sq.page(),
+                sq.perPage(),
+                orders
+        );
+
+        final Page<Company> page = this.companyRepository.findAll(specification, request).map(CompanyJpaEntity::toAggregate);
+
+        return Pagination.of(
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getContent()
+        );
     }
 
     @Override

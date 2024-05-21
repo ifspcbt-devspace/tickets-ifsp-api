@@ -1,6 +1,6 @@
-package br.com.ifsp.tickets.infra.contexts.company.persistence;
+package br.com.ifsp.tickets.infra.shared.address;
 
-import br.com.ifsp.tickets.domain.company.Company;
+import br.com.ifsp.tickets.domain.shared.Identifier;
 import br.com.ifsp.tickets.domain.shared.vo.Address;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -48,9 +48,9 @@ public class AddressJpaEntity implements Serializable {
         this.zipCode = zipCode;
     }
 
-    public static AddressJpaEntity from(Company company, Address address) {
+    public static AddressJpaEntity from(Identifier<UUID> id, Address address) {
         return new AddressJpaEntity(
-                company.getId().getValue(),
+                id.getValue(),
                 address.getStreet(),
                 address.getNumber(),
                 address.getComplement(),

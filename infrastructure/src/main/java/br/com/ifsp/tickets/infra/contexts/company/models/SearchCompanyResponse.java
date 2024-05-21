@@ -3,7 +3,7 @@ package br.com.ifsp.tickets.infra.contexts.company.models;
 import br.com.ifsp.tickets.infra.shared.address.AddressResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record CompanyResponse(
+public record SearchCompanyResponse(
         @JsonProperty("id")
         String id,
         @JsonProperty("name")
@@ -15,5 +15,4 @@ public record CompanyResponse(
         @JsonProperty("address")
         AddressResponse address
 ) {
-
 }
