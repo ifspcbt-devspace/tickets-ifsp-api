@@ -1,6 +1,7 @@
 package br.com.ifsp.tickets.app.event;
 
 import br.com.ifsp.tickets.app.event.create.CreateEventInput;
+import br.com.ifsp.tickets.app.event.create.CreateEventOutput;
 import br.com.ifsp.tickets.app.event.create.ICreateEventUseCase;
 import br.com.ifsp.tickets.app.event.retrieve.get.EventOutput;
 import br.com.ifsp.tickets.app.event.retrieve.get.IGetEventUseCase;
@@ -21,8 +22,8 @@ public class EventService {
         this.searchEventUseCase = searchEventUseCase;
     }
 
-    public void create(CreateEventInput input) {
-        this.createEventUseCase.execute(input);
+    public CreateEventOutput create(CreateEventInput input) {
+        return this.createEventUseCase.execute(input);
     }
 
     public EventOutput get(String anIn) {

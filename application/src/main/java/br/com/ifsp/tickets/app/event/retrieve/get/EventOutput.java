@@ -5,6 +5,7 @@ import br.com.ifsp.tickets.domain.event.Event;
 import br.com.ifsp.tickets.domain.event.EventConfig;
 import br.com.ifsp.tickets.domain.event.EventStatus;
 
+import java.util.Date;
 import java.util.List;
 
 public record EventOutput(
@@ -12,8 +13,8 @@ public record EventOutput(
         String name,
         String description,
         String companyId,
-        String initDate,
-        String endDate,
+        Date initDate,
+        Date endDate,
         EventStatus status,
         AddressOutput address,
         List<Configuration> configuration
@@ -21,12 +22,12 @@ public record EventOutput(
 
     public static EventOutput from(Event event) {
         return new EventOutput(
-                event.getId().toString(),
+                event.getId().getValue().toString(),
                 event.getName(),
                 event.getDescription(),
-                event.getCompanyID().toString(),
-                event.getInitDate().toString(),
-                event.getEndDate().toString(),
+                event.getCompanyID().getValue().toString(),
+                event.getInitDate(),
+                event.getEndDate(),
                 event.getStatus(),
                 AddressOutput.from(event.getAddress()),
                 event.getConfiguration().stream()
