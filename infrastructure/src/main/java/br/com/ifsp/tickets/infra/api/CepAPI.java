@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/v1/cep")
-@Tag(name = "Cep", description = "Cep API")
+@Tag(name = "Cep", description = "Cep API - get address by brazilian zip code")
 public interface CepAPI {
 
     @GetMapping(value = "/{cep}", produces = "application/json")

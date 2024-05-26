@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/v1/auth")
-@Tag(name = "Auth", description = "Authentication and Authorization API")
+@Tag(name = "Auth", description = "Authentication and Authorization API - manage user authentication and authorization based on JWT tokens")
 public interface AuthAPI {
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
