@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/v1/company")
-@Tag(name = "Company", description = "Company API")
+@Tag(name = "Company", description = "Company API - manage companies")
 public interface CompanyAPI {
 
     @PostMapping(consumes = "application/json")
@@ -30,9 +30,13 @@ public interface CompanyAPI {
     })
     ResponseEntity<CompanyResponse> update(@PathVariable String id, @RequestBody UpdateCompanyRequest request);
 
-    @GetMapping(
+    @PostMapping(
             value = "/search",
             produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Companies list"),
+            @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
     ResponseEntity<Pagination<SearchCompanyResponse>> search(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                              @RequestParam(name = "perPage", required = false, defaultValue = "10") Integer perPage,
                                                              @RequestBody AdvancedSearchRequest request);
