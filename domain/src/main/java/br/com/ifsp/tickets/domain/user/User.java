@@ -91,7 +91,19 @@ public class User extends AggregateRoot<UserID> {
     }
 
     public boolean canManageCompany() {
-        return this.role.getPermissions().contains(PermissionType.MANAGE_A_COMPANY);
+        return this.role.getPermissions().contains(PermissionType.MANAGE_COMPANY);
+    }
+
+    public boolean canManageAnyCompany() {
+        return this.role.getPermissions().contains(PermissionType.MANAGE_ANY_COMPANY);
+    }
+
+    public boolean canManageAnyEvent() {
+        return this.role.getPermissions().contains(PermissionType.MANAGE_ANY_EVENT);
+    }
+
+    public boolean canManageEvents() {
+        return this.role.getPermissions().contains(PermissionType.MANAGE_COMPANY_EVENTS);
     }
 
     public boolean hasCompany() {

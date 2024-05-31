@@ -10,7 +10,7 @@ public class Role extends ValueObject {
 
     public static final Role ADMIN = new Role(RoleType.ADMIN, List.of(PermissionType.values()));
     public static final Role COMPANY_MANAGER = new Role(RoleType.COMPANY_MANAGER, List.of(
-            PermissionType.MANAGE_A_COMPANY,
+            PermissionType.MANAGE_COMPANY,
             PermissionType.MANAGE_COMPANY_TICKETS,
             PermissionType.MANAGE_COMPANY_EVENTS,
             PermissionType.MANAGE_COMPANY_ENROLLMENTS,

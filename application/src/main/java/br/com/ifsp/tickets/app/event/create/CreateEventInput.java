@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 public record CreateEventInput(
         User user,
+        String companyId,
         String name,
         String description,
         Date initialDate,
@@ -15,10 +16,10 @@ public record CreateEventInput(
         HashMap<EventConfigKey, String> configuration
 ) {
 
-    public static CreateEventInput with(User user, String name, String description, Date initialDate, Date endDate, HashMap<String, String> config) {
+    public static CreateEventInput with(User user, String companyId, String name, String description, Date initialDate, Date endDate, HashMap<String, String> config) {
         final HashMap<EventConfigKey, String> configuration = new HashMap<>();
         config.forEach((key, value) -> configuration.put(EventConfigKey.valueOf(key), value));
-        return new CreateEventInput(user, name, description, initialDate, endDate, configuration);
+        return new CreateEventInput(user, companyId, name, description, initialDate, endDate, configuration);
     }
 
 }

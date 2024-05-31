@@ -38,7 +38,8 @@ public class CompanyController implements CompanyAPI {
     public ResponseEntity<Void> create(@NotNull CreateCompanyRequest request) {
         final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final CreateCompanyInput input = CreateCompanyInput.of(
-                authenticatedUser.getId().toString(),
+                authenticatedUser.toAggregate(),
+                request.ownerId(),
                 request.name(),
                 request.description(),
                 request.cnpj(),

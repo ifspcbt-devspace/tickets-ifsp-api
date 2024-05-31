@@ -62,7 +62,7 @@ public class EventValidator extends Validator {
     }
 
     public void validateMaxTickets() {
-        final EventConfig config = this.event.getConfiguration(EventConfigKey.MAX_AVAILABLE_TICKETS);
+        final EventConfig config = this.event.getConfiguration(EventConfigKey.MAX_AVAILABLE_ENTRIES);
         if (config == null || config.getValueAsInteger() <= 0) {
             error("MaxTickets is required and must be greater than 0");
         }

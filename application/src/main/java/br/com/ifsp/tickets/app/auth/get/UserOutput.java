@@ -20,7 +20,7 @@ public record UserOutput(
         String companyID
 ) {
     public static UserOutput from(User user, List<PermissionType> authorities) {
-        if (authorities.contains(PermissionType.MANAGE_USERS) || authorities.contains(PermissionType.MANAGE_COMPANY_ENROLLMENTS))
+        if (authorities.contains(PermissionType.MANAGE_ANY_USER) || authorities.contains(PermissionType.MANAGE_COMPANY_ENROLLMENTS))
             return new UserOutput(
                     user.getId().getValue().toString(),
                     user.getName(),

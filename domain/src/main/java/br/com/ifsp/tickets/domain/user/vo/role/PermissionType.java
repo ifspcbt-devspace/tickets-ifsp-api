@@ -5,12 +5,12 @@ import lombok.Getter;
 @Getter
 public enum PermissionType {
 
-    MANAGE_USERS("Gerenciar usuários"),
-    MANAGE_COMPANIES("Gerenciar companhias"),
-    MANAGE_TICKETS("Gerenciar ingressos"),
-    MANAGE_ENROLLMENTS("Gerenciar inscrições"),
-    MANAGE_EVENTS("Gerenciar eventos"),
-    MANAGE_A_COMPANY("Gerenciar uma companhia"),
+    MANAGE_ANY_USER("Gerenciar usuários"),
+    MANAGE_ANY_COMPANY("Gerenciar companhias"),
+    MANAGE_ANY_TICKET("Gerenciar ingressos"),
+    MANAGE_ANY_ENROLLMENT("Gerenciar inscrições"),
+    MANAGE_ANY_EVENT("Gerenciar eventos"),
+    MANAGE_COMPANY("Gerenciar uma companhia"),
     MANAGE_COMPANY_TICKETS("Gerenciar ingressos de sua companhia"),
     MANAGE_COMPANY_EVENTS("Gerenciar eventos de sua companhia"),
     MANAGE_COMPANY_ENROLLMENTS("Gerenciar inscrições de sua companhia"),

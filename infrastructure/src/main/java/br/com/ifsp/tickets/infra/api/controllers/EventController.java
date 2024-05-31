@@ -34,6 +34,7 @@ public class EventController implements EventAPI {
         final UserJpaEntity user = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final CreateEventInput input = CreateEventInput.with(
                 user.toAggregate(),
+                request.companyId(),
                 request.name(),
                 request.description(),
                 request.initDate(),

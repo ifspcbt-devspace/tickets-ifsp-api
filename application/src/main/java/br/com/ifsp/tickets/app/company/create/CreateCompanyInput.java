@@ -1,6 +1,9 @@
 package br.com.ifsp.tickets.app.company.create;
 
+import br.com.ifsp.tickets.domain.user.User;
+
 public record CreateCompanyInput(
+        User user,
         String ownerId,
         String name,
         String description,
@@ -46,8 +49,8 @@ public record CreateCompanyInput(
         zipCode = zipCode.replaceAll("[^0-9]", "");
     }
 
-    public static CreateCompanyInput of(String ownerId, String name, String description, String cnpj, String street, String complement, String number, String neighborhood, String city, String state, String zipCode) {
-        return new CreateCompanyInput(ownerId, name, description, cnpj, street, complement, number, neighborhood, city, state, zipCode);
+    public static CreateCompanyInput of(User user, String ownerId, String name, String description, String cnpj, String street, String complement, String number, String neighborhood, String city, String state, String zipCode) {
+        return new CreateCompanyInput(user, ownerId, name, description, cnpj, street, complement, number, neighborhood, city, state, zipCode);
     }
 
 }
