@@ -1,8 +1,8 @@
-package br.com.ifsp.tickets.infra.contexts.event.persistence;
+package br.com.ifsp.tickets.infra.contexts.event.core.persistence;
 
 import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.event.*;
-import br.com.ifsp.tickets.infra.contexts.event.persistence.converter.EventStatusConverter;
+import br.com.ifsp.tickets.infra.contexts.event.core.persistence.converter.EventStatusConverter;
 import br.com.ifsp.tickets.infra.shared.address.AddressJpaEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

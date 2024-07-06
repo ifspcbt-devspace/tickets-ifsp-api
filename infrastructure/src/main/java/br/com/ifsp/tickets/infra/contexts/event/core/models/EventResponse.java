@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.infra.contexts.event.models;
+package br.com.ifsp.tickets.infra.contexts.event.core.models;
 
 import br.com.ifsp.tickets.domain.event.EventStatus;
 import br.com.ifsp.tickets.infra.shared.address.AddressResponse;

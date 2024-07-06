@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.infra.contexts.event;
+package br.com.ifsp.tickets.infra.contexts.event.core;
 
 import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.event.Event;
@@ -7,9 +7,9 @@ import br.com.ifsp.tickets.domain.event.IEventGateway;
 import br.com.ifsp.tickets.domain.shared.search.AdvancedSearchQuery;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
-import br.com.ifsp.tickets.infra.contexts.event.persistence.EventJpaEntity;
-import br.com.ifsp.tickets.infra.contexts.event.persistence.EventRepository;
-import br.com.ifsp.tickets.infra.contexts.event.persistence.spec.EventSpecificationBuilder;
+import br.com.ifsp.tickets.infra.contexts.event.core.persistence.EventJpaEntity;
+import br.com.ifsp.tickets.infra.contexts.event.core.persistence.EventRepository;
+import br.com.ifsp.tickets.infra.contexts.event.core.persistence.spec.EventSpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

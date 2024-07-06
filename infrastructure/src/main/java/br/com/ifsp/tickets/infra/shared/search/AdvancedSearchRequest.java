@@ -8,10 +8,10 @@ import java.util.List;
 
 @Tag(name = "Advanced Search Request", description = "The advanced search request to be used in search endpoints")
 public record AdvancedSearchRequest(
-        @JsonProperty("filters")
+        @JsonProperty(value = "filters", defaultValue = "[]")
         @Schema(description = "The filters to be used in the search")
         List<SearchFilterRequest> filters,
-        @JsonProperty("sorts")
+        @JsonProperty(value = "sorts", defaultValue = "[]")
         @Schema(description = "The sorts to be used in the search")
         List<SortSearchRequest> sorts
 ) {

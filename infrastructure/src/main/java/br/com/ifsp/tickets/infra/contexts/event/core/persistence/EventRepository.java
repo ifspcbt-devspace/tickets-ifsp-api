@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.infra.contexts.event.persistence;
+package br.com.ifsp.tickets.infra.contexts.event.core.persistence;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

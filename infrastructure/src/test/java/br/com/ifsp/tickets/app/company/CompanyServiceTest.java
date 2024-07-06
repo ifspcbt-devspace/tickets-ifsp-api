@@ -104,6 +104,7 @@ public class CompanyServiceTest {
         assertThat(companyManager).isNotNull();
 
         CreateCompanyInput input = CreateCompanyInput.of(
+                companyManager,
                 companyManager.getId().getValue().toString(),
                 "Company Test",
                 "desc",
@@ -137,6 +138,7 @@ public class CompanyServiceTest {
         assertThat(customer).isNotNull();
 
         CreateCompanyInput input = CreateCompanyInput.of(
+                customer,
                 customer.getId().getValue().toString(),
                 "Company Testee",
                 "desc",

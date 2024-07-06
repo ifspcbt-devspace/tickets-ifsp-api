@@ -4,7 +4,7 @@ import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
 import br.com.ifsp.tickets.domain.communication.message.Message;
 import br.com.ifsp.tickets.domain.communication.message.type.MessageSubject;
 import br.com.ifsp.tickets.domain.communication.message.type.MessageType;
-/*
+
 import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
@@ -12,7 +12,7 @@ import br.com.ifsp.tickets.domain.user.vo.CPF;
 import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
-*/
+
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -27,11 +27,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-/*import org.springframework.security.crypto.password.PasswordEncoder;*/
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 import java.io.InputStream;
-/*import java.time.LocalDate;*/
+import java.time.LocalDate;
 import java.util.Scanner;
 
 @Configuration
@@ -46,7 +46,7 @@ public class WebServerConfig {
     private final ResourceLoader resourceLoader;
 
     @Autowired
-    public WebServerConfig(ResourceLoader resourceLoader, IMessageGateway messageGateway/*, PasswordEncoder passwordEncoder, IUserGateway userGateway*/) {
+    public WebServerConfig(ResourceLoader resourceLoader, IMessageGateway messageGateway, PasswordEncoder passwordEncoder, IUserGateway userGateway) {
         this.resourceLoader = resourceLoader;
 
         log.info("Creating default messages...");
@@ -63,7 +63,7 @@ public class WebServerConfig {
             log.error("Error loading file content", e);
         }
 
-        /*
+
         log.info("Creating default users...");
 
         User user = User.with(
@@ -102,7 +102,7 @@ public class WebServerConfig {
 
         userGateway.create(user);
 
-        log.info("Default users created!");*/
+        log.info("Default users created!");
     }
 
     private String loadFileContent(String filePath) throws IOException {

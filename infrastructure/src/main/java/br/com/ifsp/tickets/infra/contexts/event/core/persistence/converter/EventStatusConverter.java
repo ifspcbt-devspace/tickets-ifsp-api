@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.infra.contexts.event.persistence.converter;
+package br.com.ifsp.tickets.infra.contexts.event.core.persistence.converter;
 
 import br.com.ifsp.tickets.domain.event.EventStatus;
 import jakarta.persistence.AttributeConverter;

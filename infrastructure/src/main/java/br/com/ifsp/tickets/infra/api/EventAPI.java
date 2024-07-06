@@ -1,9 +1,9 @@
 package br.com.ifsp.tickets.infra.api;
 
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
-import br.com.ifsp.tickets.infra.contexts.event.models.CreateEventRequest;
-import br.com.ifsp.tickets.infra.contexts.event.models.EventResponse;
-import br.com.ifsp.tickets.infra.contexts.event.models.SearchEventResponse;
+import br.com.ifsp.tickets.infra.contexts.event.core.models.CreateEventRequest;
+import br.com.ifsp.tickets.infra.contexts.event.core.models.EventResponse;
+import br.com.ifsp.tickets.infra.contexts.event.core.models.SearchEventResponse;
 import br.com.ifsp.tickets.infra.shared.search.AdvancedSearchRequest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

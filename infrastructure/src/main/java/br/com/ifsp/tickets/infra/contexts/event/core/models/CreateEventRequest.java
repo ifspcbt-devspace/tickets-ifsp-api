@@ -1,4 +1,4 @@
-package br.com.ifsp.tickets.infra.contexts.event.models;
+package br.com.ifsp.tickets.infra.contexts.event.core.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

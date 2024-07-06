@@ -1,9 +1,9 @@
-package br.com.ifsp.tickets.infra.contexts.event.presenters;
+package br.com.ifsp.tickets.infra.contexts.event.core.presenters;
 
 import br.com.ifsp.tickets.app.event.retrieve.get.EventOutput;
 import br.com.ifsp.tickets.app.event.retrieve.search.SearchEventOutput;
-import br.com.ifsp.tickets.infra.contexts.event.models.EventResponse;
-import br.com.ifsp.tickets.infra.contexts.event.models.SearchEventResponse;
+import br.com.ifsp.tickets.infra.contexts.event.core.models.EventResponse;
+import br.com.ifsp.tickets.infra.contexts.event.core.models.SearchEventResponse;
 import br.com.ifsp.tickets.infra.shared.address.AddressResponse;
 
 import java.util.HashMap;
