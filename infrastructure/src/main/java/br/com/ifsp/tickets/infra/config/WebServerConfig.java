@@ -4,7 +4,14 @@ import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
 import br.com.ifsp.tickets.domain.communication.message.Message;
 import br.com.ifsp.tickets.domain.communication.message.type.MessageSubject;
 import br.com.ifsp.tickets.domain.communication.message.type.MessageType;
-
+import br.com.ifsp.tickets.domain.company.Company;
+import br.com.ifsp.tickets.domain.company.ICompanyGateway;
+import br.com.ifsp.tickets.domain.company.vo.CNPJ;
+import br.com.ifsp.tickets.domain.event.Event;
+import br.com.ifsp.tickets.domain.event.EventID;
+import br.com.ifsp.tickets.domain.event.EventStatus;
+import br.com.ifsp.tickets.domain.event.IEventGateway;
+import br.com.ifsp.tickets.domain.shared.vo.Address;
 import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
@@ -12,7 +19,6 @@ import br.com.ifsp.tickets.domain.user.vo.CPF;
 import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
-
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -32,6 +38,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 @Configuration
@@ -46,7 +53,7 @@ public class WebServerConfig {
     private final ResourceLoader resourceLoader;
 
     @Autowired
-    public WebServerConfig(ResourceLoader resourceLoader, IMessageGateway messageGateway, PasswordEncoder passwordEncoder, IUserGateway userGateway) {
+    public WebServerConfig(ResourceLoader resourceLoader, IMessageGateway messageGateway, PasswordEncoder passwordEncoder, IUserGateway userGateway, ICompanyGateway companyGateway, IEventGateway eventGateway) {
         this.resourceLoader = resourceLoader;
 
         log.info("Creating default messages...");
@@ -86,26 +93,55 @@ public class WebServerConfig {
         );
 
         userGateway.create(user);
+        log.info("Default user created!");
 
-        user = User.with(
-                UserID.unique(),
-                "Mateus",
-                Role.CUSTOMER,
-                "admin",
-                new EmailAddress("oproprioleonardo@gmail.com"),
-                new PhoneNumber("(16) 3496-1354"),
-                "cliente",
-                passwordEncoder.encode("cliente"),
-                new CPF("15303139026"),
-                LocalDate.of(1999, 4, 2),
-                null,
-                true,
-                null
+        final Company company = Company.newCompany(
+                "IFSP Cubatão",
+                "Instituto Federal de Educação, Ciência e Tecnologia de São Paulo",
+                new CNPJ("10882594000327"),
+                user.getId(),
+                Address.with(
+                        "Rua Maria Cristina",
+                        "",
+                        "50",
+                        "Jardim Casqueiro",
+                        "Cubatão",
+                        "São Paulo",
+                        "Brasil",
+                        "11533160"
+                )
         );
 
-        userGateway.create(user);
+        companyGateway.create(company);
+        user.joinCompany(company.getId());
+        userGateway.update(user);
+        log.info("Default company created!");
 
-        log.info("Default users created!");
+        Event event = Event.with(
+                EventID.unique(),
+                "Festa Junina",
+                "A Festa Junina é uma tradicional celebração brasileira que ocorre em junho, homenageando os santos populares São João, Santo Antônio e São Pedro. Com danças de quadrilha, fogueiras, comidas típicas como milho e quentão, e trajes caipiras, a festa destaca-se pela sua atmosfera alegre e colorida. É comum ver barracas com brincadeiras como pescaria e correio elegante. A celebração também inclui músicas típicas e uma forte influência das tradições rurais do nordeste do Brasil.",
+                LocalDate.of(2024, 6, 29),
+                LocalDate.of(2024, 7, 30),
+                Address.with(
+                        "Rua Maria Cristina",
+                        "",
+                        "50",
+                        "Jardim Casqueiro",
+                        "Cubatão",
+                        "São Paulo",
+                        "Brasil",
+                        "11533160"
+                ),
+                company.getId(),
+                EventStatus.OPENED,
+                List.of(),
+                List.of()
+        );
+
+        eventGateway.create(event);
+        log.info("Default event created!");
+
     }
 
     private String loadFileContent(String filePath) throws IOException {

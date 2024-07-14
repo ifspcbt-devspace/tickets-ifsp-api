@@ -56,7 +56,7 @@ public class EnrollmentGateway implements IEnrollmentGateway {
         final PageRequest request = PageRequest.of(
                 sq.page(),
                 sq.perPage(),
-                Sort.by(Sort.Direction.fromString(sq.direction()), sq.sort())
+                Sort.by(Sort.Direction.fromString(sq.sort()), sq.direction())
         );
 
         final Page<Enrollment> page = this.enrollmentRepository.findAllByEventID(eventID.getValue(), request).map(EnrollmentJpaEntity::toAggregate);

@@ -29,7 +29,7 @@ public class TicketValidator extends Validator {
         if (ticket.getExpiredIn() == null)
             error("Expiration date is required");
 
-        if (ticket.getValidIn() != null && ticket.getExpiredIn() != null && ticket.getValidIn().after(ticket.getExpiredIn()))
+        if (ticket.getValidIn() != null && ticket.getExpiredIn() != null && ticket.getValidIn().isAfter(ticket.getExpiredIn()))
             error("Validation date must be before expiration date");
 
     }

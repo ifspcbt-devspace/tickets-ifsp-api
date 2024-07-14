@@ -11,6 +11,7 @@ import br.com.ifsp.tickets.domain.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.user.UserID;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -21,14 +22,14 @@ public class Ticket extends Entity<TicketID> {
     private final UserID userID;
     private final EventID eventID;
     private final String description;
-    private final Date validIn;
-    private final Date expiredIn;
+    private final LocalDate validIn;
+    private final LocalDate expiredIn;
     private final LocalDateTime createdAt;
     private TicketStatus status;
     private TicketCode code;
     private LocalDateTime lastTimeConsumed;
 
-    public Ticket(TicketID ticketID, UserID userID, EventID eventID, String description, TicketStatus status, TicketCode code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+    public Ticket(TicketID ticketID, UserID userID, EventID eventID, String description, TicketStatus status, TicketCode code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         super(ticketID);
         this.userID = userID;
         this.eventID = eventID;
@@ -41,11 +42,11 @@ public class Ticket extends Entity<TicketID> {
         this.lastTimeConsumed = lastTimeConsumed;
     }
 
-    public static Ticket with(TicketID ticketID, UserID userID, EventID eventID, String description, TicketStatus status, TicketCode code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+    public static Ticket with(TicketID ticketID, UserID userID, EventID eventID, String description, TicketStatus status, TicketCode code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         return new Ticket(ticketID, userID, eventID, description, status, code, validIn, expiredIn, createdAt, lastTimeConsumed);
     }
 
-    public static Ticket newTicket(UserID userID, Event event, String description, Date validIn, Date expiredIn) {
+    public static Ticket newTicket(UserID userID, Event event, String description, LocalDate validIn, LocalDate expiredIn) {
         return new Ticket(TicketID.unique(), userID, event.getId(), description, TicketStatus.AVAILABLE, TicketCode.generate(), validIn, expiredIn, LocalDateTime.now(ZoneId.of("GMT-3")), null);
     }
 
@@ -63,7 +64,7 @@ public class Ticket extends Entity<TicketID> {
 
         if (this.status.isExpired())
             throw new ChangeTicketStatusException("Ticket is already expired");
-        if (now.toLocalDate().isAfter(this.expiredIn.toInstant().atZone(zoneId).toLocalDate())) {
+        if (now.toLocalDate().isAfter(this.expiredIn)) {
             this.status = TicketStatus.EXPIRED;
         } else throw new ChangeTicketStatusException("Ticket is out of date to be expired, but you can cancel it.");
 
@@ -88,10 +89,10 @@ public class Ticket extends Entity<TicketID> {
         final ZoneId zoneId = ZoneId.of("GMT-3");
         final LocalDateTime now = LocalDateTime.now(zoneId);
 
-        if (now.toLocalDate().isBefore(this.validIn.toInstant().atZone(zoneId).toLocalDate()))
+        if (now.toLocalDate().isBefore(this.validIn))
             throw new TicketConsumeException("Ticket is not valid yet");
 
-        if (now.toLocalDate().isAfter(this.expiredIn.toInstant().atZone(zoneId).toLocalDate()))
+        if (now.toLocalDate().isAfter(this.expiredIn))
             throw new TicketExpiredException(this.getId());
 
         this.status = TicketStatus.CONSUMED;

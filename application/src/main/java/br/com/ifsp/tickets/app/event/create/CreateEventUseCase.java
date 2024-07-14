@@ -13,6 +13,7 @@ import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
 import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import br.com.ifsp.tickets.domain.user.User;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +39,8 @@ public class CreateEventUseCase implements ICreateEventUseCase {
         final Company company = this.companyGateway.findById(companyID).orElseThrow(() -> NotFoundException.with(Company.class, companyID));
         final String name = anIn.name();
         final String description = anIn.description();
-        final Date initialDate = anIn.initialDate();
-        final Date endDate = anIn.endDate();
+        final LocalDate initialDate = anIn.initialDate();
+        final LocalDate endDate = anIn.endDate();
         final HashMap<EventConfigKey, String> configuration = anIn.configuration();
         final List<EventConfig> config = configuration.entrySet().stream().map(e -> EventConfig.with(e.getKey(), e.getValue())).toList();
 

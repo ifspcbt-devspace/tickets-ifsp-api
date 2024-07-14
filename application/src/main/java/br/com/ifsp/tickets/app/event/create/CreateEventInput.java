@@ -3,7 +3,7 @@ package br.com.ifsp.tickets.app.event.create;
 import br.com.ifsp.tickets.domain.event.EventConfigKey;
 import br.com.ifsp.tickets.domain.user.User;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 public record CreateEventInput(
@@ -11,12 +11,12 @@ public record CreateEventInput(
         String companyId,
         String name,
         String description,
-        Date initialDate,
-        Date endDate,
+        LocalDate initialDate,
+        LocalDate endDate,
         HashMap<EventConfigKey, String> configuration
 ) {
 
-    public static CreateEventInput with(User user, String companyId, String name, String description, Date initialDate, Date endDate, HashMap<String, String> config) {
+    public static CreateEventInput with(User user, String companyId, String name, String description, LocalDate initialDate, LocalDate endDate, HashMap<String, String> config) {
         final HashMap<EventConfigKey, String> configuration = new HashMap<>();
         config.forEach((key, value) -> configuration.put(EventConfigKey.valueOf(key), value));
         return new CreateEventInput(user, companyId, name, description, initialDate, endDate, configuration);

@@ -16,6 +16,6 @@ public class ListEnrollmentsByUserUseCase implements IListEnrollmentsByUserUseCa
 
     @Override
     public Pagination<EnrollmentOutput> execute(User authenticatedUser) {
-        return this.enrollmentGateway.findAllByUserID(authenticatedUser.getId(), new SearchQuery(0, 10, null, "desc", "createdAt")).map(EnrollmentOutput::from);
+        return this.enrollmentGateway.findAllByUserID(authenticatedUser.getId(), new SearchQuery(0, 10, null, "createdAt", "desc")).map(EnrollmentOutput::from);
     }
 }

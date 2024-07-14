@@ -5,6 +5,7 @@ import br.com.ifsp.tickets.domain.event.Event;
 import br.com.ifsp.tickets.domain.event.EventConfig;
 import br.com.ifsp.tickets.domain.event.EventStatus;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -13,8 +14,8 @@ public record SearchEventOutput(
         String name,
         String description,
         String companyId,
-        Date initDate,
-        Date endDate,
+        LocalDate initDate,
+        LocalDate endDate,
         EventStatus status,
         AddressOutput address,
         List<Configuration> configuration

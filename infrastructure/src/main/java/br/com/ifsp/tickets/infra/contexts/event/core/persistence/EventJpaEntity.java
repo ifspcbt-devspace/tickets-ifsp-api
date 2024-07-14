@@ -9,9 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -26,14 +27,14 @@ public class EventJpaEntity implements Serializable {
     private UUID id;
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "description")
+    @Column(name = "description", length = 1000)
     private String description;
     @Column(name = "company_id", nullable = false)
     private UUID companyId;
     @Column(name = "init_date", nullable = false)
-    private Date initDate;
+    private LocalDate initDate;
     @Column(name = "end_date", nullable = false)
-    private Date endDate;
+    private LocalDate endDate;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private AddressJpaEntity address;
@@ -44,10 +45,13 @@ public class EventJpaEntity implements Serializable {
     @CollectionTable(name = "event_attachments", joinColumns = @JoinColumn(name = "event_id"))
     private List<String> attachmentPaths;
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "event_configurations", joinColumns = @JoinColumn(name = "event_id"))
-    private HashMap<String, String> configuration;
+    @CollectionTable(name = "event_configurations",
+            joinColumns = {@JoinColumn(name = "event_id", referencedColumnName = "id")})
+    @MapKeyColumn(name = "key")
+    @Column(name = "value")
+    private Map<String, String> configuration;
 
-    public EventJpaEntity(UUID id, String name, String description, UUID companyId, Date initDate, Date endDate, AddressJpaEntity address, EventStatus status, List<String> attachmentPaths, HashMap<String, String> configuration) {
+    public EventJpaEntity(UUID id, String name, String description, UUID companyId, LocalDate initDate, LocalDate endDate, AddressJpaEntity address, EventStatus status, List<String> attachmentPaths, HashMap<String, String> configuration) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -56,8 +60,8 @@ public class EventJpaEntity implements Serializable {
         this.endDate = endDate;
         this.address = address;
         this.status = status;
-        this.attachmentPaths = attachmentPaths;
-        this.configuration = configuration;
+        this.attachmentPaths = attachmentPaths == null ? List.of() : attachmentPaths;
+        this.configuration = configuration == null ? new HashMap<>() : configuration;
     }
 
     public static EventJpaEntity from(Event event) {
@@ -73,7 +77,7 @@ public class EventJpaEntity implements Serializable {
                 AddressJpaEntity.from(event.getId(), event.getAddress()),
                 event.getStatus(),
                 event.getAttachmentPaths(),
-                configuration
+                configuration.isEmpty() ? null : configuration
         );
     }
 

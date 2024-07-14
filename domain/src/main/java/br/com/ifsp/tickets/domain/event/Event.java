@@ -7,8 +7,8 @@ import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.shared.vo.Address;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -19,12 +19,12 @@ public class Event extends AggregateRoot<EventID> {
     private final List<EventConfig> configuration;
     private String name;
     private String description;
-    private Date initDate;
-    private Date endDate;
+    private LocalDate initDate;
+    private LocalDate endDate;
     private Address address;
     private EventStatus status;
 
-    public Event(EventID eventID, String name, String description, Date initDate, Date endDate, Address address, CompanyID companyID, EventStatus status, List<String> attachmentPaths, List<EventConfig> configuration) {
+    public Event(EventID eventID, String name, String description, LocalDate initDate, LocalDate endDate, Address address, CompanyID companyID, EventStatus status, List<String> attachmentPaths, List<EventConfig> configuration) {
         super(eventID);
         this.name = name;
         this.description = description;
@@ -37,15 +37,15 @@ public class Event extends AggregateRoot<EventID> {
         this.configuration = configuration == null ? new ArrayList<>() : configuration;
     }
 
-    public static Event with(EventID eventID, String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, EventStatus status, List<String> attachmentPaths, List<EventConfig> configuration) {
+    public static Event with(EventID eventID, String name, String description, LocalDate initialDate, LocalDate endDate, Address address, CompanyID companyID, EventStatus status, List<String> attachmentPaths, List<EventConfig> configuration) {
         return new Event(eventID, name, description, initialDate, endDate, address, companyID, status, attachmentPaths, configuration);
     }
 
-    public static Event newEvent(String name, String description, Date initialDate, Date endDate, Address address, CompanyID companyID, List<EventConfig> configuration) {
+    public static Event newEvent(String name, String description, LocalDate initialDate, LocalDate endDate, Address address, CompanyID companyID, List<EventConfig> configuration) {
         return new Event(EventID.unique(), name, description, initialDate, endDate, address, companyID, EventStatus.SCHEDULED, null, configuration);
     }
 
-    public void update(String name, String description, Date initialDate, Date endDate, List<EventConfig> configuration) {
+    public void update(String name, String description, LocalDate initialDate, LocalDate endDate, List<EventConfig> configuration) {
         this.name = name;
         this.description = description;
         this.initDate = initialDate;

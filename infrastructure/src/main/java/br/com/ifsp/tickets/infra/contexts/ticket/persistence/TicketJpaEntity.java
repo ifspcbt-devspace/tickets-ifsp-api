@@ -11,8 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -35,15 +35,15 @@ public class TicketJpaEntity implements Serializable {
     @Column(name = "code", nullable = false)
     private String code;
     @Column(name = "valid_in", nullable = false)
-    private Date validIn;
+    private LocalDate validIn;
     @Column(name = "expired_in", nullable = false)
-    private Date expiredIn;
+    private LocalDate expiredIn;
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
     @Column(name = "last_time_consumed")
     private LocalDateTime lastTimeConsumed;
 
-    public TicketJpaEntity(UUID id, UUID userId, UUID eventId, String description, String status, String code, Date validIn, Date expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+    public TicketJpaEntity(UUID id, UUID userId, UUID eventId, String description, String status, String code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         this.id = id;
         this.userId = userId;
         this.eventId = eventId;

@@ -44,7 +44,7 @@ public class EventValidator extends Validator {
     public void validateEndDate() {
         if (this.event.getEndDate() == null) {
             error("EndDate is required");
-        } else if (this.event.getEndDate().before(this.event.getInitDate())) {
+        } else if (this.event.getEndDate().isBefore(this.event.getInitDate())) {
             error("EndDate must be after InitialDate");
         }
     }

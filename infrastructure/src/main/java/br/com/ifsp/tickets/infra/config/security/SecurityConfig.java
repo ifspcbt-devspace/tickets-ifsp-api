@@ -92,6 +92,8 @@ public class SecurityConfig {
                 .cors(crs -> crs.configurationSource(request -> cors))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/v1/enrollment").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/event/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/v1/event/search").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)

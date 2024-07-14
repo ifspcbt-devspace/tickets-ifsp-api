@@ -27,6 +27,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,7 +59,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
 
         Enrollment enrollment = Enrollment.newEnrollment(user.getId(), event.getId());
 
-        Date expiredIn = this.addDays(event.getEndDate(), 1);
+        LocalDate expiredIn = event.getEndDate().plusDays(1);
         Ticket ticket = Ticket.newTicket(user.getId(), event, "Descrição", event.getInitDate(), expiredIn);
 
         Message message = this.messageGateway.findBySubjectAndType(MessageSubject.EVENT_TICKET, MessageType.HTML).orElseThrow();
