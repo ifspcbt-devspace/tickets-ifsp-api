@@ -48,6 +48,18 @@ public class Email extends AggregateRoot<EmailID> {
                 null);
     }
 
+    public static Email createDynamic(String target, Message message, String username, String companyName, String qrData) {
+        return new Email(new EmailID(null),
+                target,
+                message.getSubject().getDescription(),
+                message.getTemplate().replace("{username}", username).replace("{companyName}", companyName).replace("{qr-code}", qrData),
+                null,
+                LocalDateTime.now(),
+                0,
+                false,
+                null);
+    }
+
     public Email with(PlaceHolder... placeHolders) {
         for (PlaceHolder ph : placeHolders) {
             this.body = this.body.replace(ph.key(), ph.value());

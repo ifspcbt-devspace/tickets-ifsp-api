@@ -12,5 +12,5 @@ public interface IEmailGateway {
     Optional<Email> findById(EmailID anID);
 
     List<Email> findNotSent();
-
+    boolean send(Email email);
 }
