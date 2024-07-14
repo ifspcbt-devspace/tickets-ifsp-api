@@ -8,7 +8,8 @@ import java.util.Arrays;
 public enum MessageSubject {
 
     PASSWORD_RECOVERY(1, "Recuperação de Senha"),
-    ACCOUNT_ACTIVATION(2, "Ativação de Conta"),;
+    ACCOUNT_ACTIVATION(2, "Ativação de Conta"),
+    EVENT_TICKET(3, "Ingresso de Evento");
 
     private final int key;
     private final String description;
