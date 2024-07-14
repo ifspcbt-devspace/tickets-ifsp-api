@@ -3,8 +3,11 @@ package br.com.ifsp.tickets.infra.api.controllers;
 import br.com.ifsp.tickets.app.enrollment.EnrollmentService;
 import br.com.ifsp.tickets.app.enrollment.create.CreateEnrollmentInput;
 import br.com.ifsp.tickets.app.enrollment.create.CreateEnrollmentOutput;
+import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.infra.api.EnrollmentAPI;
 import br.com.ifsp.tickets.infra.contexts.enrollment.models.CreateEnrollmentRequest;
+import br.com.ifsp.tickets.infra.contexts.enrollment.models.EnrollmentResponse;
+import br.com.ifsp.tickets.infra.contexts.enrollment.presenters.EnrollmentApiPresenter;
 import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +33,12 @@ public class EnrollmentController implements EnrollmentAPI {
         final CreateEnrollmentOutput out = this.enrollmentService.create(input);
 
         return ResponseEntity.created(URI.create("/v1/enrollment/" + out.enrollmentId())).build();
+    }
+
+    @Override
+    public ResponseEntity<Pagination<EnrollmentResponse>> findByUser() {
+        final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final Pagination<EnrollmentResponse> enrollments = this.enrollmentService.listEnrollmentsByUser(authenticatedUser.toAggregate()).map(EnrollmentApiPresenter::present);
+        return ResponseEntity.ok(enrollments);
     }
 }
