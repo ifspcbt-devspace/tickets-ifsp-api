@@ -62,7 +62,7 @@ public class TicketJpaEntity implements Serializable {
                 ticket.getUserID().getValue(),
                 ticket.getEventID().getValue(),
                 ticket.getDescription(),
-                ticket.getStatus().getDescription(),
+                ticket.getStatus().name(),
                 ticket.getCode().getCode(),
                 ticket.getValidIn(),
                 ticket.getExpiredIn(),
