@@ -15,8 +15,6 @@ public class EmailSenderJob {
 
     @Scheduled(fixedDelay = 10 * 1000)
     public void sendEmails() {
-        this.emailGateway.findNotSent().forEach(email -> {
-            this.emailGateway.send(email);
-        });
+        this.emailGateway.findNotSent().forEach(this.emailGateway::send);
     }
 }

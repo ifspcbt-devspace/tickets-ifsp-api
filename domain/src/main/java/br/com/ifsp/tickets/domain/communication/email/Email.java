@@ -52,7 +52,7 @@ public class Email extends AggregateRoot<EmailID> {
         return new Email(new EmailID(null),
                 target,
                 message.getSubject().getDescription(),
-                message.getTemplate().replace("{username}", username).replace("{companyName}", companyName).replace("{qr-code}", qrData),
+                message.getTemplate().replace("{nome}", username).replace("{company-name}", companyName).replace("{qr-code}", qrData),
                 null,
                 LocalDateTime.now(),
                 0,
