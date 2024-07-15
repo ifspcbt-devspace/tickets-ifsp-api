@@ -45,7 +45,6 @@ import java.util.Scanner;
 @EnableScheduling
 @EnableAsync
 @ComponentScan("br.com.ifsp.tickets.infra")
-@PropertySource("classpath:.env")
 @Slf4j
 @OpenAPIDefinition(info = @Info(title = "Tickets API", version = "v1", description = "Tickets API Documentation", contact = @Contact(name = "Leonardo da Silva", email = "oproprioleonardo@gmail.com", url = "https://linktr.ee/_oleonardosilva")))
 public class WebServerConfig {
