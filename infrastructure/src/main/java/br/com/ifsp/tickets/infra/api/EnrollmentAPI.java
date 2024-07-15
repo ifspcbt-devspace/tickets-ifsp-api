@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Tag(name = "Enrollment", description = "Enrollment API - manage enrollments for events")
 public interface EnrollmentAPI {
 
-    @PostMapping(consumes = "application/json")
+    @PostMapping(value = "/", consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Enrollment created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request")
