@@ -48,7 +48,7 @@ public class EnrollmentJpaEntity implements Serializable {
                 enrollment.getId().getValue(),
                 enrollment.getUserID().getValue(),
                 enrollment.getEventID().getValue(),
-                enrollment.getStatus().getDescription(),
+                enrollment.getStatus().name(),
                 enrollment.getCreatedAt(),
                 enrollment.getUpdatedAt()
         );
