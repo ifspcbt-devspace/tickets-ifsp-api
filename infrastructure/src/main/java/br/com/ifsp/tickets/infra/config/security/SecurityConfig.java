@@ -82,7 +82,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, IAuthUtils authService, AuthenticationProvider authenticationProvider) throws Exception {
         final CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
-        cors.addAllowedMethod(HttpMethod.POST);
         cors.addAllowedMethod(HttpMethod.PUT);
         cors.addAllowedMethod(HttpMethod.PATCH);
         cors.addAllowedMethod(HttpMethod.GET);
