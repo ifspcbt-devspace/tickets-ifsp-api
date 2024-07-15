@@ -91,7 +91,6 @@ public class SecurityConfig {
                 .addFilterAfter(new JwtAuthFilter(authService, customUserDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .cors(crs -> crs.configurationSource(request -> cors))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/v1/enrollment").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/event/*").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/event/search").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()

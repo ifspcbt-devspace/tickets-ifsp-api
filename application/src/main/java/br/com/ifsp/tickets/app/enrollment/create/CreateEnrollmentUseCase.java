@@ -60,7 +60,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         Enrollment enrollment = Enrollment.newEnrollment(user.getId(), event.getId());
 
         LocalDate expiredIn = event.getEndDate().plusDays(1);
-        Ticket ticket = Ticket.newTicket(user.getId(), event, "Descrição", event.getInitDate(), expiredIn);
+        Ticket ticket = Ticket.newTicket(user.getId(), event, "Ingresso sem limite de acompanhantes", event.getInitDate(), expiredIn);
 
         Message message = this.messageGateway.findBySubjectAndType(MessageSubject.EVENT_TICKET, MessageType.HTML).orElseThrow();
         final Notification notification = Notification.create();
@@ -80,13 +80,6 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         final Email createdEmail = this.emailGateway.create(email);
         this.emailGateway.send(createdEmail);
         return CreateEnrollmentOutput.from(createdEnrollment, createdTicket, createdEmail);
-    }
-
-    private Date addDays(Date date, int days) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DAY_OF_MONTH, days);
-        return calendar.getTime();
     }
 
     private String generateQRCodeToBase64(String qrCodeData) {

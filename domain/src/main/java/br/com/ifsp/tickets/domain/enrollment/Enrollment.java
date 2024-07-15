@@ -31,7 +31,7 @@ public class Enrollment extends Entity<EnrollmentID> {
     }
 
     public static Enrollment newEnrollment(UserID userID, EventID eventID) {
-        return new Enrollment(EnrollmentID.unique(), userID, eventID, EnrollmentStatus.WAITING_CONFIRMATION, LocalDateTime.now(), null);
+        return new Enrollment(EnrollmentID.unique(), userID, eventID, EnrollmentStatus.CONFIRMED, LocalDateTime.now(), null);
     }
 
     public void confirm() {
