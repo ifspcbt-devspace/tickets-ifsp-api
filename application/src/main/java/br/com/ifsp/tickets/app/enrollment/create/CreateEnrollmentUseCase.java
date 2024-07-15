@@ -15,6 +15,7 @@ import br.com.ifsp.tickets.domain.event.Event;
 import br.com.ifsp.tickets.domain.event.EventID;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
+import br.com.ifsp.tickets.domain.shared.providers.IFileProvider;
 import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
 import br.com.ifsp.tickets.domain.ticket.Ticket;
@@ -28,7 +29,6 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Base64;
 
 public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
     private final SecretConfig secretConfig = new SecretConfig();
@@ -38,14 +38,16 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
     private final IMessageGateway messageGateway;
     private final ICompanyGateway companyGateway;
     private final IEmailGateway emailGateway;
+    private final IFileProvider fileProvider;
 
-    public CreateEnrollmentUseCase(IEventGateway eventGateway, IEnrollmentGateway enrollmentGateway, ITicketGateway ticketGateway, IMessageGateway messageGateway, ICompanyGateway companyGateway, IEmailGateway emailGateway) {
+    public CreateEnrollmentUseCase(IEventGateway eventGateway, IEnrollmentGateway enrollmentGateway, ITicketGateway ticketGateway, IMessageGateway messageGateway, ICompanyGateway companyGateway, IEmailGateway emailGateway, IFileProvider fileProvider) {
         this.eventGateway = eventGateway;
         this.enrollmentGateway = enrollmentGateway;
         this.ticketGateway = ticketGateway;
         this.messageGateway = messageGateway;
         this.companyGateway = companyGateway;
         this.emailGateway = emailGateway;
+        this.fileProvider = fileProvider;
     }
 
     @Override
@@ -67,7 +69,8 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         final Ticket createdTicket = this.ticketGateway.create(ticket);
 
         String qrCodeData = secretConfig.getBASE_URL() + "/" + secretConfig.getAPI_VERSION() + "/ticket/" + createdTicket.getId() + "/check";
-        Email email = Email.createDynamic(user.getEmail().toString(), message, user.getName(), company.getName(), generateQRCodeToBase64(qrCodeData));
+        Email email = Email.createDynamic(user.getEmail().toString(), message, user.getName(), company.getName());
+        email.appendAttachment("qr-code.png", generateQRCodeToBase64(qrCodeData), fileProvider);
         email.validate(notification);
         notification.throwPossibleErrors();
 
@@ -75,7 +78,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         return CreateEnrollmentOutput.from(createdEnrollment, createdTicket, createdEmail);
     }
 
-    private String generateQRCodeToBase64(String qrCodeData) {
+    private byte[] generateQRCodeToBase64(String qrCodeData) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -86,9 +89,6 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
             e.printStackTrace();
         }
 
-        byte[] qrCodeBytes = outputStream.toByteArray();
-        String base64Image = Base64.getEncoder().encodeToString(qrCodeBytes);
-
-        return "data:image/png;base64," + base64Image;
+        return outputStream.toByteArray();
     }
 }

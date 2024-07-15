@@ -3,6 +3,7 @@ package br.com.ifsp.tickets.infra.contexts.communication.email;
 import br.com.ifsp.tickets.domain.communication.email.Email;
 import br.com.ifsp.tickets.domain.communication.email.EmailID;
 import br.com.ifsp.tickets.domain.communication.email.IEmailGateway;
+import br.com.ifsp.tickets.domain.shared.providers.IFileProvider;
 import br.com.ifsp.tickets.infra.contexts.communication.email.persistence.EmailJpaEntity;
 import br.com.ifsp.tickets.infra.contexts.communication.email.persistence.EmailRepository;
 import jakarta.mail.internet.MimeMessage;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,11 +26,12 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor(onConstructor_ = @__(@Autowired))
 public class EmailGateway implements IEmailGateway {
+
     private final JavaMailSender javaMailSender;
+    private final IFileProvider fileProvider;
+    private final EmailRepository repository;
     @Value("${spring.mail.host}")
     private String emailFrom;
-
-    private final EmailRepository repository;
 
     @Override
     public Email create(Email anEmail) {
@@ -60,6 +64,16 @@ public class EmailGateway implements IEmailGateway {
             helper.setFrom(this.emailFrom);
             helper.setSubject(email.getSubject());
             helper.setText(email.getBody(), true);
+
+            email.getAttachments(fileProvider).forEach(attachment -> {
+                try {
+                    final InputStreamSource source = new ByteArrayResource(attachment.content());
+                    helper.addAttachment(attachment.name(), source);
+                } catch (Exception e) {
+                    log.warn("Erro ao adicionar anexo ao email %s".formatted(email.getSubject()));
+                }
+            });
+
             javaMailSender.send(mensagem);
             email.send();
             this.update(email);

@@ -48,11 +48,11 @@ public class Email extends AggregateRoot<EmailID> {
                 null);
     }
 
-    public static Email createDynamic(String target, Message message, String username, String companyName, String qrData) {
+    public static Email createDynamic(String target, Message message, String username, String companyName) {
         return new Email(new EmailID(null),
                 target,
                 message.getSubject().getDescription(),
-                message.getTemplate().replace("{nome}", username).replace("{company-name}", companyName).replace("{qr-code}", qrData),
+                message.getTemplate().replace("{nome}", username).replace("{company-name}", companyName),
                 null,
                 LocalDateTime.now(),
                 0,
@@ -93,6 +93,10 @@ public class Email extends AggregateRoot<EmailID> {
 
     public void incrementFailedAttempts() {
         this.failedAttempts++;
+    }
+
+    public boolean hasAttachments() {
+        return !this.attachments.isEmpty();
     }
 
     public Email copyToResend() {
