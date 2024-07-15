@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/v1/enrollment")
+@RequestMapping("/v1/subscription/")
 @Tag(name = "Enrollment", description = "Enrollment API - manage enrollments for events")
 public interface EnrollmentAPI {
 
-    @PostMapping(value = "/", consumes = "application/json")
+    @PostMapping(consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Enrollment created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request")
