@@ -28,7 +28,7 @@ public class EmailJpaEntity implements Serializable {
     private String body;
     @Column(name = "failed_attempts", nullable = false)
     private int failedAttempts;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "email_attachments", joinColumns = @JoinColumn(name = "email_id"))
     private List<String> attachments;
     @Column(name = "created_at", nullable = false)
