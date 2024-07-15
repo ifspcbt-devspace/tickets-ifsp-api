@@ -54,30 +54,24 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         EventID eventID = EventID.with(anIn.eventId());
         Event event = this.eventGateway.findById(eventID).orElseThrow(() -> NotFoundException.with(Event.class, eventID));
         Company company = this.companyGateway.findById(event.getCompanyID()).orElseThrow(() -> NotFoundException.with(Company.class, event.getCompanyID()));
-        System.out.println("user: ok");
         Enrollment enrollment = Enrollment.newEnrollment(user.getId(), event.getId());
 
         LocalDate expiredIn = event.getEndDate().plusDays(1);
         Ticket ticket = Ticket.newTicket(user.getId(), event, "Ingresso sem limite de acompanhantes", event.getInitDate(), expiredIn);
-        System.out.println("ticket: ok");
         Message message = this.messageGateway.findBySubjectAndType(MessageSubject.EVENT_TICKET, MessageType.HTML).orElseThrow(() -> NotFoundException.with("Email template not found"));
         final Notification notification = Notification.create();
-        System.out.println("message ok");
         enrollment.validate(notification);
         ticket.validate(notification);
         notification.throwPossibleErrors();
-        System.out.println("validacao ok");
         final Enrollment createdEnrollment = this.enrollmentGateway.create(enrollment);
         final Ticket createdTicket = this.ticketGateway.create(ticket);
 
         String qrCodeData = secretConfig.getBASE_URL() + "/" + secretConfig.getAPI_VERSION() + "/ticket/" + createdTicket.getId() + "/check";
         Email email = Email.createDynamic(user.getEmail().toString(), message, user.getName(), company.getName(), generateQRCodeToBase64(qrCodeData));
-        System.out.println("email ok");
         email.validate(notification);
         notification.throwPossibleErrors();
 
         final Email createdEmail = this.emailGateway.create(email);
-        System.out.println("fim");
         return CreateEnrollmentOutput.from(createdEnrollment, createdTicket, createdEmail);
     }
 

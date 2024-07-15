@@ -9,7 +9,6 @@ import br.com.ifsp.tickets.infra.contexts.enrollment.models.CreateEnrollmentRequ
 import br.com.ifsp.tickets.infra.contexts.enrollment.models.EnrollmentResponse;
 import br.com.ifsp.tickets.infra.contexts.enrollment.presenters.EnrollmentApiPresenter;
 import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ public class EnrollmentController implements EnrollmentAPI {
     private final EnrollmentService enrollmentService;
 
     @Override
-    public ResponseEntity<Void> create(@NotNull CreateEnrollmentRequest request) {
+    public ResponseEntity<Void> create(CreateEnrollmentRequest request) {
         final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final CreateEnrollmentInput input = CreateEnrollmentInput.of(
                 authenticatedUser.toAggregate(),

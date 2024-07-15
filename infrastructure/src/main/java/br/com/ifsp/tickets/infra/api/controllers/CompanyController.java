@@ -20,7 +20,6 @@ import br.com.ifsp.tickets.infra.shared.search.AdvancedSearchRequest;
 import br.com.ifsp.tickets.infra.shared.search.SearchFilterRequest;
 import br.com.ifsp.tickets.infra.shared.search.SortSearchRequest;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,7 +34,7 @@ public class CompanyController implements CompanyAPI {
     private final CompanyService companyService;
 
     @Override
-    public ResponseEntity<Void> create(@NotNull CreateCompanyRequest request) {
+    public ResponseEntity<Void> create(CreateCompanyRequest request) {
         final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final CreateCompanyInput input = CreateCompanyInput.of(
                 authenticatedUser.toAggregate(),
