@@ -38,6 +38,8 @@ public class SecurityConfig {
             "/docs/api-docs",
             "/docs/**",
             "/docs/swagger.html",
+            "/error",
+            "/error/**",
 //          Spring Actuator
             "/actuator/**",
             "/health/**",
