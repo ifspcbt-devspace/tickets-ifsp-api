@@ -33,6 +33,11 @@ public class EmailAddress extends ValueObject {
     }
 
     @Override
+    public String toString() {
+        return value;
+    }
+
+    @Override
     public int hashCode() {
         return value.hashCode();
     }
