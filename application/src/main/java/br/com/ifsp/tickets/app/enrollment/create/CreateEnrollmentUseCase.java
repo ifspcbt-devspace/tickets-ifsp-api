@@ -33,7 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
-    private SecretConfig secretConfig = new SecretConfig();
+    private final SecretConfig secretConfig = new SecretConfig();
     private final IEventGateway eventGateway;
     private final IEnrollmentGateway enrollmentGateway;
     private final ITicketGateway ticketGateway;
