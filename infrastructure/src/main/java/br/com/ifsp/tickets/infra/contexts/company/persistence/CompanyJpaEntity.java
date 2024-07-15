@@ -19,7 +19,6 @@ import java.util.UUID;
 public class CompanyJpaEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
     @Column(name = "name", nullable = false)
