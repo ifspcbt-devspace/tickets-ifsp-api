@@ -1,6 +1,5 @@
 package br.com.ifsp.tickets.infra.contexts.enrollment.persistence;
 
-import br.com.ifsp.tickets.domain.enrollment.Enrollment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

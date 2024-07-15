@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor(onConstructor_ = @__(@Autowired))
 public class EnrollmentConfig {
+
     private final IEmailGateway emailGateway;
     private final IMessageGateway messageGateway;
     private final IEventGateway eventGateway;

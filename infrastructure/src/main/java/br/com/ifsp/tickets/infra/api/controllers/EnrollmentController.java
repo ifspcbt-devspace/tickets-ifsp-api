@@ -21,6 +21,7 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EnrollmentController implements EnrollmentAPI {
+
     private final EnrollmentService enrollmentService;
 
     @Override
