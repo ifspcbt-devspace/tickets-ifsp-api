@@ -65,7 +65,7 @@ dependencies {
 
 bootJar {
     archiveFileName.set("tickets-ifsp-api.${archiveExtension.get()}")
-    destinationDirectory.set(rootProject.getLayout().getBuildDirectory().dir('/libs').get())
+    destinationDirectory = file("../build/libs")
 }
 
 test {
