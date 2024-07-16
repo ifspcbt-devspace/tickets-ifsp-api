@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface MessageRepository extends JpaRepository<MessageJpaEntity, Integer> {
 
     Optional<MessageJpaEntity> findBySubjectAndType(int subject, char type);
+
+    boolean existsBySubjectAndType(int subject, char type);
 }
