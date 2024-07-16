@@ -9,6 +9,7 @@ import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ public class Email extends AggregateRoot<EmailID> {
         this.target = target;
         this.subject = subject;
         this.body = body;
-        this.attachments = attachments == null ? List.of() : attachments;
+        this.attachments = attachments == null ? new ArrayList<>() : attachments;
         this.createdAt = createdAt;
         this.failedAttempts = failedAttempts;
         this.sent = sent;
