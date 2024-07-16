@@ -2,7 +2,10 @@ package br.com.ifsp.tickets.infra.shared.address;
 
 import br.com.ifsp.tickets.domain.shared.Identifier;
 import br.com.ifsp.tickets.domain.shared.vo.Address;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +19,6 @@ import java.util.UUID;
 public class AddressJpaEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
     @Column(name = "street", nullable = false)

@@ -19,7 +19,6 @@ import java.util.UUID;
 public class UpsertEmailJpaEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
     @OneToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})

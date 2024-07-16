@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class EventJpaEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
     @Column(name = "name", nullable = false)
     private String name;

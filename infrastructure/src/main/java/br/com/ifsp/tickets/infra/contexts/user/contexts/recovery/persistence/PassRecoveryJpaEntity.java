@@ -18,7 +18,6 @@ import java.util.UUID;
 public class PassRecoveryJpaEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})

@@ -5,7 +5,10 @@ import br.com.ifsp.tickets.domain.enrollment.EnrollmentID;
 import br.com.ifsp.tickets.domain.enrollment.EnrollmentStatus;
 import br.com.ifsp.tickets.domain.event.EventID;
 import br.com.ifsp.tickets.domain.user.UserID;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +23,6 @@ import java.util.UUID;
 public class EnrollmentJpaEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
     @Column(name = "user_id", nullable = false)

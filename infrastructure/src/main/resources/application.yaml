@@ -33,8 +33,6 @@ spring:
     locale: br
   jpa:
     open-in-view: false
-    hibernate:
-      ddl-auto: update
   datasource:
     hikari:
       maxLifetime: '2000000'
