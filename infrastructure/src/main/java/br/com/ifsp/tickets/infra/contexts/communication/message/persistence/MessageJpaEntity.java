@@ -7,6 +7,7 @@ import br.com.ifsp.tickets.domain.communication.message.type.MessageType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -24,6 +25,7 @@ public class MessageJpaEntity implements Serializable {
     private int subject;
     @Column(name = "type", nullable = false)
     private char type;
+    @Setter
     @Column(name = "template", columnDefinition = "TEXT", nullable = false)
     private String template;
 

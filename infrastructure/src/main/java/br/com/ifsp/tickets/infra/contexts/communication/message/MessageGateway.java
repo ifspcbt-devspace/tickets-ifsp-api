@@ -26,8 +26,11 @@ public class MessageGateway implements IMessageGateway {
 
     @Override
     public Message update(Message message) {
-        if (this.repository.existsBySubjectAndType(message.getSubject().getKey(), message.getType().getKey()))
-            this.repository.findBySubjectAndType(message.getSubject().getKey(), message.getType().getKey()).ifPresent(this.repository::delete);
+        if (this.repository.existsBySubjectAndType(message.getSubject().getKey(), message.getType().getKey())) {
+            MessageJpaEntity entity = this.repository.findBySubjectAndType(message.getSubject().getKey(), message.getType().getKey()).get();
+            entity.setTemplate(message.getTemplate());
+            return this.repository.save(entity).toAggregate();
+        }
         return this.repository.save(MessageJpaEntity.from(message)).toAggregate();
     }
 
