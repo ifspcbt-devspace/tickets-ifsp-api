@@ -68,7 +68,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         final Enrollment createdEnrollment = this.enrollmentGateway.create(enrollment);
         final Ticket createdTicket = this.ticketGateway.create(ticket);
 
-        String qrCodeData = secretConfig.getBASE_URL() + "/" + secretConfig.getAPI_VERSION() + "/ticket/" + createdTicket.getId() + "/check";
+        String qrCodeData = secretConfig.getBASE_URL() + "/ticket/" + createdTicket.getId() + "/check";
         Email email = Email.createDynamic(user.getEmail().toString(), message, user.getName(), company.getName());
         email.appendAttachment("qr-code.png", generateQRCodeToBase64(qrCodeData), fileProvider);
         email.validate(notification);
@@ -82,7 +82,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeData, BarcodeFormat.QR_CODE, 200, 200);
+            BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeData, BarcodeFormat.QR_CODE, 500, 500);
 
             MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
         } catch (WriterException | IOException e) {

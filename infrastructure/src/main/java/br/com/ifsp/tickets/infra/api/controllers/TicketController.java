@@ -17,7 +17,6 @@ public class TicketController implements TicketAPI {
     public ResponseEntity<Void> check(String id) {
         final CheckTicketInput input = CheckTicketInput.of(id);
         ticketService.checkTicket(input);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.accepted().build();
     }
 }

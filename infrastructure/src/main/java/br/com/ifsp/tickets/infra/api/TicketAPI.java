@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Ticket", description = "Ticket API - manage tickets for events")
 public interface TicketAPI {
 
-    @PatchMapping(value = "/{id}/check", consumes = "application/json", produces = "application/json")
+    @PatchMapping(value = "/{id}/check", produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ticket checked successfully"),
             @ApiResponse(responseCode = "404", description = "Ticket not found"),

@@ -34,7 +34,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   datasource:
     hikari:
       maxLifetime: '2000000'

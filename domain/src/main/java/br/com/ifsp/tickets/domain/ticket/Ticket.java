@@ -83,6 +83,8 @@ public class Ticket extends Entity<TicketID> {
             throw new TicketConsumeException("Ticket does not belong to this event");
         if (this.status.isCanceled())
             throw new TicketConsumeException("Ticket is canceled");
+        if (this.status.isConsumed())
+            throw new TicketConsumeException("Ticket is already consumed");
         if (this.status.isExpired())
             throw new TicketExpiredException(this.getId());
 
