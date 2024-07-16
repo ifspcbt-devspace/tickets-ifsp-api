@@ -76,6 +76,11 @@ public class EnrollmentGateway implements IEnrollmentGateway {
     }
 
     @Override
+    public boolean existsByUserIDAndEventID(UserID userID, EventID eventID) {
+        return this.enrollmentRepository.existsByUserIDAndEventID(userID.getValue(), eventID.getValue());
+    }
+
+    @Override
     public Enrollment update(Enrollment enrollment) {
         return this.enrollmentRepository.save(EnrollmentJpaEntity.from(enrollment)).toAggregate();
     }

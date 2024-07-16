@@ -56,6 +56,9 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         EventID eventID = EventID.with(anIn.eventId());
         Event event = this.eventGateway.findById(eventID).orElseThrow(() -> NotFoundException.with(Event.class, eventID));
         Company company = this.companyGateway.findById(event.getCompanyID()).orElseThrow(() -> NotFoundException.with(Company.class, event.getCompanyID()));
+        if (this.enrollmentGateway.existsByUserIDAndEventID(user.getId(), eventID)) {
+            Notification.create("Validation Error").append("User already enrolled in this event").throwPossibleErrors();
+        }
         Enrollment enrollment = Enrollment.newEnrollment(user.getId(), event.getId());
 
         LocalDate expiredIn = event.getEndDate().plusDays(1);

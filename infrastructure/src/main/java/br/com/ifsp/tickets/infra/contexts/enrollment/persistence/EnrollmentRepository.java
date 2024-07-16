@@ -13,4 +13,5 @@ public interface EnrollmentRepository extends JpaRepository<EnrollmentJpaEntity,
     Page<EnrollmentJpaEntity> findAllByUserID(UUID id, Pageable pageable);
     Page<EnrollmentJpaEntity> findAllByEventID(UUID id, Pageable pageable);
     Optional<EnrollmentJpaEntity> findByUserIDAndEventID(UUID userID, UUID eventID);
+    boolean existsByUserIDAndEventID(UUID userID, UUID eventID);
 }
