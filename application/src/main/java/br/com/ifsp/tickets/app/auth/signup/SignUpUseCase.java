@@ -66,6 +66,7 @@ public class SignUpUseCase implements ISignUpUseCase {
                 .uniqueness(() -> this.userGateway.existsByUsername(username), "username")
                 .uniqueness(() -> this.userGateway.existsByCPF(cpf), "cpf")
                 .uniqueness(() -> this.userGateway.existsByEmail(emailAddress), "email")
+                .uniqueness(() -> this.upsertEmailGateway.existsByEmail(emailAddress), "email")
                 .throwPossibleErrors();
 
         this.authUtils.validatePassword(password, notification);

@@ -11,5 +11,7 @@ public interface UpsertEmailRepository extends JpaRepository<UpsertEmailJpaEntit
 
     Optional<UpsertEmailJpaEntity> findByUserId(UUID userId);
 
+    boolean existsByEmail(String email);
+
     Optional<UpsertEmailJpaEntity> findByToken(String token);
 }
