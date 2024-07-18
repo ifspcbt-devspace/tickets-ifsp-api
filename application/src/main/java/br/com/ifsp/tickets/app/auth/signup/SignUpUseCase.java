@@ -64,7 +64,7 @@ public class SignUpUseCase implements ISignUpUseCase {
         notification
                 .throwPossibleErrors()
                 .uniqueness(() -> this.userGateway.existsByUsername(username), "username")
-                .uniqueness(() -> this.userGateway.existsByCPF(cpf), "cpf")
+                .uniqueness(() -> this.userGateway.existsByEncryptedCPF(cpf), "cpf")
                 .uniqueness(() -> this.userGateway.existsByEmail(emailAddress), "email")
                 .uniqueness(() -> this.upsertEmailGateway.existsByEmail(emailAddress), "email")
                 .throwPossibleErrors();

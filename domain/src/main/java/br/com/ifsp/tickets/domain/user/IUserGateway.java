@@ -36,6 +36,6 @@ public interface IUserGateway {
 
     boolean existsByPhoneNumber(PhoneNumber phoneNumber);
 
-    boolean existsByCPF(CPF cpf);
+    boolean existsByEncryptedCPF(CPF cpf);
 
 }

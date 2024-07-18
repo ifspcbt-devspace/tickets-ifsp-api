@@ -111,7 +111,7 @@ public class UserGateway implements IUserGateway {
     }
 
     @Override
-    public boolean existsByCPF(CPF cpf) {
-        return this.userRepository.existsByCpf(cpf.getValue());
+    public boolean existsByEncryptedCPF(CPF cpf) {
+        return this.userRepository.existsByEncryptedCpf(EncryptionService.encrypt(cpf.getValue()));
     }
 }

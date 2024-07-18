@@ -32,5 +32,5 @@ public interface UserRepository extends JpaRepository<UserJpaEntity, UUID> {
 
     boolean existsByPhoneNumber(String phoneNumber);
 
-    boolean existsByCpf(String cpf);
+    boolean existsByEncryptedCpf(String cpf);
 }
