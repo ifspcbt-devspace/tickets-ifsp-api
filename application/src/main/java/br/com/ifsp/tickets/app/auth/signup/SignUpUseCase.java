@@ -57,7 +57,7 @@ public class SignUpUseCase implements ISignUpUseCase {
                 cpf,
                 birthDate
         );
-
+        System.out.println("usecase cpf" + user.getCpf().getValue());
         final Notification notification = Notification.create("Could not create aggregate User");
         user.validate(notification);
 
