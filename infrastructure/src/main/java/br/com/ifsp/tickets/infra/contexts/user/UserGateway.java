@@ -11,6 +11,7 @@ import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
 import br.com.ifsp.tickets.infra.contexts.user.persistence.UserRepository;
 import br.com.ifsp.tickets.infra.contexts.user.persistence.spec.UserSpecificationBuilder;
+import br.com.ifsp.tickets.infra.shared.encryption.EncryptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,7 +50,7 @@ public class UserGateway implements IUserGateway {
 
     @Override
     public Optional<User> findByCPF(CPF cpf) {
-        return this.userRepository.findByCpf(cpf.getValue()).map(UserJpaEntity::toAggregate);
+        return this.userRepository.findByEncryptedCpf(EncryptionService.encrypt(cpf.getValue())).map(UserJpaEntity::toAggregate);
     }
 
     @Override

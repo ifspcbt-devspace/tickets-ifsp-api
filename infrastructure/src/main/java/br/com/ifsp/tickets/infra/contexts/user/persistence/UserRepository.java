@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<UserJpaEntity, UUID> {
             """)
     Optional<UserJpaEntity> findByUsernameOrEmail(String login);
 
-    Optional<UserJpaEntity> findByCpf(String cpf);
+    Optional<UserJpaEntity> findByEncryptedCpf(String cpf);
 
     Page<UserJpaEntity> findAll(Specification<UserJpaEntity> specification, Pageable pageable);
 
