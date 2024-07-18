@@ -53,8 +53,6 @@ public class UserJpaEntity implements UserDetails, Serializable {
     private UUID companyID;
     @Column(name = "role_id", nullable = false)
     private Integer roleId;
-    @Transient
-    private String decryptedCpf;
 
     public UserJpaEntity(UUID id, String name, String bio, String email, String phoneNumber, String username, String password, String cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, UUID companyID, Integer roleId) {
         this.id = id;
@@ -64,13 +62,12 @@ public class UserJpaEntity implements UserDetails, Serializable {
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.password = password;
-        this.decryptedCpf = cpf;
+        this.encryptedCpf = EncryptionService.encrypt(cpf);
         this.birthDate = birthDate;
         this.passwordDate = passwordDate;
         this.active = active;
         this.companyID = companyID;
         this.roleId = roleId;
-        System.out.println("enc " + encryptedCpf  + "\ndec CPF: " + this.decryptedCpf);
     }
 
     public static UserJpaEntity from(User user) {
@@ -100,7 +97,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
                 new PhoneNumber(this.phoneNumber),
                 this.username,
                 this.password,
-                new CPF(this.decryptedCpf),
+                new CPF(this.getDecryptedCPF()),
                 this.birthDate,
                 this.passwordDate,
                 this.active,
@@ -137,14 +134,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
         return this.active;
     }
 
-    @PrePersist
-    public void prePersist() {
-        this.encryptedCpf = EncryptionService.encrypt(this.decryptedCpf);
-        System.out.println("AAAAAAAAAAAAAAAAAAA " + encryptedCpf  + "\nCPF: " + this.decryptedCpf);
-    }
-
-    @PostLoad
-    public void postLoad() {
-        this.decryptedCpf = EncryptionService.decrypt(this.encryptedCpf);
+    public String getDecryptedCPF(){
+        return EncryptionService.decrypt(this.encryptedCpf);
     }
 }
