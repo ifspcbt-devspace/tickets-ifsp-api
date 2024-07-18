@@ -139,7 +139,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
     @PrePersist
     public void prePersist() {
         this.encryptedCpf = EncryptionService.encrypt(this.decryptedCpf);
-        System.out.println("AAAAAAAAAAAAAAAAAAA " + encryptedCpf);
+        System.out.println("AAAAAAAAAAAAAAAAAAA " + encryptedCpf  + "\nCPF: " + this.decryptedCpf);
     }
 
     @PostLoad
