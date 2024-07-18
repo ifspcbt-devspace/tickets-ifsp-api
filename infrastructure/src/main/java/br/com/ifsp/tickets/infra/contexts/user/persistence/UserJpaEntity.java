@@ -70,7 +70,6 @@ public class UserJpaEntity implements UserDetails, Serializable {
         this.active = active;
         this.companyID = companyID;
         this.roleId = roleId;
-        System.out.println("enc CPF: " + this.encryptedCpf + "\n Dec CPF: " + this.decryptedCpf);
     }
 
     public static UserJpaEntity from(User user) {
