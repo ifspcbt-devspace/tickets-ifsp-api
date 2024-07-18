@@ -4,6 +4,7 @@ import br.com.ifsp.tickets.domain.user.UserID;
 import br.com.ifsp.tickets.domain.user.email.IUpsertEmailGateway;
 import br.com.ifsp.tickets.domain.user.email.UpsertEmail;
 import br.com.ifsp.tickets.domain.user.email.UpsertEmailID;
+import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.infra.contexts.user.contexts.upsert.email.persistence.UpsertEmailJpaEntity;
 import br.com.ifsp.tickets.infra.contexts.user.contexts.upsert.email.persistence.UpsertEmailRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,11 @@ public class UpsertEmailGateway implements IUpsertEmailGateway {
     @Override
     public UpsertEmail update(UpsertEmail upsertEmail) {
         return this.repository.save(UpsertEmailJpaEntity.from(upsertEmail)).toAggregate();
+    }
+
+    @Override
+    public boolean existsByEmail(EmailAddress email) {
+        return this.repository.existsByEmail(email.getValue());
     }
 
     @Override

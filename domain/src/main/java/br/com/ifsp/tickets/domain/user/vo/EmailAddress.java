@@ -19,7 +19,7 @@ public class EmailAddress extends ValueObject {
         if (!ValidationUtils.isValidEmail(value)) {
             throw new IllegalEmailException(value);
         }
-        this.value = value;
+        this.value = value.trim();
     }
 
     @Override

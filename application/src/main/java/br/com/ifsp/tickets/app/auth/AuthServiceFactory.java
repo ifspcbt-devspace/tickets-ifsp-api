@@ -30,7 +30,7 @@ public class AuthServiceFactory {
                                      IPasswordRecoveryGateway passwordRecoveryTokenGateway,
                                      IUpsertEmailGateway upsertEmailGateway) {
         if (authService == null) {
-            final ISignInUseCase signInUseCase = new SignInUseCase(authUtils, authManager, userGateway);
+            final ISignInUseCase signInUseCase = new SignInUseCase(authUtils, authManager, userGateway, upsertEmailGateway);
             final ISignUpUseCase signUpUseCase = new SignUpUseCase(userGateway, authUtils, upsertEmailGateway, messageGateway, emailGateway);
             final IRecoveryRequestUseCase recoveryRequestUseCase = new RecoveryRequestUseCase(emailGateway, messageGateway, userGateway, passwordRecoveryTokenGateway);
             final IRecoveryUseCase recoveryUseCase = new RecoveryUseCase(passwordRecoveryTokenGateway, authUtils, userGateway);

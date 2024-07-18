@@ -19,6 +19,8 @@ public interface IEnrollmentGateway {
 
     Enrollment findByUserIDAndEventID(UserID userID, EventID eventID);
 
+    boolean existsByUserIDAndEventID(UserID userID, EventID eventID);
+
     Enrollment update(Enrollment enrollment);
 
     void delete(EnrollmentID id);
