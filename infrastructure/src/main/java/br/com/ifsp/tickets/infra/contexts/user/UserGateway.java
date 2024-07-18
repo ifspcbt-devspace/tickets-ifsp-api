@@ -30,9 +30,7 @@ public class UserGateway implements IUserGateway {
 
     @Override
     public User create(User user) {
-        User a = this.userRepository.save(UserJpaEntity.from(user)).toAggregate();
-        System.out.println(a.getCpf().getValue());
-        return a;
+        return this.userRepository.save(UserJpaEntity.from(user)).toAggregate();
     }
 
     @Override
