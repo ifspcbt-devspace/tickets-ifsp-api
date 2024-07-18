@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 public class EncryptionService {
 
     private static final StrongTextEncryptor encryptor;
-    @Value("{encryptor-value}")
+    @Value("${encryptor-value}")
     private static String encryptorValue;
 
     static {
