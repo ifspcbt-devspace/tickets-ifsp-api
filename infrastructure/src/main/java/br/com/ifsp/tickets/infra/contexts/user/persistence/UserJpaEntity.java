@@ -7,10 +7,8 @@ import br.com.ifsp.tickets.domain.user.vo.CPF;
 import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import br.com.ifsp.tickets.infra.shared.encryption.EncryptionService;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -44,7 +42,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
     @Column(name = "password")
     private String password;
     @Column(name = "cpf", nullable = false, unique = true)
-    private String cpf;
+    private String encryptedCpf;
     @Column(name = "birth_date")
     private LocalDate birthDate;
     @Column(name = "password_date")
@@ -55,6 +53,8 @@ public class UserJpaEntity implements UserDetails, Serializable {
     private UUID companyID;
     @Column(name = "role_id", nullable = false)
     private Integer roleId;
+    @Transient
+    private String cpf;
 
     public UserJpaEntity(UUID id, String name, String bio, String email, String phoneNumber, String username, String password, String cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, UUID companyID, Integer roleId) {
         this.id = id;
@@ -134,5 +134,15 @@ public class UserJpaEntity implements UserDetails, Serializable {
     @Override
     public boolean isEnabled() {
         return this.active;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.encryptedCpf = EncryptionService.encrypt(this.cpf);
+    }
+
+    @PostLoad
+    public void postLoad() {
+        this.cpf = EncryptionService.decrypt(this.encryptedCpf);
     }
 }
