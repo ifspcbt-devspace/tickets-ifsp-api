@@ -1,17 +1,13 @@
 package br.com.ifsp.tickets.infra.shared.encryption;
 
-import lombok.extern.slf4j.Slf4j;
 import org.jasypt.util.text.StrongTextEncryptor;
-import org.springframework.beans.factory.annotation.Value;
 
-@Slf4j
 public class EncryptionService {
 
     private static final StrongTextEncryptor encryptor;
-    @Value("${encryptor-value}")
-    private static String encryptorValue;
 
     static {
+        String encryptorValue = System.getenv("ENCRYPTOR_VALUE");
         encryptor = new StrongTextEncryptor();
         encryptor.setPassword(encryptorValue);
     }
