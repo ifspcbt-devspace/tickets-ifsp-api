@@ -62,3 +62,5 @@ server:
       force: true
 
 upload-dir: ticketsifsp/uploads/
+
+encryptor-value: ${ENCRYPTOR_VALUE}
