@@ -54,7 +54,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
     @Column(name = "role_id", nullable = false)
     private Integer roleId;
     @Transient
-    private String cpf;
+    private String decryptedCpf;
 
     public UserJpaEntity(UUID id, String name, String bio, String email, String phoneNumber, String username, String password, String cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, UUID companyID, Integer roleId) {
         this.id = id;
@@ -64,7 +64,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.password = password;
-        this.cpf = cpf;
+        this.decryptedCpf = cpf;
         this.birthDate = birthDate;
         this.passwordDate = passwordDate;
         this.active = active;
@@ -99,7 +99,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
                 new PhoneNumber(this.phoneNumber),
                 this.username,
                 this.password,
-                new CPF(this.cpf),
+                new CPF(this.decryptedCpf),
                 this.birthDate,
                 this.passwordDate,
                 this.active,
@@ -138,11 +138,12 @@ public class UserJpaEntity implements UserDetails, Serializable {
 
     @PrePersist
     public void prePersist() {
-        this.encryptedCpf = EncryptionService.encrypt(this.cpf);
+        this.encryptedCpf = EncryptionService.encrypt(this.decryptedCpf);
+        System.out.println("AAAAAAAAAAAAAAAAAAA " + encryptedCpf);
     }
 
     @PostLoad
     public void postLoad() {
-        this.cpf = EncryptionService.decrypt(this.encryptedCpf);
+        this.decryptedCpf = EncryptionService.decrypt(this.encryptedCpf);
     }
 }
