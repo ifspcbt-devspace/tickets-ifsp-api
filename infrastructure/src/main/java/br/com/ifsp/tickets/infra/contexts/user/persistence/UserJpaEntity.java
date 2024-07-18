@@ -88,6 +88,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
     }
 
     public User toAggregate() {
+        System.out.println(this.getDecryptedCPF());
         return User.with(
                 UserID.with(this.id),
                 this.name,
