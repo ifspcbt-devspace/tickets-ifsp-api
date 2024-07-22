@@ -4,6 +4,7 @@ import br.com.ifsp.tickets.app.auth.activation.ActivationInput;
 import br.com.ifsp.tickets.app.auth.activation.IActivationUseCase;
 import br.com.ifsp.tickets.app.auth.get.GetUserByIdInput;
 import br.com.ifsp.tickets.app.auth.get.IGetUserByIdUseCase;
+import br.com.ifsp.tickets.app.auth.get.UserOutput;
 import br.com.ifsp.tickets.app.auth.recovery.change.IRecoveryUseCase;
 import br.com.ifsp.tickets.app.auth.recovery.change.RecoveryInput;
 import br.com.ifsp.tickets.app.auth.recovery.request.IRecoveryRequestUseCase;
@@ -53,8 +54,8 @@ public class AuthService {
         this.activationUseCase.execute(inputData);
     }
 
-    public void getUserById(GetUserByIdInput input) {
-        this.getUserByIdUseCase.execute(input);
+    public UserOutput getUserById(GetUserByIdInput input) {
+        return this.getUserByIdUseCase.execute(input);
     }
 
 }

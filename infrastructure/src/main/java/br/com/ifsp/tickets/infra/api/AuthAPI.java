@@ -4,16 +4,14 @@ import br.com.ifsp.tickets.infra.contexts.user.contexts.recovery.models.Recovery
 import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginRequest;
 import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginResponse;
 import br.com.ifsp.tickets.infra.contexts.user.models.register.RegisterRequest;
+import br.com.ifsp.tickets.infra.contexts.user.models.user.UserResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/v1/auth")
 @Tag(name = "Auth", description = "Authentication and Authorization API - manage user authentication and authorization based on JWT tokens")
@@ -32,6 +30,13 @@ public interface AuthAPI {
             @ApiResponse(responseCode = "400", description = "Invalid request")
     })
     ResponseEntity<Void> register(@RequestBody RegisterRequest request);
+
+    @GetMapping(value = "/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User found successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    ResponseEntity<UserResponse> getUserById(@PathVariable String id);
 
     @PostMapping(value = "/activate/{token}")
     @ApiResponses(value = {

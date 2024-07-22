@@ -2,6 +2,7 @@ package br.com.ifsp.tickets.infra.api.controllers;
 
 import br.com.ifsp.tickets.app.auth.AuthService;
 import br.com.ifsp.tickets.app.auth.activation.ActivationInput;
+import br.com.ifsp.tickets.app.auth.get.GetUserByIdInput;
 import br.com.ifsp.tickets.app.auth.recovery.change.RecoveryInput;
 import br.com.ifsp.tickets.app.auth.recovery.request.RecoveryRequestInput;
 import br.com.ifsp.tickets.app.auth.signin.SignInInput;
@@ -9,15 +10,18 @@ import br.com.ifsp.tickets.app.auth.signin.SignInOutput;
 import br.com.ifsp.tickets.app.auth.signup.SignUpInput;
 import br.com.ifsp.tickets.app.auth.signup.SignUpOutput;
 import br.com.ifsp.tickets.infra.api.AuthAPI;
+import br.com.ifsp.tickets.infra.contexts.user.contexts.recovery.models.RecoveryRequest;
 import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginRequest;
 import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginResponse;
 import br.com.ifsp.tickets.infra.contexts.user.models.register.RegisterRequest;
+import br.com.ifsp.tickets.infra.contexts.user.models.user.UserResponse;
+import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
 import br.com.ifsp.tickets.infra.contexts.user.presenters.AuthApiPresenter;
-import br.com.ifsp.tickets.infra.contexts.user.contexts.recovery.models.RecoveryRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -40,6 +44,13 @@ public class AuthController implements AuthAPI {
         final SignUpInput input = SignUpInput.of(request.name(), request.email(), request.username(), request.password(), request.getBirthDate(), request.cpf(), request.phoneNumber());
         final SignUpOutput output = this.authService.register(input);
         return ResponseEntity.created(URI.create("/v1/users/" + output.id())).build();
+    }
+
+    @Override
+    public ResponseEntity<UserResponse> getUserById(String id) {
+        final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final GetUserByIdInput input = GetUserByIdInput.of(id, authenticatedUser.toAggregate());
+        return ResponseEntity.ok(AuthApiPresenter.present(this.authService.getUserById(input)));
     }
 
     @Override
