@@ -18,6 +18,6 @@ public class GetUserByIdUseCase implements IGetUserByIdUseCase {
         final UserID userID = UserID.with(anIn.id());
         final User user = this.userGateway.findById(userID).orElseThrow(() -> NotFoundException.with(User.class, userID));
         final User authenticatedUser = anIn.authenticatedUser();
-        return UserOutput.from(authenticatedUser, user.getRole().getPermissions());
+        return UserOutput.from(user, authenticatedUser.getRole().getPermissions());
     }
 }
