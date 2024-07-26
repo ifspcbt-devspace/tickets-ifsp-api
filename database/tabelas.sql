@@ -164,7 +164,7 @@ create table upsert_emails
     user_id                uuid         not null
         unique
         constraint fk4r2qn2aoel26lppx4p60a09sy
-            references users,
+            references users on DELETE cascade,
     email                  varchar(255) not null
         unique,
     token                  varchar(255) not null
