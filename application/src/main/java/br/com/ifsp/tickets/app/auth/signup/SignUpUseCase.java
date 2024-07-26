@@ -75,13 +75,16 @@ public class SignUpUseCase implements ISignUpUseCase {
         user = this.userGateway.create(user);
 
         // e-mail de confirmação para ativação de conta
-        final UpsertEmail upsertEmail = UpsertEmail.create(emailAddress, user);
+        /*final UpsertEmail upsertEmail = UpsertEmail.create(emailAddress, user);
         upsertEmail.userNotified();
         upsertEmail.validate(notification);
         notification.throwPossibleErrors();
         this.upsertEmailGateway.create(upsertEmail);
 
-        this.sendEmail(notification, emailAddress, user, upsertEmail);
+        this.sendEmail(notification, emailAddress, user, upsertEmail);*/
+        // todo: temporary modification
+        user.enable();
+        user.changeEmail(emailAddress);
 
         return SignUpOutput.from(user);
     }
