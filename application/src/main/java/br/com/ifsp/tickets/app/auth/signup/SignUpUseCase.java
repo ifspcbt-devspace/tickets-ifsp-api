@@ -71,7 +71,8 @@ public class SignUpUseCase implements ISignUpUseCase {
 
         this.authUtils.validatePassword(password, notification);
         notification.throwPossibleErrors();
-
+        user.enable();
+        user.changeEmail(emailAddress);
         user = this.userGateway.create(user);
 
         // e-mail de confirmação para ativação de conta
@@ -83,8 +84,6 @@ public class SignUpUseCase implements ISignUpUseCase {
 
         this.sendEmail(notification, emailAddress, user, upsertEmail);*/
         // todo: temporary modification
-        user.enable();
-        user.changeEmail(emailAddress);
 
         return SignUpOutput.from(user);
     }
