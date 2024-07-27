@@ -68,3 +68,5 @@ end ;
 $$ LANGUAGE plpgsql;
 
 CALL CriarEntidadesPadroes();
+
+SELECT * FROM users WHERE id NOT IN (select user_id from tickets);
