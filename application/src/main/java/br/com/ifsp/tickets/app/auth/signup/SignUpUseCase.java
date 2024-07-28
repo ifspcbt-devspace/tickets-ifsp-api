@@ -81,7 +81,6 @@ public class SignUpUseCase implements ISignUpUseCase {
         this.upsertEmailGateway.create(upsertEmail);
 
         this.sendEmail(notification, emailAddress, user, upsertEmail);
-
         return SignUpOutput.from(user);
     }
 
