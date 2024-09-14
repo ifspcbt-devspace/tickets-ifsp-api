@@ -78,24 +78,18 @@ jobs:
       - name: Log in to Docker registry
         run: echo "${{ secrets.CI_REGISTRY_PASSWORD }}" | docker login ${{ secrets.CI_REGISTRY }} -u "${{ secrets.CI_REGISTRY_USER }}" --password-stdin
 
-      - name: Set branch-specific tag
-        id: tag
-        run: |
-          if [[ "${{ github.ref_name }}" == "master" ]]; then
-            echo "Running on default branch 'master': tag = 'latest'"
-            echo "tag=latest" >> $GITHUB_ENV
-          else
-            echo "Running on branch '${{ github.ref_name }}': tag = '${{ github.ref_name }}'"
-            echo "tag=${{ github.ref_name }}" >> $GITHUB_ENV
-          fi
-
-      - name: Display Docker image tag
-        run: echo "Docker image will be pushed with tag: ${{ env.tag }}"
-
       - name: Build and push Docker image
         run: |
-          docker build --pull -t ${{ secrets.CI_REGISTRY_IMAGE }}:${{ env.tag }} .
-          docker push ${{ secrets.CI_REGISTRY_IMAGE }}:${{ env.tag }}
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
+            tag="latest"
+            echo "Running on default branch 'master': tag = 'latest'"
+          else
+            tag="${{ github.ref_name }}"
+            echo "Running on branch '${{ github.ref_name }}': tag = '${{ github.ref_name }}'"
+          fi
+          docker build --pull -t ${{ secrets.CI_REGISTRY_IMAGE }}:$tag .
+          docker push ${{ secrets.CI_REGISTRY_IMAGE }}:$tag
 
       - name: Clean up Docker images
-        run: docker rmi ${{ secrets.CI_REGISTRY_IMAGE }}:${{ env.tag }} || true
+        run: |
+          docker rmi ${{ secrets.CI_REGISTRY_IMAGE }}:$tag || true
