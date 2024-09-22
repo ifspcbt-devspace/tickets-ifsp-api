@@ -18,13 +18,14 @@ public class Event extends AggregateRoot<EventID> {
     private final List<String> attachmentPaths;
     private final List<EventConfig> configuration;
     private String name;
+    private EventThumbnail thumbnail;
     private String description;
     private LocalDate initDate;
     private LocalDate endDate;
     private Address address;
     private EventStatus status;
 
-    public Event(EventID eventID, String name, String description, LocalDate initDate, LocalDate endDate, Address address, CompanyID companyID, EventStatus status, List<String> attachmentPaths, List<EventConfig> configuration) {
+    public Event(EventID eventID, String name, String description, LocalDate initDate, LocalDate endDate, Address address, CompanyID companyID, EventStatus status, List<String> attachmentPaths, List<EventConfig> configuration, EventThumbnail thumbnail) {
         super(eventID);
         this.name = name;
         this.description = description;
@@ -35,14 +36,15 @@ public class Event extends AggregateRoot<EventID> {
         this.status = status;
         this.attachmentPaths = attachmentPaths == null ? new ArrayList<>() : attachmentPaths;
         this.configuration = configuration == null ? new ArrayList<>() : configuration;
+        this.thumbnail = thumbnail;
     }
 
-    public static Event with(EventID eventID, String name, String description, LocalDate initialDate, LocalDate endDate, Address address, CompanyID companyID, EventStatus status, List<String> attachmentPaths, List<EventConfig> configuration) {
-        return new Event(eventID, name, description, initialDate, endDate, address, companyID, status, attachmentPaths, configuration);
+    public static Event with(EventID eventID, String name, String description, LocalDate initialDate, LocalDate endDate, Address address, CompanyID companyID, EventStatus status, List<String> attachmentPaths, List<EventConfig> configuration, EventThumbnail thumbnail) {
+        return new Event(eventID, name, description, initialDate, endDate, address, companyID, status, attachmentPaths, configuration, thumbnail);
     }
 
     public static Event newEvent(String name, String description, LocalDate initialDate, LocalDate endDate, Address address, CompanyID companyID, List<EventConfig> configuration) {
-        return new Event(EventID.unique(), name, description, initialDate, endDate, address, companyID, EventStatus.SCHEDULED, null, configuration);
+        return new Event(EventID.unique(), name, description, initialDate, endDate, address, companyID, EventStatus.SCHEDULED, null, configuration, EventThumbnail.empty());
     }
 
     public void update(String name, String description, LocalDate initialDate, LocalDate endDate, List<EventConfig> configuration) {
@@ -51,6 +53,10 @@ public class Event extends AggregateRoot<EventID> {
         this.initDate = initialDate;
         this.endDate = endDate;
         this.changeConfiguration(configuration);
+    }
+
+    public void updateThumbnail(EventThumbnail thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public EventConfig getConfiguration(EventConfigKey key) {

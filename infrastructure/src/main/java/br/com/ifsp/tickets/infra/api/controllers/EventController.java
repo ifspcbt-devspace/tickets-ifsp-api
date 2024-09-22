@@ -4,6 +4,11 @@ import br.com.ifsp.tickets.app.event.EventService;
 import br.com.ifsp.tickets.app.event.create.CreateEventInput;
 import br.com.ifsp.tickets.app.event.create.CreateEventOutput;
 import br.com.ifsp.tickets.app.event.retrieve.get.EventOutput;
+import br.com.ifsp.tickets.app.event.thumbnail.download.DownloadThumbnailOutput;
+import br.com.ifsp.tickets.app.event.thumbnail.reset.ResetThumbnailInput;
+import br.com.ifsp.tickets.app.event.thumbnail.upload.UploadThumbnailInput;
+import br.com.ifsp.tickets.domain.shared.exceptions.NoStacktraceException;
+import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.shared.search.AdvancedSearchQuery;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.infra.api.EventAPI;
@@ -17,9 +22,11 @@ import br.com.ifsp.tickets.infra.shared.search.SearchFilterRequest;
 import br.com.ifsp.tickets.infra.shared.search.SortSearchRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 
@@ -61,5 +68,31 @@ public class EventController implements EventAPI {
     public ResponseEntity<EventResponse> get(String id) {
         final EventOutput output = this.eventService.get(id);
         return ResponseEntity.ok(EventApiPresenter.present(output));
+    }
+
+    @Override
+    public ResponseEntity<byte[]> getThumbnail(String id) {
+        final DownloadThumbnailOutput output = this.eventService.downloadThumbnail(id);
+        return ResponseEntity.ok().contentType(IFileStorage.getExtension(output.fileName()).equals("png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG).body(output.fileContent());
+    }
+
+    @Override
+    public ResponseEntity<?> deleteThumbnail(String id) {
+        final UserJpaEntity user = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        this.eventService.resetThumbnail(ResetThumbnailInput.of(user.toAggregate(), id));
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<?> uploadThumbnail(String id, MultipartFile file, String fileName) {
+        final UserJpaEntity user = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final UploadThumbnailInput input;
+        try {
+            input = UploadThumbnailInput.of(user.toAggregate(), id, fileName, file.getBytes());
+        } catch (Exception e) {
+            throw new NoStacktraceException(e.getMessage(), e);
+        }
+        this.eventService.uploadThumbnail(input);
+        return ResponseEntity.accepted().build();
     }
 }

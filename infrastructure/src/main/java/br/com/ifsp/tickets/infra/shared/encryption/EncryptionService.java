@@ -7,7 +7,7 @@ public class EncryptionService {
     private static final StrongTextEncryptor encryptor;
 
     static {
-        String encryptorValue = System.getenv("ENCRYPTOR_VALUE");
+        final String encryptorValue = System.getenv("ENCRYPTOR_VALUE");
         encryptor = new StrongTextEncryptor();
         encryptor.setPassword(encryptorValue);
     }

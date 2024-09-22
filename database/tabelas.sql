@@ -59,20 +59,32 @@ create table enrollments
     status     varchar(255) not null
 );
 
+create table events_thumbnails
+(
+    id          uuid
+        constraint events_thumbnails_pk
+            primary key,
+    filename    varchar   not null,
+    uploaded_at timestamp not null
+);
+
 create table events
 (
-    end_date    date         not null,
-    init_date   date         not null,
-    status      integer      not null,
-    address_id  uuid
+    end_date           date         not null,
+    init_date          date         not null,
+    status             integer      not null,
+    address_id         uuid
         unique
         constraint fkquc7xx27bo60lupj2rf7e0hn2
             references addresses,
-    company_id  uuid         not null,
-    id          uuid         not null
+    event_thumbnail_id uuid
+        constraint events_event_thumbnail_id_fk
+            references events_thumbnails (id),
+    company_id         uuid         not null,
+    id                 uuid         not null
         primary key,
-    description varchar(1000),
-    name        varchar(255) not null
+    description        varchar(1000),
+    name               varchar(255) not null
 );
 
 create table event_attachments

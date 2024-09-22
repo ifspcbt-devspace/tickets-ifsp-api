@@ -3,7 +3,7 @@ package br.com.ifsp.tickets.infra.contexts.communication.email;
 import br.com.ifsp.tickets.domain.communication.email.Email;
 import br.com.ifsp.tickets.domain.communication.email.EmailID;
 import br.com.ifsp.tickets.domain.communication.email.IEmailGateway;
-import br.com.ifsp.tickets.domain.shared.providers.IFileProvider;
+import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.infra.contexts.communication.email.persistence.EmailJpaEntity;
 import br.com.ifsp.tickets.infra.contexts.communication.email.persistence.EmailRepository;
 import jakarta.mail.internet.MimeMessage;
@@ -28,7 +28,7 @@ import java.util.Optional;
 public class EmailGateway implements IEmailGateway {
 
     private final JavaMailSender javaMailSender;
-    private final IFileProvider fileProvider;
+    private final IFileStorage fileProvider;
     private final EmailRepository repository;
     @Value("${spring.mail.host}")
     private String emailFrom;

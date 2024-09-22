@@ -40,8 +40,6 @@ repositories {
 
 dependencies {
     implementation(project(":domain"))
-    implementation 'com.google.zxing:core:3.4.1'
-    implementation 'com.google.zxing:javase:3.4.1'
     implementation 'io.vavr:vavr:0.10.4'
     compileOnly 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.26'

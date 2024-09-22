@@ -9,7 +9,7 @@ import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
 import br.com.ifsp.tickets.domain.enrollment.IEnrollmentGateway;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
-import br.com.ifsp.tickets.domain.shared.providers.IFileProvider;
+import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
 
 public class EnrollmentServiceFactory {
@@ -22,7 +22,8 @@ public class EnrollmentServiceFactory {
             IEnrollmentGateway enrollmentGateway,
             ITicketGateway ticketGateway,
             ICompanyGateway companyGateway,
-            IFileProvider fileProvider
+            IFileStorage fileProvider,
+            ITicketQRGenerator ticketQRGenerator
     ) {
         if (enrollmentService == null) {
             final ICreateEnrollmentUseCase createEnrollmentUseCase = new CreateEnrollmentUseCase(
@@ -32,7 +33,8 @@ public class EnrollmentServiceFactory {
                     messageGateway,
                     companyGateway,
                     emailGateway,
-                    fileProvider);
+                    fileProvider,
+                    ticketQRGenerator);
             final IListEnrollmentsByUserUseCase listEnrollmentsByUserUseCase = new ListEnrollmentsByUserUseCase(
                     enrollmentGateway
             );

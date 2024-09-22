@@ -61,4 +61,5 @@ server:
       enabled: true
       force: true
 
+fe-ticket-check-url: ${FRONTEND_TICKET_CHECK_URL}
 upload-dir: ticketsifsp/uploads/

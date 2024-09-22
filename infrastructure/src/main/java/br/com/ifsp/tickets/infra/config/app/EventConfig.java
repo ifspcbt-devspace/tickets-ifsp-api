@@ -5,6 +5,7 @@ import br.com.ifsp.tickets.app.event.EventServiceFactory;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
 import br.com.ifsp.tickets.domain.event.sale.ITicketSaleGateway;
+import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,9 +18,10 @@ public class EventConfig {
     private final ICompanyGateway companyGateway;
     private final IEventGateway eventGateway;
     private final ITicketSaleGateway ticketSaleGateway;
+    private final IFileStorage fileStorage;
 
     @Bean
     public EventService eventService() {
-        return EventServiceFactory.create(companyGateway, eventGateway, ticketSaleGateway);
+        return EventServiceFactory.create(companyGateway, eventGateway, ticketSaleGateway, fileStorage);
     }
 }

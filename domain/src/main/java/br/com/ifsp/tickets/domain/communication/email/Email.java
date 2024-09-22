@@ -4,7 +4,7 @@ import br.com.ifsp.tickets.domain.communication.Attachment;
 import br.com.ifsp.tickets.domain.communication.PlaceHolder;
 import br.com.ifsp.tickets.domain.communication.message.Message;
 import br.com.ifsp.tickets.domain.shared.AggregateRoot;
-import br.com.ifsp.tickets.domain.shared.providers.IFileProvider;
+import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import lombok.Getter;
 
@@ -68,17 +68,17 @@ public class Email extends AggregateRoot<EmailID> {
         return this;
     }
 
-    public void appendAttachment(String attachment, byte[] content, IFileProvider fileProvider) {
+    public void appendAttachment(String attachment, byte[] content, IFileStorage fileProvider) {
         final String fileName = fileProvider.uploadEmailAttachment(attachment, content);
         this.attachments.add(fileName);
     }
 
-    public void removeAttachment(String attachment, IFileProvider fileProvider) {
+    public void removeAttachment(String attachment, IFileStorage fileProvider) {
         this.attachments.remove(attachment);
         fileProvider.deleteEmailAttachment(attachment);
     }
 
-    public List<Attachment> getAttachments(IFileProvider fileProvider) {
+    public List<Attachment> getAttachments(IFileStorage fileProvider) {
         return this.attachments.stream()
                 .map(fileProvider::downloadEmailAttachment)
                 .filter(Optional::isPresent)

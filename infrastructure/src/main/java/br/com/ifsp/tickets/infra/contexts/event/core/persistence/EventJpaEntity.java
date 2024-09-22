@@ -2,6 +2,7 @@ package br.com.ifsp.tickets.infra.contexts.event.core.persistence;
 
 import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.event.*;
+import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.infra.contexts.event.core.persistence.converter.EventStatusConverter;
 import br.com.ifsp.tickets.infra.shared.address.AddressJpaEntity;
 import jakarta.persistence.*;
@@ -35,9 +36,12 @@ public class EventJpaEntity implements Serializable {
     private LocalDate initDate;
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private AddressJpaEntity address;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "event_thumbnail_id", referencedColumnName = "id")
+    private EventThumbnailJpaEntity thumbnail;
     @Column(name = "status", nullable = false)
     @Convert(converter = EventStatusConverter.class)
     private EventStatus status;
@@ -51,7 +55,7 @@ public class EventJpaEntity implements Serializable {
     @Column(name = "value")
     private Map<String, String> configuration;
 
-    public EventJpaEntity(UUID id, String name, String description, UUID companyId, LocalDate initDate, LocalDate endDate, AddressJpaEntity address, EventStatus status, List<String> attachmentPaths, HashMap<String, String> configuration) {
+    public EventJpaEntity(UUID id, String name, String description, UUID companyId, LocalDate initDate, LocalDate endDate, AddressJpaEntity address, EventThumbnailJpaEntity thumbnail, EventStatus status, List<String> attachmentPaths, HashMap<String, String> configuration) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -59,6 +63,7 @@ public class EventJpaEntity implements Serializable {
         this.initDate = initDate;
         this.endDate = endDate;
         this.address = address;
+        this.thumbnail = thumbnail;
         this.status = status;
         this.attachmentPaths = attachmentPaths == null ? List.of() : attachmentPaths;
         this.configuration = configuration == null ? new HashMap<>() : configuration;
@@ -75,13 +80,13 @@ public class EventJpaEntity implements Serializable {
                 event.getInitDate(),
                 event.getEndDate(),
                 AddressJpaEntity.from(event.getId(), event.getAddress()),
+                event.getThumbnail().isEmpty() ? null : EventThumbnailJpaEntity.from(event.getId(), event.getThumbnail()),
                 event.getStatus(),
                 event.getAttachmentPaths(),
-                configuration.isEmpty() ? null : configuration
-        );
+                configuration.isEmpty() ? null : configuration);
     }
 
-    public Event toAggregate() {
+    public Event toAggregate(IFileStorage fileStorage) {
         final List<EventConfig> eventConfigs = this.configuration.entrySet().stream()
                 .map(e -> new EventConfig(EventConfigKey.valueOf(e.getKey()), e.getValue()))
                 .collect(Collectors.toList());
@@ -95,7 +100,8 @@ public class EventJpaEntity implements Serializable {
                 new CompanyID(this.companyId),
                 this.status,
                 this.attachmentPaths,
-                eventConfigs
+                eventConfigs,
+                this.thumbnail.toVo(fileStorage, new EventID(this.id))
         );
     }
 
