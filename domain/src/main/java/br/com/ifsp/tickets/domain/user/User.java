@@ -53,7 +53,7 @@ public class User extends AggregateRoot<UserID> {
     }
 
     public static User create(String name, Role role, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate) {
-        return new User(UserID.unique(), name, role, null, new EmailAddress(null), phoneNumber, username, password, cpf, birthDate, LocalDate.now(), false, null);
+        return new User(UserID.unique(), name, role, null, new EmailAddress(null), phoneNumber, username, password, cpf, birthDate, LocalDate.now(), true, null);
     }
 
     public void updateProfile(String name, String bio, CPF cpf, LocalDate birthDate) {
