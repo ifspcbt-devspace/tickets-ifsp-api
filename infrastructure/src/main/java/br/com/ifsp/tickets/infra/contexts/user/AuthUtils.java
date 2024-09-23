@@ -24,10 +24,10 @@ import java.util.function.Function;
 
 public class AuthUtils implements IAuthUtils {
 
-    private static final CharacterRule LOWERCASE = new CharacterRule(EnglishCharacterData.LowerCase, 4);
+    private static final CharacterRule LOWERCASE = new CharacterRule(EnglishCharacterData.LowerCase, 1);
     private static final CharacterRule UPPERCASE = new CharacterRule(EnglishCharacterData.UpperCase, 1);
     private static final CharacterRule NUMBER = new CharacterRule(EnglishCharacterData.Digit, 1);
-    private static final LengthRule LENGTH_RULE = new LengthRule(8, Integer.MAX_VALUE);
+    private static final LengthRule LENGTH_RULE = new LengthRule(6, 16);
 
     private final PasswordValidator passwordValidator = new PasswordValidator(LENGTH_RULE, NUMBER, UPPERCASE, LOWERCASE);
     private final String secretKey;
