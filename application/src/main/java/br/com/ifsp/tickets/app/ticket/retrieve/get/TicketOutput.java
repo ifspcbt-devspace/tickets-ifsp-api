@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public record TicketOutput(
         String id,
         String userId,
+        String document,
         String eventId,
         String description,
         LocalDate validIn,
@@ -23,6 +24,7 @@ public record TicketOutput(
         return new TicketOutput(
                 ticket.getId().getValue().toString(),
                 ticket.getUserID().isEmpty() ? null : ticket.getUserID().orElse(null).getValue().toString(),
+                ticket.getDocument(),
                 ticket.getEventID().getValue().toString(),
                 ticket.getDescription(),
                 ticket.getValidIn(),
