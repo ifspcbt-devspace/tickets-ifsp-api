@@ -28,6 +28,10 @@ public class EnrollmentController implements EnrollmentAPI {
         final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final CreateEnrollmentInput input = CreateEnrollmentInput.of(
                 authenticatedUser.toAggregate(),
+                request.name(),
+                request.email(),
+                request.document(),
+                request.birthDate(),
                 request.eventId()
         );
         final CreateEnrollmentOutput out = this.enrollmentService.create(input);

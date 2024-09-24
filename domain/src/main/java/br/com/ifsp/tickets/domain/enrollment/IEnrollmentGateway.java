@@ -20,6 +20,7 @@ public interface IEnrollmentGateway {
     Enrollment findByUserIDAndEventID(UserID userID, EventID eventID);
 
     boolean existsByUserIDAndEventID(UserID userID, EventID eventID);
+    boolean existsByDocumentAndEventID(String document, EventID eventID);
 
     Enrollment update(Enrollment enrollment);
 
