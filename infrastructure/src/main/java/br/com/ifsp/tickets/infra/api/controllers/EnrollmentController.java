@@ -24,7 +24,7 @@ public class EnrollmentController implements EnrollmentAPI {
     private final EnrollmentService enrollmentService;
 
     @Override
-    public ResponseEntity<Void> create(CreateEnrollmentRequest request) {
+    public ResponseEntity<String> create(CreateEnrollmentRequest request) {
         final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final CreateEnrollmentInput input = CreateEnrollmentInput.of(
                 authenticatedUser.toAggregate(),
@@ -36,7 +36,7 @@ public class EnrollmentController implements EnrollmentAPI {
         );
         final CreateEnrollmentOutput out = this.enrollmentService.create(input);
 
-        return ResponseEntity.created(URI.create("/v1/enrollment/" + out.enrollmentId())).build();
+        return ResponseEntity.created(URI.create("/v1/enrollment/" + out.enrollmentId())).body(out.ticketId());
     }
 
     @Override

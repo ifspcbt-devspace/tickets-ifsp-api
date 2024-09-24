@@ -21,7 +21,7 @@ public interface EnrollmentAPI {
             @ApiResponse(responseCode = "201", description = "Enrollment created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request")
     })
-    ResponseEntity<Void> create(@RequestBody CreateEnrollmentRequest request);
+    ResponseEntity<String> create(@RequestBody CreateEnrollmentRequest request);
 
     @GetMapping(value = "/list", produces = "application/json")
     @ApiResponses(value = {
