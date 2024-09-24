@@ -11,6 +11,8 @@ public record TicketResponse(
         String id,
         @JsonProperty("user_id")
         String userId,
+        @JsonProperty("document")
+        String document,
         @JsonProperty("event_id")
         String eventId,
         @JsonProperty("description")

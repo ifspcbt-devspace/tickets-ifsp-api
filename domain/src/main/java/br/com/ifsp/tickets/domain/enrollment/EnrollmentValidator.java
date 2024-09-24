@@ -16,8 +16,8 @@ public class EnrollmentValidator extends Validator {
     public void validate() {
         if (this.enrollment.getEventID() == null || this.enrollment.getEventID().getValue() == null)
             error("EventID is required");
-        if (this.enrollment.getUserID() == null || this.enrollment.getUserID().getValue() == null)
-            error("UserID is required");
+        if (this.enrollment.getDocument() == null)
+            error("Document is required");
         if (this.enrollment.getStatus() == null) error("Status is required");
         if (this.enrollment.getCreatedAt() == null) error("CreatedAt is required");
     }

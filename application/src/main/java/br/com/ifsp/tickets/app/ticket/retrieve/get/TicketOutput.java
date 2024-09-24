@@ -22,7 +22,7 @@ public record TicketOutput(
     public static TicketOutput from(Ticket ticket) {
         return new TicketOutput(
                 ticket.getId().getValue().toString(),
-                ticket.getUserID().getValue().toString(),
+                ticket.getUserID().isEmpty() ? null : ticket.getUserID().orElse(null).getValue().toString(),
                 ticket.getEventID().getValue().toString(),
                 ticket.getDescription(),
                 ticket.getValidIn(),
