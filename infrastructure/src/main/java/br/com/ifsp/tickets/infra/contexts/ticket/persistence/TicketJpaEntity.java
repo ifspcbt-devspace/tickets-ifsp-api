@@ -27,7 +27,9 @@ public class TicketJpaEntity implements Serializable {
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "document", nullable = false)
+    private String document;
+    @Column(name = "user_id")
     private UUID userId;
     @Column(name = "event_id", nullable = false)
     private UUID eventId;
@@ -46,8 +48,9 @@ public class TicketJpaEntity implements Serializable {
     @Column(name = "last_time_consumed")
     private LocalDateTime lastTimeConsumed;
 
-    public TicketJpaEntity(UUID id, UUID userId, UUID eventId, String description, String status, String code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+    public TicketJpaEntity(UUID id, String document, UUID userId, UUID eventId, String description, String status, String code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         this.id = id;
+        this.document = document;
         this.userId = userId;
         this.eventId = eventId;
         this.description = description;
@@ -62,7 +65,8 @@ public class TicketJpaEntity implements Serializable {
     public static TicketJpaEntity from(Ticket ticket) {
         return new TicketJpaEntity(
                 ticket.getId().getValue(),
-                ticket.getUserID().getValue(),
+                ticket.getDocument(),
+                ticket.getUserID().orElse(null).getValue(),
                 ticket.getEventID().getValue(),
                 ticket.getDescription(),
                 ticket.getStatus().name(),
@@ -77,7 +81,7 @@ public class TicketJpaEntity implements Serializable {
     public Ticket toAggregate() {
         return Ticket.with(
                 TicketID.with(this.id),
-                UserID.with(this.userId),
+                this.getDocument(),
                 EventID.with(this.eventId),
                 this.description,
                 TicketStatus.valueOf(this.status),
@@ -85,7 +89,8 @@ public class TicketJpaEntity implements Serializable {
                 this.validIn,
                 this.expiredIn,
                 this.createdAt,
-                this.lastTimeConsumed
+                this.lastTimeConsumed,
+                UserID.with(this.userId)
         );
     }
 }

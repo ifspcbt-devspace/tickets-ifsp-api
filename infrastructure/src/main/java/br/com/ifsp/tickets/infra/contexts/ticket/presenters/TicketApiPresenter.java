@@ -9,6 +9,7 @@ public interface TicketApiPresenter {
         return new TicketResponse(
                 output.id(),
                 output.userId(),
+                output.document(),
                 output.eventId(),
                 output.description(),
                 output.validIn(),

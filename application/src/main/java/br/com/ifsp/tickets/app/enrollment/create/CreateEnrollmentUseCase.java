@@ -19,6 +19,7 @@ import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
 import br.com.ifsp.tickets.domain.ticket.Ticket;
+import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ import java.time.LocalDate;
 public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
 
     private final IEventGateway eventGateway;
+    private final IUserGateway userGateway;
     private final IEnrollmentGateway enrollmentGateway;
     private final ITicketGateway ticketGateway;
     private final IMessageGateway messageGateway;
@@ -34,8 +36,9 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
     private final IFileStorage fileProvider;
     private final ITicketQRGenerator ticketGenerator;
 
-    public CreateEnrollmentUseCase(IEventGateway eventGateway, IEnrollmentGateway enrollmentGateway, ITicketGateway ticketGateway, IMessageGateway messageGateway, ICompanyGateway companyGateway, IEmailGateway emailGateway, IFileStorage fileProvider, ITicketQRGenerator ticketGenerator) {
+    public CreateEnrollmentUseCase(IEventGateway eventGateway, IUserGateway userGateway, IEnrollmentGateway enrollmentGateway, ITicketGateway ticketGateway, IMessageGateway messageGateway, ICompanyGateway companyGateway, IEmailGateway emailGateway, IFileStorage fileProvider, ITicketQRGenerator ticketGenerator) {
         this.eventGateway = eventGateway;
+        this.userGateway = userGateway;
         this.enrollmentGateway = enrollmentGateway;
         this.ticketGateway = ticketGateway;
         this.messageGateway = messageGateway;
@@ -48,16 +51,32 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
     @Override
     public CreateEnrollmentOutput execute(CreateEnrollmentInput anIn) {
         final User user = anIn.user();
+        String name = anIn.name();
+        String emailString = anIn.email();
+        LocalDate birthDate = anIn.birthDate();
+        String document = anIn.document();
+        final boolean alreadyExists;
         final EventID eventID = EventID.with(anIn.eventId());
         final Event event = this.eventGateway.findById(eventID).orElseThrow(() -> NotFoundException.with(Event.class, eventID));
         final Company company = this.companyGateway.findById(event.getCompanyID()).orElseThrow(() -> NotFoundException.with(Company.class, event.getCompanyID()));
-        if (this.enrollmentGateway.existsByUserIDAndEventID(user.getId(), eventID)) {
+
+        if(user != null){
+            name = user.getName();
+            emailString = String.valueOf(user.getEmail());
+            birthDate = user.getBirthDate();
+            document = String.valueOf(user.getCpf());
+            alreadyExists = this.enrollmentGateway.existsByUserIDAndEventID(user.getId(), eventID);
+        }else alreadyExists = this.enrollmentGateway.existsByDocumentAndEventID(document, eventID);
+
+        if (alreadyExists) {
             Notification.create("Validation Error").append("User already enrolled in this event").throwPossibleErrors();
         }
-        final Enrollment enrollment = Enrollment.newEnrollment(user.getId(), event.getId());
+        final Enrollment enrollment = Enrollment
+                .newEnrollment(name, emailString, document, birthDate,
+                        user != null ? user.getId() : null, event.getId());
 
         final LocalDate expiredIn = event.getEndDate().plusDays(1);
-        final Ticket ticket = Ticket.newTicket(user.getId(), event, "Ingresso sem limite de acompanhantes", event.getInitDate(), expiredIn);
+        final Ticket ticket = Ticket.newTicket(user.getId(), document, event, "Ingresso sem limite de acompanhantes", event.getInitDate(), expiredIn);
         final Message message = this.messageGateway.findBySubjectAndType(MessageSubject.EVENT_TICKET, MessageType.HTML).orElseThrow(() -> NotFoundException.with("Email template not found"));
         final Notification notification = Notification.create();
         enrollment.validate(notification);
