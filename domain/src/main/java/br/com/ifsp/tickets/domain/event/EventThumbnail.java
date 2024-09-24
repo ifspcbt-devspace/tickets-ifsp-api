@@ -1,7 +1,6 @@
 package br.com.ifsp.tickets.domain.event;
 
 import br.com.ifsp.tickets.domain.shared.ValueObject;
-import br.com.ifsp.tickets.domain.shared.exceptions.EventThumbnailException;
 import br.com.ifsp.tickets.domain.shared.file.FileContextType;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import lombok.Getter;
