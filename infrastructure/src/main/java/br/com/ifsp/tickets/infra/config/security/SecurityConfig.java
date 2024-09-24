@@ -93,6 +93,7 @@ public class SecurityConfig {
                 .cors(crs -> crs.configurationSource(request -> cors))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/v1/event/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/event/*/thumbnail").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/event/search").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated())
