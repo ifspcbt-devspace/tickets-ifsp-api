@@ -27,7 +27,7 @@ public class UploadThumbnailUseCase implements IUploadThumbnailUseCase {
         final String fileName = anInput.fileName();
         final Event event = this.eventGateway.findById(eventID).orElseThrow(() -> NotFoundException.with(Event.class, eventID));
 
-        if ((!user.canManageEvents() || !user.getCompanyID().equals(event.getCompanyID())) && !user.canManageAnyEvent())
+        if ((!user.canManageEvents() && !user.getCompanyID().equals(event.getCompanyID())) && !user.canManageAnyEvent())
             throw new IllegalResourceAccessException("You don't have permission to change this event");
 
         if (!IFileStorage.isImageType(fileName))
