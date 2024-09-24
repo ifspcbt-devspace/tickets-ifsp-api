@@ -101,7 +101,7 @@ public class EventJpaEntity implements Serializable {
                 this.status,
                 this.attachmentPaths,
                 eventConfigs,
-                this.thumbnail == null ? EventThumbnail.empty() : this.thumbnail.toVo(fileStorage, new EventID(this.id))
+                this.thumbnail == null ? EventThumbnail.empty() : this.thumbnail.toVo()
         );
     }
 

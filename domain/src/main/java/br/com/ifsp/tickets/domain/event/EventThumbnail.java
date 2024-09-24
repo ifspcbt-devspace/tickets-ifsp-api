@@ -25,10 +25,7 @@ public class EventThumbnail extends ValueObject {
         return new EventThumbnail(null, null);
     }
 
-    public static EventThumbnail with(String filename, LocalDateTime uploadedAt, EventID eventID, IFileStorage fileUploader) {
-        if (filename != null && !fileUploader.existsFile(FileContextType.EVENT, filename, DEFAULT_EXTRA_PATH, eventID.getValue().toString())) {
-            throw new EventThumbnailException(eventID, filename);
-        }
+    public static EventThumbnail with(String filename, LocalDateTime uploadedAt) {
         return new EventThumbnail(filename, uploadedAt);
     }
 

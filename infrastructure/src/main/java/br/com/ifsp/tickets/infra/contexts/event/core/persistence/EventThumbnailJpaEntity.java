@@ -2,7 +2,6 @@ package br.com.ifsp.tickets.infra.contexts.event.core.persistence;
 
 import br.com.ifsp.tickets.domain.event.EventID;
 import br.com.ifsp.tickets.domain.event.EventThumbnail;
-import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -38,7 +37,7 @@ public class EventThumbnailJpaEntity implements Serializable {
         return new EventThumbnailJpaEntity(eventID.getValue(), thumbnail.getFilename(), thumbnail.getUploadedAt());
     }
 
-    public EventThumbnail toVo(IFileStorage fileStorage, EventID eventID) {
-        return EventThumbnail.with(this.filename, this.uploadedAt, eventID, fileStorage);
+    public EventThumbnail toVo() {
+        return EventThumbnail.with(this.filename, this.uploadedAt);
     }
 }
