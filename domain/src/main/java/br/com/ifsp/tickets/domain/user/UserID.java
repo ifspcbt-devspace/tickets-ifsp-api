@@ -10,7 +10,7 @@ public class UserID extends Identifier<UUID> {
 
     private final UUID value;
 
-    protected UserID(UUID value) {
+    public UserID(UUID value) {
         this.value = value;
     }
 

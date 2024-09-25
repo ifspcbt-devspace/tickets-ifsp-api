@@ -5,6 +5,7 @@ import br.com.ifsp.tickets.domain.enrollment.EnrollmentID;
 import br.com.ifsp.tickets.domain.enrollment.EnrollmentStatus;
 import br.com.ifsp.tickets.domain.event.EventID;
 import br.com.ifsp.tickets.domain.user.UserID;
+import br.com.ifsp.tickets.infra.shared.encryption.EncryptionService;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -49,7 +50,7 @@ public class EnrollmentJpaEntity implements Serializable {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.document = document;
+        this.document = EncryptionService.encrypt(document);
         this.birthDate = birthDate;
         this.userID = userID;
         this.eventID = eventID;
@@ -69,7 +70,7 @@ public class EnrollmentJpaEntity implements Serializable {
                 enrollment.getStatus().name(),
                 enrollment.getCreatedAt(),
                 enrollment.getUpdatedAt(),
-                enrollment.getUserID().orElse(null).getValue()
+                enrollment.getUserID().isPresent() ? enrollment.getUserID().get().getValue() : null
         );
     }
 
@@ -79,12 +80,16 @@ public class EnrollmentJpaEntity implements Serializable {
                 this.name,
                 this.email,
                 this.birthDate,
-                this.document,
+                this.getDecryptedDocument(),
                 EventID.with(this.eventID),
                 EnrollmentStatus.valueOf(this.status),
                 this.createdAt,
                 this.updatedAt,
                 UserID.with(this.userID)
         );
+    }
+
+    public String getDecryptedDocument() {
+        return EncryptionService.decrypt(this.document);
     }
 }

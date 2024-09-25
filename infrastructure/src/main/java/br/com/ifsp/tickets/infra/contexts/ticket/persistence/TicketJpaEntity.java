@@ -6,6 +6,7 @@ import br.com.ifsp.tickets.domain.ticket.TicketID;
 import br.com.ifsp.tickets.domain.ticket.TicketStatus;
 import br.com.ifsp.tickets.domain.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.user.UserID;
+import br.com.ifsp.tickets.infra.shared.encryption.EncryptionService;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -50,7 +51,7 @@ public class TicketJpaEntity implements Serializable {
 
     public TicketJpaEntity(UUID id, String document, UUID userId, UUID eventId, String description, String status, String code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         this.id = id;
-        this.document = document;
+        this.document = EncryptionService.encrypt(document);
         this.userId = userId;
         this.eventId = eventId;
         this.description = description;
@@ -66,7 +67,7 @@ public class TicketJpaEntity implements Serializable {
         return new TicketJpaEntity(
                 ticket.getId().getValue(),
                 ticket.getDocument(),
-                ticket.getUserID().orElse(null).getValue(),
+                ticket.getUserID().isPresent() ? ticket.getUserID().get().getValue() : null,
                 ticket.getEventID().getValue(),
                 ticket.getDescription(),
                 ticket.getStatus().name(),
@@ -81,7 +82,7 @@ public class TicketJpaEntity implements Serializable {
     public Ticket toAggregate() {
         return Ticket.with(
                 TicketID.with(this.id),
-                this.getDocument(),
+                this.getDecryptedDocument(),
                 EventID.with(this.eventId),
                 this.description,
                 TicketStatus.valueOf(this.status),
@@ -92,5 +93,9 @@ public class TicketJpaEntity implements Serializable {
                 this.lastTimeConsumed,
                 UserID.with(this.userId)
         );
+    }
+
+    public String getDecryptedDocument(){
+        return EncryptionService.decrypt(this.document);
     }
 }

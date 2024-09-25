@@ -11,14 +11,12 @@ import br.com.ifsp.tickets.domain.enrollment.IEnrollmentGateway;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
-import br.com.ifsp.tickets.domain.user.IUserGateway;
 
 public class EnrollmentServiceFactory {
     private static EnrollmentService enrollmentService;
 
     public static EnrollmentService create(
             IEmailGateway emailGateway,
-            IUserGateway userGateway,
             IMessageGateway messageGateway,
             IEventGateway eventGateway,
             IEnrollmentGateway enrollmentGateway,
@@ -30,7 +28,6 @@ public class EnrollmentServiceFactory {
         if (enrollmentService == null) {
             final ICreateEnrollmentUseCase createEnrollmentUseCase = new CreateEnrollmentUseCase(
                     eventGateway,
-                    userGateway,
                     enrollmentGateway,
                     ticketGateway,
                     messageGateway,

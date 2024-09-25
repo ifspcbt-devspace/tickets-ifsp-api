@@ -14,13 +14,12 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.Optional;
 
 @Getter
 public class Ticket extends Entity<TicketID> {
 
-    private final Optional<UserID> userID;
+    private final UserID userID;
     private final String document;
     private final EventID eventID;
     private final String description;
@@ -31,7 +30,7 @@ public class Ticket extends Entity<TicketID> {
     private TicketCode code;
     private LocalDateTime lastTimeConsumed;
 
-    public Ticket(TicketID ticketID, String document, EventID eventID, String description, TicketStatus status, TicketCode code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed, Optional<UserID> userID) {
+    public Ticket(TicketID ticketID, String document, EventID eventID, String description, TicketStatus status, TicketCode code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed, UserID userID) {
         super(ticketID);
         this.userID = userID;
         this.document = document;
@@ -45,12 +44,16 @@ public class Ticket extends Entity<TicketID> {
         this.lastTimeConsumed = lastTimeConsumed;
     }
 
-    public static Ticket with(TicketID ticketID, String document,EventID eventID, String description, TicketStatus status, TicketCode code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed, UserID userID) {
-        return new Ticket(ticketID, document, eventID, description, status, code, validIn, expiredIn, createdAt, lastTimeConsumed, Optional.ofNullable(userID));
+    public static Ticket with(TicketID ticketID, String document, EventID eventID, String description, TicketStatus status, TicketCode code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed, UserID userID) {
+        return new Ticket(ticketID, document, eventID, description, status, code, validIn, expiredIn, createdAt, lastTimeConsumed, userID);
     }
 
     public static Ticket newTicket(UserID userID, String document, Event event, String description, LocalDate validIn, LocalDate expiredIn) {
-        return new Ticket(TicketID.unique(), document, event.getId(), description, TicketStatus.AVAILABLE, TicketCode.generate(), validIn, expiredIn, LocalDateTime.now(ZoneId.of("GMT-3")), null, Optional.ofNullable(userID));
+        return new Ticket(TicketID.unique(), document, event.getId(), description, TicketStatus.AVAILABLE, TicketCode.generate(), validIn, expiredIn, LocalDateTime.now(ZoneId.of("GMT-3")), null, userID);
+    }
+
+    public Optional<UserID> getUserID() {
+        return Optional.ofNullable(this.userID);
     }
 
     public void generateNewCode() {

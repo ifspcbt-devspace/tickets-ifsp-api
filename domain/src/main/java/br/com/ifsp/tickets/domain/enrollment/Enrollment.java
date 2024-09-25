@@ -12,7 +12,8 @@ import java.util.Optional;
 
 @Getter
 public class Enrollment extends Entity<EnrollmentID> {
-    private final Optional<UserID> userID;
+
+    private final UserID userID;
     private final String name;
     private final String email;
     private final LocalDate birthDate;
@@ -22,7 +23,7 @@ public class Enrollment extends Entity<EnrollmentID> {
     private EnrollmentStatus status;
     private LocalDateTime updatedAt;
 
-    public Enrollment(EnrollmentID enrollmentID, String name, String email, LocalDate birthDate, String document, EventID eventID, EnrollmentStatus status, LocalDateTime createdAt, LocalDateTime updatedAt, Optional<UserID> userID) {
+    public Enrollment(EnrollmentID enrollmentID, String name, String email, LocalDate birthDate, String document, EventID eventID, EnrollmentStatus status, LocalDateTime createdAt, LocalDateTime updatedAt, UserID userID) {
         super(enrollmentID);
         this.userID = userID;
         this.name = name;
@@ -36,11 +37,15 @@ public class Enrollment extends Entity<EnrollmentID> {
     }
 
     public static Enrollment with(EnrollmentID enrollmentID, String name, String email, LocalDate birthDate, String document, EventID eventID, EnrollmentStatus status, LocalDateTime createdAt, LocalDateTime updatedAt, UserID userID) {
-        return new Enrollment(enrollmentID, name, email, birthDate, document, eventID, status, createdAt, updatedAt, Optional.ofNullable(userID));
+        return new Enrollment(enrollmentID, name, email, birthDate, document, eventID, status, createdAt, updatedAt, userID);
     }
 
     public static Enrollment newEnrollment(String name, String email, String document, LocalDate birthDate, UserID userID, EventID eventID) {
-        return new Enrollment(EnrollmentID.unique(), name, email, birthDate, document, eventID, EnrollmentStatus.CONFIRMED, LocalDateTime.now(), null, Optional.ofNullable(userID));
+        return new Enrollment(EnrollmentID.unique(), name, email, birthDate, document, eventID, EnrollmentStatus.CONFIRMED, LocalDateTime.now(), null, userID);
+    }
+
+    public Optional<UserID> getUserID() {
+        return Optional.ofNullable(userID);
     }
 
     public void confirm() {

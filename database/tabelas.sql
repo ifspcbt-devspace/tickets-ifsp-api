@@ -48,16 +48,26 @@ create table email_attachments
     attachments varchar(255)
 );
 
-create table enrollments
+CREATE TABLE enrollments
 (
-    created_at timestamp(6) not null,
+    id         uuid         NOT NULL PRIMARY KEY,
+    event_id   uuid         NOT NULL,
+    name       varchar(255) NOT NULL,
+    email      varchar(255) NOT NULL,
+    birth_date date         NOT NULL,
+    document   varchar(255) NOT NULL,
+    status     varchar(255) NOT NULL,
+    created_at timestamp(6) NOT NULL,
     updated_at timestamp(6),
-    event_id   uuid         not null,
-    id         uuid         not null
-        primary key,
-    user_id    uuid         not null,
-    status     varchar(255) not null
+    user_id    uuid
 );
+
+ALTER TABLE enrollments
+    ADD COLUMN name       varchar(255),
+    ADD COLUMN email      varchar(255),
+    ADD COLUMN birth_date date,
+    ADD COLUMN document   varchar(255);
+
 
 create table events_thumbnails
 (
@@ -128,6 +138,9 @@ create table tickets
     description        varchar(255) not null,
     status             varchar(255) not null
 );
+
+ALTER TABLE tickets
+    ADD COLUMN document varchar(255);
 
 create table users
 (

@@ -11,7 +11,6 @@ import br.com.ifsp.tickets.domain.enrollment.IEnrollmentGateway;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
-import br.com.ifsp.tickets.domain.user.IUserGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +21,6 @@ import org.springframework.context.annotation.Configuration;
 public class EnrollmentConfig {
 
     private final IEmailGateway emailGateway;
-    private final IUserGateway userGateway;
     private final IMessageGateway messageGateway;
     private final IEventGateway eventGateway;
     private final IEnrollmentGateway enrollmentGateway;
@@ -33,6 +31,6 @@ public class EnrollmentConfig {
 
     @Bean
     public EnrollmentService enrollmentService() {
-        return EnrollmentServiceFactory.create(emailGateway, userGateway, messageGateway, eventGateway, enrollmentGateway, ticketGateway, companyGateway, fileProvider, ticketQRGenerator);
+        return EnrollmentServiceFactory.create(emailGateway, messageGateway, eventGateway, enrollmentGateway, ticketGateway, companyGateway, fileProvider, ticketQRGenerator);
     }
 }

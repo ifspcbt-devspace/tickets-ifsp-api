@@ -19,15 +19,14 @@ import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
 import br.com.ifsp.tickets.domain.ticket.Ticket;
-import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
+import br.com.ifsp.tickets.domain.user.UserID;
 
 import java.time.LocalDate;
 
 public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
 
     private final IEventGateway eventGateway;
-    private final IUserGateway userGateway;
     private final IEnrollmentGateway enrollmentGateway;
     private final ITicketGateway ticketGateway;
     private final IMessageGateway messageGateway;
@@ -36,9 +35,8 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
     private final IFileStorage fileProvider;
     private final ITicketQRGenerator ticketGenerator;
 
-    public CreateEnrollmentUseCase(IEventGateway eventGateway, IUserGateway userGateway, IEnrollmentGateway enrollmentGateway, ITicketGateway ticketGateway, IMessageGateway messageGateway, ICompanyGateway companyGateway, IEmailGateway emailGateway, IFileStorage fileProvider, ITicketQRGenerator ticketGenerator) {
+    public CreateEnrollmentUseCase(IEventGateway eventGateway, IEnrollmentGateway enrollmentGateway, ITicketGateway ticketGateway, IMessageGateway messageGateway, ICompanyGateway companyGateway, IEmailGateway emailGateway, IFileStorage fileProvider, ITicketQRGenerator ticketGenerator) {
         this.eventGateway = eventGateway;
-        this.userGateway = userGateway;
         this.enrollmentGateway = enrollmentGateway;
         this.ticketGateway = ticketGateway;
         this.messageGateway = messageGateway;
@@ -60,23 +58,25 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         final Event event = this.eventGateway.findById(eventID).orElseThrow(() -> NotFoundException.with(Event.class, eventID));
         final Company company = this.companyGateway.findById(event.getCompanyID()).orElseThrow(() -> NotFoundException.with(Company.class, event.getCompanyID()));
 
-        if(user != null){
+        if (user != null) {
             name = user.getName();
-            emailString = String.valueOf(user.getEmail());
+            emailString = user.getEmail().getValue();
             birthDate = user.getBirthDate();
-            document = String.valueOf(user.getCpf());
+            document = user.getCpf().getValue();
             alreadyExists = this.enrollmentGateway.existsByUserIDAndEventID(user.getId(), eventID);
-        }else alreadyExists = this.enrollmentGateway.existsByDocumentAndEventID(document, eventID);
+        } else alreadyExists = this.enrollmentGateway.existsByDocumentAndEventID(document, eventID);
 
         if (alreadyExists) {
             Notification.create("Validation Error").append("User already enrolled in this event").throwPossibleErrors();
         }
+        final UserID userID = user != null ? user.getId() : new UserID(null);
+
         final Enrollment enrollment = Enrollment
                 .newEnrollment(name, emailString, document, birthDate,
-                        user != null ? user.getId() : null, event.getId());
+                        userID, event.getId());
 
         final LocalDate expiredIn = event.getEndDate().plusDays(1);
-        final Ticket ticket = Ticket.newTicket(user.getId(), document, event, "Ingresso sem limite de acompanhantes", event.getInitDate(), expiredIn);
+        final Ticket ticket = Ticket.newTicket(userID, document, event, "Ingresso sem limite de acompanhantes", event.getInitDate(), expiredIn);
         final Message message = this.messageGateway.findBySubjectAndType(MessageSubject.EVENT_TICKET, MessageType.HTML).orElseThrow(() -> NotFoundException.with("Email template not found"));
         final Notification notification = Notification.create();
         enrollment.validate(notification);
@@ -85,7 +85,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         final Enrollment createdEnrollment = this.enrollmentGateway.create(enrollment);
         final Ticket createdTicket = this.ticketGateway.create(ticket);
 
-        final Email email = Email.createDynamic(user.getEmail().toString(), message, user.getName(), company.getName());
+        final Email email = Email.createDynamic(emailString, message, name, company.getName());
         email.appendAttachment("qr-code.png", ticketGenerator.generateQRCodeToBase64(createdTicket.getId()), fileProvider);
         email.validate(notification);
         notification.throwPossibleErrors();
