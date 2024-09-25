@@ -7,12 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 @Component
@@ -24,7 +22,7 @@ public class LocalFileStorage implements IFileStorage {
     private String uploadDir;
 
     private Path getUploadDir() {
-        final Path path = Paths.get(rootPath + File.separator + uploadDir);
+        final Path path = rootPath.resolve(uploadDir);
         if (Files.notExists(path)) {
             try {
                 Files.createDirectories(path);
@@ -32,12 +30,13 @@ public class LocalFileStorage implements IFileStorage {
                 log.error("Não foi possível criar o diretório de upload de arquivos", e);
             }
         }
-        return path;
+        return path.toAbsolutePath();
     }
 
     public boolean uploadFile(FileContextType contextType, String filename, byte[] aContent, String... extraPath) {
         try {
-            final Path path = extraPath.length > 0 ? this.getUploadDir().resolve(contextType.getPath()).resolve(String.join("/", extraPath)) : this.getUploadDir().resolve(contextType.getPath());
+            final Path dir = this.getUploadDir();
+            final Path path = extraPath.length > 0 ? dir.resolve(contextType.getPath()).resolve(String.join("/", extraPath)) : dir.resolve(contextType.getPath());
             if (Files.notExists(path)) Files.createDirectories(path);
             Files.write(path.resolve(filename), aContent);
             return true;

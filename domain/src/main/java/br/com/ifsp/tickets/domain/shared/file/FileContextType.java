@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum FileContextType {
 
-    EVENT("/events"),
-    USER("/users"),
-    EMAIL("/emails");
+    EVENT("events/"),
+    USER("users/"),
+    EMAIL("emails/");
 
     private final String path;
 
