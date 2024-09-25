@@ -60,7 +60,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         final Company company = this.companyGateway.findById(event.getCompanyID()).orElseThrow(() -> NotFoundException.with(Company.class, event.getCompanyID()));
 
         if(!event.getStatus().equals(EventStatus.OPENED))
-            Notification.create("Event is not opened").append("Event is not opened to enroll").throwPossibleErrors();
+            Notification.create("Event is not opened").append("Event is not open for enrollment").throwPossibleErrors();
 
         if (user != null) {
             name = user.getName();
