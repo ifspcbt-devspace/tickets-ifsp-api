@@ -13,6 +13,7 @@ import br.com.ifsp.tickets.domain.enrollment.Enrollment;
 import br.com.ifsp.tickets.domain.enrollment.IEnrollmentGateway;
 import br.com.ifsp.tickets.domain.event.Event;
 import br.com.ifsp.tickets.domain.event.EventID;
+import br.com.ifsp.tickets.domain.event.EventStatus;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
@@ -58,6 +59,9 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         final Event event = this.eventGateway.findById(eventID).orElseThrow(() -> NotFoundException.with(Event.class, eventID));
         final Company company = this.companyGateway.findById(event.getCompanyID()).orElseThrow(() -> NotFoundException.with(Company.class, event.getCompanyID()));
 
+        if(!event.getStatus().equals(EventStatus.OPENED))
+            Notification.create("Event is not opened").append("Event is not opened yes").throwPossibleErrors();
+        
         if (user != null) {
             name = user.getName();
             emailString = user.getEmail().getValue();
