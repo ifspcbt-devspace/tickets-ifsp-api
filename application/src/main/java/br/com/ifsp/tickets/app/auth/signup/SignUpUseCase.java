@@ -57,6 +57,7 @@ public class SignUpUseCase implements ISignUpUseCase {
                 cpf,
                 birthDate
         );
+        user.changeEmail(emailAddress);
 
         final Notification notification = Notification.create("Could not create aggregate User");
         user.validate(notification);
