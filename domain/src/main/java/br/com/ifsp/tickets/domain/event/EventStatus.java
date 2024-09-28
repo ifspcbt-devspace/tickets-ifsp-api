@@ -28,8 +28,9 @@ public enum EventStatus {
             case 1 -> SCHEDULED;
             case 2 -> PUBLISHED;
             case 3 -> OPENED;
-            case 4 -> CANCELED;
-            case 5 -> FINISHED;
+            case 4 -> IN_PROGRESS;
+            case 5 -> CANCELED;
+            case 6 -> FINISHED;
             default -> throw new IllegalEnumException(EventStatus.class, code);
         };
     }
