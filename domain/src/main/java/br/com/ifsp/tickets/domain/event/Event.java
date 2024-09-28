@@ -87,6 +87,7 @@ public class Event extends AggregateRoot<EventID> {
             case SCHEDULED -> unpublish();
             case PUBLISHED -> publish();
             case OPENED -> open();
+            case IN_PROGRESS -> inProgress();
             case CANCELED -> cancel();
             case FINISHED -> finish();
         }
@@ -114,6 +115,18 @@ public class Event extends AggregateRoot<EventID> {
         if (this.status.isScheduled())
             throw new ChangeEventStatusException("Event is scheduled and cannot be opened before being published");
         this.status = EventStatus.OPENED;
+    }
+
+    public void inProgress() {
+        if (this.status.isFinished())
+            throw new ChangeEventStatusException("Event is finished");
+        if (this.status.isCanceled())
+            throw new ChangeEventStatusException("Event is canceled");
+        if (this.status.isInProgress())
+            throw new ChangeEventStatusException("Event is already in progress");
+        if (this.status.isOpened())
+            this.status = EventStatus.IN_PROGRESS;
+        else throw new ChangeEventStatusException("Event needs to be open to get in progress");
     }
 
     public void publish() {

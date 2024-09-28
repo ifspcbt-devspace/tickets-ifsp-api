@@ -9,8 +9,9 @@ public enum EventStatus {
     SCHEDULED(1, "Agendado"),
     PUBLISHED(2, "Publicado"),
     OPENED(3, "Aberto"),
-    CANCELED(4, "Cancelado"),
-    FINISHED(5, "Finalizado");
+    IN_PROGRESS(4, "Em andamento"),
+    CANCELED(5, "Cancelado"),
+    FINISHED(6, "Finalizado");
 
     private final Integer code;
     private final String description;
@@ -52,4 +53,9 @@ public enum EventStatus {
     public boolean isOpened() {
         return this.equals(OPENED);
     }
+
+    public boolean isInProgress() {
+        return this.equals(IN_PROGRESS);
+    }
+
 }

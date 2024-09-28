@@ -83,8 +83,8 @@ public class Ticket extends Entity<TicketID> {
     }
 
     public void consume(Event event) {
-        if (!event.getStatus().isOpened())
-            throw new TicketConsumeException("Event is not opened");
+        if (!event.getStatus().isOpened() && !event.getStatus().isInProgress())
+            throw new TicketConsumeException("Event is not open and is not in progress");
         if (!event.getId().equals(this.eventID))
             throw new TicketConsumeException("Ticket does not belong to this event");
         if (this.status.isCanceled())
