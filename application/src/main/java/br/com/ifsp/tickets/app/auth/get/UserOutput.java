@@ -1,6 +1,7 @@
 package br.com.ifsp.tickets.app.auth.get;
 
 import br.com.ifsp.tickets.domain.user.User;
+import br.com.ifsp.tickets.domain.user.UserID;
 import br.com.ifsp.tickets.domain.user.vo.role.PermissionType;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
 
@@ -15,12 +16,12 @@ public record UserOutput(
         String username,
         RoleOutputData role,
         LocalDate birthDate,
-        String cpfInitials,
+        String documentInitials,
         String phoneNumberInitials,
         String companyID
 ) {
-    public static UserOutput from(User user, List<PermissionType> authorities) {
-        if (authorities.contains(PermissionType.MANAGE_ANY_USER) || authorities.contains(PermissionType.MANAGE_COMPANY_ENROLLMENTS))
+    public static UserOutput from(User user, UserID applicant, List<PermissionType> authorities) {
+        if (authorities.contains(PermissionType.MANAGE_ANY_USER) || authorities.contains(PermissionType.MANAGE_COMPANY_ENROLLMENTS) || applicant.equals(user.getId()))
             return new UserOutput(
                     user.getId().getValue().toString(),
                     user.getName(),
@@ -29,7 +30,7 @@ public record UserOutput(
                     user.getUsername(),
                     RoleOutputData.from(user.getRole()),
                     user.getBirthDate(),
-                    user.getCpf().getInitials(),
+                    user.getDocument() == null ? null : user.getDocument().getInitials(),
                     user.getPhoneNumber().getInitials(),
                     user.getCompanyID().getValue() == null ? null : user.getCompanyID().getValue().toString()
             );

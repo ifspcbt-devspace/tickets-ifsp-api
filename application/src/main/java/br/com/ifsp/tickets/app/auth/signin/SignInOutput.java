@@ -25,7 +25,7 @@ public record SignInOutput(
             String username,
             RoleOutputData role,
             LocalDate birthDate,
-            String cpfInitials,
+            String documentInitials,
             String phoneNumberInitials,
             String companyID
     ) {
@@ -38,7 +38,7 @@ public record SignInOutput(
                     user.getUsername(),
                     RoleOutputData.from(user.getRole()),
                     user.getBirthDate(),
-                    user.getCpf().getInitials(),
+                    user.getDocument() == null ? null : user.getDocument().getInitials(),
                     user.getPhoneNumber().getInitials(),
                     user.getCompanyID().getValue() == null ? null : user.getCompanyID().getValue().toString()
             );

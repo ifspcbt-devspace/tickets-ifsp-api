@@ -5,7 +5,7 @@ import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
-import br.com.ifsp.tickets.domain.user.vo.CPF;
+import br.com.ifsp.tickets.domain.user.vo.Document;
 import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
@@ -49,8 +49,8 @@ public class UserGateway implements IUserGateway {
     }
 
     @Override
-    public Optional<User> findByCPF(CPF cpf) {
-        return this.userRepository.findByEncryptedCpf(EncryptionService.encrypt(cpf.getValue())).map(UserJpaEntity::toAggregate);
+    public Optional<User> findByDocument(Document document) {
+        return this.userRepository.findByEncryptedDocument(EncryptionService.encrypt(document.getValue())).map(UserJpaEntity::toAggregate);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class UserGateway implements IUserGateway {
     }
 
     @Override
-    public boolean existsByEncryptedCPF(CPF cpf) {
-        return this.userRepository.existsByEncryptedCpf(EncryptionService.encrypt(cpf.getValue()));
+    public boolean existsByEncryptedDocument(Document document) {
+        return this.userRepository.existsByEncryptedDocument(EncryptionService.encrypt(document.getValue()));
     }
 }

@@ -3,12 +3,15 @@ package br.com.ifsp.tickets.infra.contexts.user.persistence;
 import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
-import br.com.ifsp.tickets.domain.user.vo.CPF;
 import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
+import br.com.ifsp.tickets.domain.user.vo.RG;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
 import br.com.ifsp.tickets.infra.shared.encryption.EncryptionService;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,8 +44,8 @@ public class UserJpaEntity implements UserDetails, Serializable {
     private String username;
     @Column(name = "password")
     private String password;
-    @Column(name = "cpf", nullable = false, unique = true)
-    private String encryptedCpf;
+    @Column(name = "document", nullable = false, unique = true)
+    private String encryptedDocument;
     @Column(name = "birth_date")
     private LocalDate birthDate;
     @Column(name = "password_date")
@@ -54,7 +57,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
     @Column(name = "role_id", nullable = false)
     private Integer roleId;
 
-    public UserJpaEntity(UUID id, String name, String bio, String email, String phoneNumber, String username, String password, String cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, UUID companyID, Integer roleId) {
+    public UserJpaEntity(UUID id, String name, String bio, String email, String phoneNumber, String username, String password, String document, LocalDate birthDate, LocalDate passwordDate, boolean active, UUID companyID, Integer roleId) {
         this.id = id;
         this.name = name;
         this.bio = bio;
@@ -62,7 +65,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.password = password;
-        this.encryptedCpf = EncryptionService.encrypt(cpf);
+        this.encryptedDocument = EncryptionService.encrypt(document);
         this.birthDate = birthDate;
         this.passwordDate = passwordDate;
         this.active = active;
@@ -79,7 +82,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
                 user.getPhoneNumber().getValue(),
                 user.getUsername(),
                 user.getPassword(),
-                user.getCpf().getValue(),
+                user.getDocument() == null ? null : user.getDocument().getValue(),
                 user.getBirthDate(),
                 user.getPasswordDate(),
                 user.isActive(),
@@ -97,7 +100,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
                 new PhoneNumber(this.phoneNumber),
                 this.username,
                 this.password,
-                new CPF(this.getDecryptedCPF()),
+                this.encryptedDocument == null ? null : new RG(this.getDecryptedDocument()),
                 this.birthDate,
                 this.passwordDate,
                 this.active,
@@ -134,7 +137,7 @@ public class UserJpaEntity implements UserDetails, Serializable {
         return this.active;
     }
 
-    public String getDecryptedCPF(){
-        return EncryptionService.decrypt(this.encryptedCpf);
+    public String getDecryptedDocument() {
+        return EncryptionService.decrypt(this.encryptedDocument);
     }
 }

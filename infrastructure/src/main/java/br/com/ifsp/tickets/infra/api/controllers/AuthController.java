@@ -41,7 +41,7 @@ public class AuthController implements AuthAPI {
 
     @Override
     public ResponseEntity<Void> register(RegisterRequest request) {
-        final SignUpInput input = SignUpInput.of(request.name(), request.email(), request.username(), request.password(), request.getBirthDate(), request.cpf(), request.phoneNumber());
+        final SignUpInput input = SignUpInput.of(request.name(), request.email(), request.username(), request.password(), request.getBirthDate(), request.document(), request.phoneNumber());
         final SignUpOutput output = this.authService.register(input);
         return ResponseEntity.created(URI.create("/v1/users/" + output.id())).build();
     }

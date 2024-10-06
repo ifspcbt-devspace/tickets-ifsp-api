@@ -16,7 +16,7 @@ public record LoginResponse(
             @JsonProperty("username") String username,
             @JsonProperty("role") RoleResponse role,
             @JsonProperty("birth_date") String birthDate,
-            @JsonProperty("cpf_initials") String cpfInitials,
+            @JsonProperty("document_initials") String documentInitials,
             @JsonProperty("phone_number_initials") String phoneNumberInitials,
             @JsonProperty("company_id") String companyID
     ) {

@@ -11,7 +11,7 @@ public record RegisterRequest(
         @JsonProperty("username") String username,
         @JsonProperty("password") String password,
         @JsonProperty("birth_date") String birthDate,
-        @JsonProperty("cpf") String cpf,
+        @JsonProperty("document") String document,
         @JsonProperty("phone_number") String phoneNumber
 ) {
 

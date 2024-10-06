@@ -5,7 +5,7 @@ import br.com.ifsp.tickets.domain.company.CompanyID;
 import br.com.ifsp.tickets.domain.shared.AggregateRoot;
 import br.com.ifsp.tickets.domain.shared.exceptions.IllegalEntityIdException;
 import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
-import br.com.ifsp.tickets.domain.user.vo.CPF;
+import br.com.ifsp.tickets.domain.user.vo.Document;
 import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 import br.com.ifsp.tickets.domain.user.vo.role.PermissionType;
@@ -26,13 +26,13 @@ public class User extends AggregateRoot<UserID> {
     private PhoneNumber phoneNumber;
     private String username;
     private String password;
-    private CPF cpf;
+    private Document document;
     private LocalDate birthDate;
     private LocalDate passwordDate;
     private boolean active;
     private CompanyID companyID;
 
-    protected User(UserID userID, String name, Role role, String bio, EmailAddress email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, CompanyID companyID) {
+    protected User(UserID userID, String name, Role role, String bio, EmailAddress email, PhoneNumber phoneNumber, String username, String password, Document document, LocalDate birthDate, LocalDate passwordDate, boolean active, CompanyID companyID) {
         super(userID);
         this.name = name;
         this.role = role;
@@ -41,25 +41,25 @@ public class User extends AggregateRoot<UserID> {
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.password = password;
-        this.cpf = cpf;
+        this.document = document;
         this.birthDate = birthDate;
         this.passwordDate = passwordDate;
         this.active = active;
         this.companyID = companyID == null ? new CompanyID(null) : companyID;
     }
 
-    public static User with(UserID userID, String name, Role role, String bio, EmailAddress email, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate, LocalDate passwordDate, boolean active, CompanyID companyID) {
-        return new User(userID, name, role, bio, email, phoneNumber, username, password, cpf, birthDate, passwordDate, active, companyID);
+    public static User with(UserID userID, String name, Role role, String bio, EmailAddress email, PhoneNumber phoneNumber, String username, String password, Document document, LocalDate birthDate, LocalDate passwordDate, boolean active, CompanyID companyID) {
+        return new User(userID, name, role, bio, email, phoneNumber, username, password, document, birthDate, passwordDate, active, companyID);
     }
 
-    public static User create(String name, Role role, PhoneNumber phoneNumber, String username, String password, CPF cpf, LocalDate birthDate) {
-        return new User(UserID.unique(), name, role, null, new EmailAddress(null), phoneNumber, username, password, cpf, birthDate, LocalDate.now(), true, null);
+    public static User create(String name, Role role, PhoneNumber phoneNumber, String username, String password, Document document, LocalDate birthDate) {
+        return new User(UserID.unique(), name, role, null, new EmailAddress(null), phoneNumber, username, password, document, birthDate, LocalDate.now(), true, null);
     }
 
-    public void updateProfile(String name, String bio, CPF cpf, LocalDate birthDate) {
+    public void updateProfile(String name, String bio, Document document, LocalDate birthDate) {
         this.name = name;
         this.bio = bio;
-        this.cpf = cpf;
+        this.document = document;
         this.birthDate = birthDate;
     }
 

@@ -8,7 +8,7 @@ public record SignUpInput(
         String username,
         String password,
         LocalDate birthDate,
-        String cpf,
+        String document,
         String phoneNumber
 ) {
 
@@ -28,14 +28,14 @@ public record SignUpInput(
         if (birthDate == null)
             throw new IllegalArgumentException("field 'birth_date' cannot be null");
 
-        if (cpf == null || cpf.isBlank())
-            throw new IllegalArgumentException("field 'cpf' cannot be null or empty");
+        if (document == null || document.isBlank())
+            throw new IllegalArgumentException("field 'document' cannot be null or empty");
 
         if (phoneNumber == null || phoneNumber.isBlank())
             throw new IllegalArgumentException("field 'phone_number' cannot be null or empty");
     }
 
-    public static SignUpInput of(String name, String email, String username, String password, LocalDate birthDate, String cpf, String phoneNumber) {
-        return new SignUpInput(name, email, username, password, birthDate, cpf, phoneNumber);
+    public static SignUpInput of(String name, String email, String username, String password, LocalDate birthDate, String document, String phoneNumber) {
+        return new SignUpInput(name, email, username, password, birthDate, document, phoneNumber);
     }
 }

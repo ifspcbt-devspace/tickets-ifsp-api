@@ -18,6 +18,18 @@ public class ValidationUtils {
         return s.length() == 10;
     }
 
+    public static boolean isRG(String rg) {
+        // Remove todos os caracteres não numéricos (pontos, hífens, espaços)
+        final String cleanRG = rg.replaceAll("[^\\dXx]", "");
+
+        // Verifica se o tamanho do RG é válido (8 dígitos + dígito verificador opcional)
+        if (cleanRG.length() < 8 || cleanRG.length() > 9) {
+            return false;
+        }
+
+        return Pattern.matches("^[0-9]{7,9}[0-9Xx]?$", cleanRG);
+    }
+
     public static boolean isCPF(String CPF) {
         CPF = CPF.replaceAll("[^0-9]", "");
         // considera-se erro CPF's formados por uma sequencia de numeros iguais

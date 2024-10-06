@@ -22,7 +22,7 @@ public interface AuthApiPresenter {
                 output.username(),
                 presentRole(output.role()),
                 output.birthDate() == null ? null : formatter.format(output.birthDate()),
-                output.cpfInitials(),
+                output.documentInitials(),
                 output.phoneNumberInitials(),
                 output.companyID()
         );
@@ -37,7 +37,7 @@ public interface AuthApiPresenter {
                 data.username(),
                 presentRole(data.role()),
                 formatter.format(data.birthDate()),
-                data.cpfInitials(),
+                data.documentInitials(),
                 data.phoneNumberInitials(),
                 data.companyID()
         );

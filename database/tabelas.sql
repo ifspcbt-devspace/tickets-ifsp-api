@@ -152,7 +152,7 @@ create table users
     id            uuid         not null
         primary key,
     bio           varchar(255),
-    cpf           varchar(255) not null
+    document      varchar(255)
         unique,
     email         varchar(255)
         unique,

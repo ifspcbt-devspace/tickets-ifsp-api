@@ -20,7 +20,7 @@ public class UserValidator extends Validator {
         this.validateBio();
         this.validateUsername();
         this.validatePhoneNumber();
-        this.validateCPF();
+        this.validateDocument();
         this.validateBirthDate();
         this.validateRole();
     }
@@ -63,9 +63,9 @@ public class UserValidator extends Validator {
             error("Phone number is required");
     }
 
-    private void validateCPF() {
-        if (user.getCpf() == null)
-            error("CPF is required");
+    private void validateDocument() {
+        if (user.getDocument() == null)
+            error("document is required");
     }
 
     private void validateBirthDate() {

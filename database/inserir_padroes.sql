@@ -6,7 +6,7 @@ DECLARE
     id_company uuid;
     id_event   uuid;
 BEGIN
-    INSERT INTO users (id, name, role_id, username, email, phone, password, cpf, birth_date, active)
+    INSERT INTO users (id, name, role_id, username, email, phone, password, document, birth_date, active)
     VALUES (uuid_generate_v4(),
             'Leonardo',
             2,
@@ -14,7 +14,7 @@ BEGIN
             'l.6042silva@gmail.com',
             '11999999999',
             '$2y$10$C2LFrm1SlAx8H13NsZDns.DOj4eHVBz4mfYVwI.MaGKD6/IKAZItG',
-            '63640027060',
+            '219555783',
             '1999-04-02',
             true)
     RETURNING id INTO id_usuario;

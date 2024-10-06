@@ -5,17 +5,18 @@ import br.com.ifsp.tickets.domain.shared.utils.ValidationUtils;
 import lombok.Getter;
 
 @Getter
-public class CPF extends Document {
+public class RG extends Document {
 
-    public CPF(String value) {
+
+    public RG(String value) {
         super(value);
 
-        if (!ValidationUtils.isCPF(value))
+        if (!ValidationUtils.isRG(value))
             throw new IllegalDocumentException(value);
     }
 
     public String getInitials() {
-        return this.getValue().substring(0, this.getValue().length() - 5) + "*****";
+        return this.getValue().substring(0, this.getValue().length() - 4) + "****";
     }
 
     @Override
@@ -23,13 +24,9 @@ public class CPF extends Document {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        final CPF cpf = (CPF) o;
+        final RG rg = (RG) o;
 
-        return this.getValue().equals(cpf.getValue());
+        return this.getValue().equals(rg.getValue());
     }
 
-    @Override
-    public int hashCode() {
-        return this.getValue().hashCode();
-    }
 }

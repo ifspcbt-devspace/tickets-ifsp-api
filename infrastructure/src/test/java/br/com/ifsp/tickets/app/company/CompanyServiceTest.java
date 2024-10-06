@@ -17,9 +17,9 @@ import br.com.ifsp.tickets.domain.shared.search.SortSearch;
 import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
-import br.com.ifsp.tickets.domain.user.vo.CPF;
 import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
+import br.com.ifsp.tickets.domain.user.vo.RG;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
 import br.com.ifsp.tickets.infra.config.WebServerConfig;
 import org.junit.jupiter.api.*;
@@ -63,7 +63,7 @@ public class CompanyServiceTest {
                 new PhoneNumber("11999999999"),
                 "c_manager",
                 passwordEncoder.encode("c_manager"),
-                new CPF("63640027060"),
+                new RG("130142281"),
                 LocalDate.of(1999, 4, 2),
                 null,
                 true,
@@ -86,7 +86,7 @@ public class CompanyServiceTest {
                 new PhoneNumber("(16) 3496-1354"),
                 "cliente",
                 passwordEncoder.encode("cliente"),
-                new CPF("15303139026"),
+                new RG("147836785"),
                 LocalDate.of(1999, 4, 2),
                 null,
                 true,

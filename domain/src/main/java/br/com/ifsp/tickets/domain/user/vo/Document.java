@@ -1,21 +1,23 @@
 package br.com.ifsp.tickets.domain.user.vo;
 
+import br.com.ifsp.tickets.domain.shared.ValueObject;
 import br.com.ifsp.tickets.domain.shared.exceptions.IllegalDocumentException;
-import br.com.ifsp.tickets.domain.shared.utils.ValidationUtils;
 import lombok.Getter;
 
 @Getter
-public class CPF extends Document {
+public class Document extends ValueObject {
 
-    public CPF(String value) {
-        super(value);
+    private final String value;
 
-        if (!ValidationUtils.isCPF(value))
+    public Document(String value) {
+        if (value == null || value.isBlank())
             throw new IllegalDocumentException(value);
+
+        this.value = value;
     }
 
     public String getInitials() {
-        return this.getValue().substring(0, this.getValue().length() - 5) + "*****";
+        return this.value.substring(0, this.value.length() - 5) + "*****";
     }
 
     @Override
@@ -23,13 +25,13 @@ public class CPF extends Document {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        final CPF cpf = (CPF) o;
+        final Document doc = (Document) o;
 
-        return this.getValue().equals(cpf.getValue());
+        return this.value.equals(doc.value);
     }
 
     @Override
     public int hashCode() {
-        return this.getValue().hashCode();
+        return this.value.hashCode();
     }
 }

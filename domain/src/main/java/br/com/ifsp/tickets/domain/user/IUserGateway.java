@@ -2,7 +2,7 @@ package br.com.ifsp.tickets.domain.user;
 
 import br.com.ifsp.tickets.domain.shared.search.AdvancedSearchQuery;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
-import br.com.ifsp.tickets.domain.user.vo.CPF;
+import br.com.ifsp.tickets.domain.user.vo.Document;
 import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
 
@@ -18,7 +18,7 @@ public interface IUserGateway {
 
     Optional<User> findByUsernameOrEmail(String login);
 
-    Optional<User> findByCPF(CPF cpf);
+    Optional<User> findByDocument(Document document);
 
     Optional<User> findById(UserID id);
 
@@ -36,6 +36,6 @@ public interface IUserGateway {
 
     boolean existsByPhoneNumber(PhoneNumber phoneNumber);
 
-    boolean existsByEncryptedCPF(CPF cpf);
+    boolean existsByEncryptedDocument(Document document);
 
 }

@@ -26,7 +26,7 @@ public interface UserRepository extends JpaRepository<UserJpaEntity, UUID> {
             """)
     Optional<UserJpaEntity> findByUsernameOrEmail(String login);
 
-    Optional<UserJpaEntity> findByEncryptedCpf(String cpf);
+    Optional<UserJpaEntity> findByEncryptedDocument(String document);
 
     Page<UserJpaEntity> findAll(Specification<UserJpaEntity> specification, Pageable pageable);
 
@@ -44,5 +44,5 @@ public interface UserRepository extends JpaRepository<UserJpaEntity, UUID> {
 
     boolean existsByPhoneNumber(String phoneNumber);
 
-    boolean existsByEncryptedCpf(String cpf);
+    boolean existsByEncryptedDocument(String document);
 }

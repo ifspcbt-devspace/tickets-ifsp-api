@@ -14,9 +14,9 @@ import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.email.IUpsertEmailGateway;
 import br.com.ifsp.tickets.domain.user.email.UpsertEmail;
-import br.com.ifsp.tickets.domain.user.vo.CPF;
 import br.com.ifsp.tickets.domain.user.vo.EmailAddress;
 import br.com.ifsp.tickets.domain.user.vo.PhoneNumber;
+import br.com.ifsp.tickets.domain.user.vo.RG;
 import br.com.ifsp.tickets.domain.user.vo.role.Role;
 
 import java.time.LocalDate;
@@ -41,7 +41,7 @@ public class SignUpUseCase implements ISignUpUseCase {
     public SignUpOutput execute(SignUpInput anIn) {
         final String name = anIn.name();
         final String username = anIn.username();
-        final CPF cpf = new CPF(anIn.cpf());
+        final RG rg = new RG(anIn.document());
         final EmailAddress emailAddress = new EmailAddress(anIn.email());
         final PhoneNumber phoneNumber = new PhoneNumber(anIn.phoneNumber());
         final LocalDate birthDate = anIn.birthDate();
@@ -54,7 +54,7 @@ public class SignUpUseCase implements ISignUpUseCase {
                 phoneNumber,
                 username,
                 passwordEncoded,
-                cpf,
+                rg,
                 birthDate
         );
         user.changeEmail(emailAddress);
@@ -65,7 +65,7 @@ public class SignUpUseCase implements ISignUpUseCase {
         notification
                 .throwPossibleErrors()
                 .uniqueness(() -> this.userGateway.existsByUsername(username), "username")
-                .uniqueness(() -> this.userGateway.existsByEncryptedCPF(cpf), "cpf")
+                .uniqueness(() -> this.userGateway.existsByEncryptedDocument(rg), "document")
                 .uniqueness(() -> this.userGateway.existsByEmail(emailAddress), "email")
                 .uniqueness(() -> this.upsertEmailGateway.existsByEmail(emailAddress), "email")
                 .throwPossibleErrors();

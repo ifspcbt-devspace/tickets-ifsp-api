@@ -66,7 +66,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
             name = user.getName();
             emailString = user.getEmail().getValue();
             birthDate = user.getBirthDate();
-            document = user.getCpf().getValue();
+            document = user.getDocument().getValue();
             alreadyExists = this.enrollmentGateway.existsByUserIDAndEventID(user.getId(), eventID);
         } else alreadyExists = this.enrollmentGateway.existsByDocumentAndEventID(document, eventID);
 
