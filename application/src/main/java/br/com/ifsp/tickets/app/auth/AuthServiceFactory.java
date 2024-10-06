@@ -12,6 +12,8 @@ import br.com.ifsp.tickets.app.auth.signin.ISignInUseCase;
 import br.com.ifsp.tickets.app.auth.signin.SignInUseCase;
 import br.com.ifsp.tickets.app.auth.signup.ISignUpUseCase;
 import br.com.ifsp.tickets.app.auth.signup.SignUpUseCase;
+import br.com.ifsp.tickets.app.auth.update.IUpdateUserUseCase;
+import br.com.ifsp.tickets.app.auth.update.UpdateUserUseCase;
 import br.com.ifsp.tickets.domain.communication.email.IEmailGateway;
 import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
 import br.com.ifsp.tickets.domain.user.IUserGateway;
@@ -36,7 +38,17 @@ public class AuthServiceFactory {
             final IRecoveryUseCase recoveryUseCase = new RecoveryUseCase(passwordRecoveryTokenGateway, authUtils, userGateway);
             final IActivationUseCase activationUseCase = new ActivationUseCase(userGateway, upsertEmailGateway);
             final IGetUserByIdUseCase getUserByIdUseCase = new GetUserByIdUseCase(userGateway);
-            authService = new AuthService(signInUseCase, signUpUseCase, recoveryRequestUseCase, recoveryUseCase, activationUseCase, getUserByIdUseCase);
+            final IUpdateUserUseCase updateUserUseCase = new UpdateUserUseCase(userGateway);
+
+            authService = new AuthService(
+                    signInUseCase,
+                    signUpUseCase,
+                    recoveryRequestUseCase,
+                    recoveryUseCase,
+                    activationUseCase,
+                    getUserByIdUseCase,
+                    updateUserUseCase
+            );
         }
         return authService;
     }

@@ -106,6 +106,10 @@ public class User extends AggregateRoot<UserID> {
         return this.role.getPermissions().contains(PermissionType.MANAGE_COMPANY_EVENTS);
     }
 
+    public boolean canManageAnyUsers() {
+        return this.role.getPermissions().contains(PermissionType.MANAGE_ANY_USER);
+    }
+
     public boolean canManageAnyTicket() {
         return this.role.getPermissions().contains(PermissionType.MANAGE_ANY_TICKET);
     }

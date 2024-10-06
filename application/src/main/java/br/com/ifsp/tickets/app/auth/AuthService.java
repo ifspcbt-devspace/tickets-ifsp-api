@@ -15,6 +15,8 @@ import br.com.ifsp.tickets.app.auth.signin.SignInOutput;
 import br.com.ifsp.tickets.app.auth.signup.ISignUpUseCase;
 import br.com.ifsp.tickets.app.auth.signup.SignUpInput;
 import br.com.ifsp.tickets.app.auth.signup.SignUpOutput;
+import br.com.ifsp.tickets.app.auth.update.IUpdateUserUseCase;
+import br.com.ifsp.tickets.app.auth.update.UpdateUserInput;
 
 public class AuthService {
 
@@ -24,14 +26,16 @@ public class AuthService {
     private final IRecoveryUseCase recoveryUseCase;
     private final IActivationUseCase activationUseCase;
     private final IGetUserByIdUseCase getUserByIdUseCase;
+    private final IUpdateUserUseCase updateUserUseCase;
 
-    public AuthService(ISignInUseCase signInUseCase, ISignUpUseCase signUpUseCase, IRecoveryRequestUseCase recoveryRequestUseCase, IRecoveryUseCase recoveryUseCase, IActivationUseCase activationUseCase, IGetUserByIdUseCase getUserByIdUseCase) {
+    public AuthService(ISignInUseCase signInUseCase, ISignUpUseCase signUpUseCase, IRecoveryRequestUseCase recoveryRequestUseCase, IRecoveryUseCase recoveryUseCase, IActivationUseCase activationUseCase, IGetUserByIdUseCase getUserByIdUseCase, IUpdateUserUseCase updateUserUseCase) {
         this.signInUseCase = signInUseCase;
         this.signUpUseCase = signUpUseCase;
         this.recoveryRequestUseCase = recoveryRequestUseCase;
         this.recoveryUseCase = recoveryUseCase;
         this.activationUseCase = activationUseCase;
         this.getUserByIdUseCase = getUserByIdUseCase;
+        this.updateUserUseCase = updateUserUseCase;
     }
 
     public void accountRecovery(RecoveryInput inputData) {
@@ -48,6 +52,10 @@ public class AuthService {
 
     public SignUpOutput register(SignUpInput inputData) {
         return this.signUpUseCase.execute(inputData);
+    }
+
+    public UserOutput update(UpdateUserInput input) {
+        return this.updateUserUseCase.execute(input);
     }
 
     public void activate(ActivationInput inputData) {

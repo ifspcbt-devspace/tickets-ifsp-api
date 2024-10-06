@@ -4,6 +4,7 @@ import br.com.ifsp.tickets.infra.contexts.user.contexts.recovery.models.Recovery
 import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginRequest;
 import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginResponse;
 import br.com.ifsp.tickets.infra.contexts.user.models.register.RegisterRequest;
+import br.com.ifsp.tickets.infra.contexts.user.models.update.UpdateUserRequest;
 import br.com.ifsp.tickets.infra.contexts.user.models.user.UserResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -37,6 +38,15 @@ public interface AuthAPI {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     ResponseEntity<UserResponse> getUserById(@PathVariable String id);
+
+    @PutMapping(value = "/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User updated successfully"),
+            @ApiResponse(responseCode = "401", description = "Invalid credentials"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    ResponseEntity<UserResponse> updateUser(@PathVariable String id, @RequestBody UpdateUserRequest request);
 
     @PostMapping(value = "/activate/{token}")
     @ApiResponses(value = {

@@ -9,11 +9,13 @@ import br.com.ifsp.tickets.app.auth.signin.SignInInput;
 import br.com.ifsp.tickets.app.auth.signin.SignInOutput;
 import br.com.ifsp.tickets.app.auth.signup.SignUpInput;
 import br.com.ifsp.tickets.app.auth.signup.SignUpOutput;
+import br.com.ifsp.tickets.app.auth.update.UpdateUserInput;
 import br.com.ifsp.tickets.infra.api.AuthAPI;
 import br.com.ifsp.tickets.infra.contexts.user.contexts.recovery.models.RecoveryRequest;
 import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginRequest;
 import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginResponse;
 import br.com.ifsp.tickets.infra.contexts.user.models.register.RegisterRequest;
+import br.com.ifsp.tickets.infra.contexts.user.models.update.UpdateUserRequest;
 import br.com.ifsp.tickets.infra.contexts.user.models.user.UserResponse;
 import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
 import br.com.ifsp.tickets.infra.contexts.user.presenters.AuthApiPresenter;
@@ -51,6 +53,13 @@ public class AuthController implements AuthAPI {
         final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final GetUserByIdInput input = GetUserByIdInput.of(id, authenticatedUser.toAggregate());
         return ResponseEntity.ok(AuthApiPresenter.present(this.authService.getUserById(input)));
+    }
+
+    @Override
+    public ResponseEntity<UserResponse> updateUser(String id, UpdateUserRequest request) {
+        final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final UpdateUserInput input = UpdateUserInput.of(authenticatedUser.toAggregate(), id, request.name(), request.bio(), request.getBirthDate(), request.document());
+        return ResponseEntity.ok(AuthApiPresenter.present(this.authService.update(input)));
     }
 
     @Override
