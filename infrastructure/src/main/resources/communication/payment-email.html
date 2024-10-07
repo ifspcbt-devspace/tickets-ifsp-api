@@ -2,14 +2,12 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="pt">
 <head>
-    <script src="https://sdk.mercadopago.com/js/v2">
-    </script>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta name="x-apple-disable-message-reformatting">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="telephone=no" name="format-detection">
-    <title>Confirmação de Pagamento</title>
+    <title>Pagamento de ingresso</title>
     <style type="text/css">
         #outlook a {padding: 0;}
         .es-button {mso-style-priority: 100 !important;text-decoration: none !important;}
@@ -80,7 +78,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="es-m-txt-c" align="center" style="padding-top:10px;padding-bottom:20px">
-                                                                <h1 style="font-size:30px;color:#333333">Confirmação de Pagamento</h1>
+                                                                <h1 style="font-size:30px;color:#333333">Pagamento de Ingresso</h1>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -99,7 +97,11 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="es-m-txt-c" align="center" style="padding-top:20px;padding-bottom:20px">
-                                                                <div id="wallet_container" style="text-align:center; margin: 20px 0;"></div>
+                                                                <div id="wallet_container" style="text-align:center; margin: 20px 0;">
+                                                                    <a href="https://www.mercadopago.com.br/checkout/v1/redirect?pref_id={preference-url}">
+                                                                        CLIQUE AQUI PARA REDIRECIONAR AO PAGAMENTO
+                                                                    </a>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -116,16 +118,5 @@
         </tr>
     </table>
 </div>
-<script type="application/javascript">
-    const mp = new MercadoPago('APP_USR-49633992-519d-470f-b9cf-1e3c1449c636', {
-        locale: 'pt-BR'
-    });
-
-    mp.bricks().create("wallet", "wallet_container", {
-        initialization: {
-            preferenceId: '{preference-url}',
-        },
-    });
-</script>
 </body>
 </html>
