@@ -128,7 +128,7 @@ public interface EventAPI {
     @GetMapping(
             value = "/{id}/ticketSale", consumes = "application/json")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Ticket Sale created successfully"),
+            @ApiResponse(responseCode = "200", description = "Ticket Sale list"),
             @ApiResponse(responseCode = "400", description = "Invalid request")
     })
     ResponseEntity<Pagination<TicketSaleResponse>> getTicketSaleByEventId(@PathVariable String id);
