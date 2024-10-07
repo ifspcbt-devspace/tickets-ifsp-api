@@ -8,6 +8,7 @@ import br.com.ifsp.tickets.domain.communication.email.IEmailGateway;
 import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
 import br.com.ifsp.tickets.domain.enrollment.IEnrollmentGateway;
+import br.com.ifsp.tickets.domain.enrollment.upsert.IUpsertEnrollmentGateway;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
 import br.com.ifsp.tickets.domain.event.sale.ITicketSaleGateway;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
@@ -25,6 +26,7 @@ public class EnrollmentConfig {
     private final IMessageGateway messageGateway;
     private final IEventGateway eventGateway;
     private final IEnrollmentGateway enrollmentGateway;
+    private final IUpsertEnrollmentGateway upsertEnrollmentGateway;
     private final ITicketGateway ticketGateway;
     private final ICompanyGateway companyGateway;
     private final IFileStorage fileProvider;
@@ -33,6 +35,6 @@ public class EnrollmentConfig {
 
     @Bean
     public EnrollmentService enrollmentService() {
-        return EnrollmentServiceFactory.create(emailGateway, messageGateway, eventGateway, enrollmentGateway, ticketGateway, companyGateway, fileProvider, ticketQRGenerator, ticketSaleGateway);
+        return EnrollmentServiceFactory.create(emailGateway, messageGateway, eventGateway, enrollmentGateway, ticketGateway, companyGateway, fileProvider, ticketQRGenerator, ticketSaleGateway, upsertEnrollmentGateway);
     }
 }

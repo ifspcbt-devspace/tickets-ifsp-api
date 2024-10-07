@@ -59,6 +59,10 @@ public class Ticket extends Entity<TicketID> {
         return new Ticket(TicketID.unique(), document, event.getId(), ticketSale.getId(), description, TicketStatus.AVAILABLE, PaymentStatus.IN_PROCESS, TicketCode.generate(), validIn, expiredIn, LocalDateTime.now(ZoneId.of("GMT-3")), null, userID);
     }
 
+    public static Ticket newTicketWithId(TicketID ticketID, UserID userID, String document, Event event, TicketSale ticketSale, String description, LocalDate validIn, LocalDate expiredIn) {
+        return new Ticket(ticketID, document, event.getId(), ticketSale.getId(), description, TicketStatus.AVAILABLE, PaymentStatus.IN_PROCESS, TicketCode.generate(), validIn, expiredIn, LocalDateTime.now(ZoneId.of("GMT-3")), null, userID);
+    }
+
     public Optional<UserID> getUserID() {
         return Optional.ofNullable(this.userID);
     }

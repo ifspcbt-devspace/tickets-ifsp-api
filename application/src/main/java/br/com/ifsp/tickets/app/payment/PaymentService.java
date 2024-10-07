@@ -4,6 +4,7 @@ import br.com.ifsp.tickets.app.payment.create.CreatePaymentInput;
 import br.com.ifsp.tickets.app.payment.create.CreatePaymentOutput;
 import br.com.ifsp.tickets.app.payment.create.ICreatePaymentUseCase;
 import br.com.ifsp.tickets.app.payment.preference.create.CreatePreferenceInput;
+import br.com.ifsp.tickets.app.payment.preference.create.CreatePreferenceOutput;
 import br.com.ifsp.tickets.app.payment.preference.create.ICreatePreferenceUseCase;
 import br.com.ifsp.tickets.app.payment.retrieve.IGetPaymentUseCase;
 import br.com.ifsp.tickets.app.payment.retrieve.PaymentOutput;
@@ -20,7 +21,7 @@ public class PaymentService {
         this.createPaymentUseCase = createPaymentUseCase;
     }
 
-    public String CreatePreference(CreatePreferenceInput anIn) {
+    public CreatePreferenceOutput CreatePreference(CreatePreferenceInput anIn) {
         return this.createPreferenceUseCase.execute(anIn);
     }
 

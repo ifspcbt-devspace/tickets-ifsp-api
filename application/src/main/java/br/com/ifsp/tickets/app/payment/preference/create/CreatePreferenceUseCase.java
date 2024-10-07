@@ -25,7 +25,7 @@ public class CreatePreferenceUseCase implements ICreatePreferenceUseCase{
     }
 
     @Override
-    public String execute(CreatePreferenceInput anIn) {
+    public CreatePreferenceOutput execute(CreatePreferenceInput anIn) {
         TicketID ticketId = TicketID.with(anIn.ticketId());
         User user = anIn.user();
         final Ticket ticket = this.ticketGateway.findById(ticketId).orElseThrow(() -> NotFoundException.with(Ticket.class, ticketId));
@@ -79,6 +79,6 @@ public class CreatePreferenceUseCase implements ICreatePreferenceUseCase{
         }catch (Exception e){
             e.printStackTrace();
         }
-        return preference.getInitPoint();
+        return new CreatePreferenceOutput(preference.getInitPoint(), ticketId.getValue().toString());
     }
 }

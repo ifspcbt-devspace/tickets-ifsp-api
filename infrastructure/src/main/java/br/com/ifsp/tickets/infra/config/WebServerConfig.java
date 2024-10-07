@@ -52,6 +52,9 @@ public class WebServerConfig {
             content = this.loadFileContent("/communication/event-ticket.html");
             messageGateway.update(Message.create(MessageSubject.EVENT_TICKET, content, MessageType.HTML));
 
+            content = this.loadFileContent("/communication/payment-email.html");
+            messageGateway.update(Message.create(MessageSubject.PAYMENT_EMAIL, content, MessageType.HTML));
+
             log.info("Default messages created!");
         } catch (IOException e) {
             log.error("Error loading file content", e);

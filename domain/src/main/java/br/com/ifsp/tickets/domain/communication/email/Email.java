@@ -49,11 +49,11 @@ public class Email extends AggregateRoot<EmailID> {
                 null);
     }
 
-    public static Email createDynamic(String target, Message message, String username, String companyName) {
+    public static Email createDynamic(String target, Message message, String username, String companyName, String preferenceURL) {
         return new Email(new EmailID(null),
                 target,
                 message.getSubject().getDescription(),
-                message.getTemplate().replace("{nome}", username).replace("{company-name}", companyName),
+                message.getTemplate().replace("{nome}", username).replace("{company-name}", companyName).replace("{preference-url}", preferenceURL),
                 null,
                 LocalDateTime.now(),
                 0,

@@ -1,5 +1,6 @@
 package br.com.ifsp.tickets.app.payment.preference.create;
 
+import br.com.ifsp.tickets.domain.ticket.TicketID;
 import br.com.ifsp.tickets.domain.user.User;
 
 public record CreatePreferenceInput(
@@ -7,7 +8,7 @@ public record CreatePreferenceInput(
         String ticketId
 ) {
 
-    public static CreatePreferenceInput of(final User user, final String ticketId) {
-        return new CreatePreferenceInput(user, ticketId);
+    public static CreatePreferenceInput of(final User user) {
+        return new CreatePreferenceInput(user, TicketID.unique().getValue().toString());
     }
 }

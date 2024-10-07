@@ -1,8 +1,10 @@
 package br.com.ifsp.tickets.infra.api;
 
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
-import br.com.ifsp.tickets.infra.contexts.enrollment.models.CreateEnrollmentRequest;
-import br.com.ifsp.tickets.infra.contexts.enrollment.models.EnrollmentResponse;
+import br.com.ifsp.tickets.infra.contexts.enrollment.core.models.CreateEnrollmentRequest;
+import br.com.ifsp.tickets.infra.contexts.enrollment.core.models.EnrollmentResponse;
+import br.com.ifsp.tickets.infra.contexts.enrollment.upsert.models.CreateUpsertEnrollmentRequest;
+import br.com.ifsp.tickets.infra.contexts.event.sale.payment.models.CreatePaymentRequest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,4 +31,18 @@ public interface EnrollmentAPI {
             @ApiResponse(responseCode = "400", description = "Invalid request")
     })
     ResponseEntity<Pagination<EnrollmentResponse>> findByUser();
+
+    @PostMapping(consumes = "application/json", value = "/upsert")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Upsert enrollment created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    ResponseEntity<String> createUpsertEnrollment(@RequestBody CreateUpsertEnrollmentRequest request);
+
+    @PostMapping(consumes = "application/json", value = "/webhook")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Upsert enrollment created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    ResponseEntity<Void> webhook(@RequestBody CreatePaymentRequest request);
 }
