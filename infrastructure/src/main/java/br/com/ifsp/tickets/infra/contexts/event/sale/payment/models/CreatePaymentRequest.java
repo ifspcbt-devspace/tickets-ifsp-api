@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record CreatePaymentRequest(
-        @JsonProperty("id") String id,
+        @JsonProperty("data") DataModel data,
         @JsonProperty("date_created") LocalDateTime dateCreated,
         @JsonProperty("action") String action
 ) {

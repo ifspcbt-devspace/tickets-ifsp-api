@@ -36,12 +36,12 @@ public class PaymentController implements PaymentAPI {
 
     @Override
     public ResponseEntity<Void> paymentWebhook(CreatePaymentRequest request) {
-        PaymentOutput p = paymentService.getPayment(request.id());
+        PaymentOutput p = paymentService.getPayment(request.data().id());
         CheckPaymentInput checkPaymentInput = new CheckPaymentInput(p.externalReference(), p.status());
 
         ticketService.changePaymentStatus(checkPaymentInput);
 
-        final CreatePaymentInput input = CreatePaymentInput.of(request.id(), request.dateCreated(), request.action(), p.externalReference());
+        final CreatePaymentInput input = CreatePaymentInput.of(request.data().id(), request.dateCreated(), request.action(), p.externalReference());
         CreatePaymentOutput output = paymentService.CreatePayment(input);
 
         return ResponseEntity.created(URI.create("/v1/payment/" + output.id())).build();
