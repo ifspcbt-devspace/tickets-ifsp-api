@@ -16,6 +16,6 @@ public class ListTicketSaleByEventUseCase implements IListTicketSaleByEventUseCa
 
     @Override
     public Pagination<Ticket2SellOutput> execute(String eventId) {
-        return this.gateway.findAllByEventID(EventID.with(eventId), new SearchQuery(0, 10, null, "createdAt", "desc")).map(Ticket2SellOutput::from);
+        return this.gateway.findAllByEventID(EventID.with(eventId), new SearchQuery(0, 10, null, "id", "desc")).map(Ticket2SellOutput::from);
     }
 }
