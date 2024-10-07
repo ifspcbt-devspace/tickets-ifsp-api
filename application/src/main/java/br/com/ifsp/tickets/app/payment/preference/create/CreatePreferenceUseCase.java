@@ -48,9 +48,7 @@ public class CreatePreferenceUseCase implements ICreatePreferenceUseCase{
 
         List<PreferencePaymentTypeRequest> excludedPaymentTypes = new ArrayList<>();
         excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder().id("ticket").build());
-
-        List<PreferencePaymentMethodRequest> excludedPaymentMethods = new ArrayList<>();
-        excludedPaymentMethods.add(PreferencePaymentMethodRequest.builder().id("").build());
+        excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder().id("credit_card").build());
 
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .expires(false)
@@ -69,8 +67,7 @@ public class CreatePreferenceUseCase implements ICreatePreferenceUseCase{
                         PreferencePaymentMethodsRequest.builder()
                                 .defaultPaymentMethodId("pix")
                                 .excludedPaymentTypes(excludedPaymentTypes)
-                                .excludedPaymentMethods(excludedPaymentMethods)
-                                .installments(5)
+                                .installments(1)
                                 .defaultInstallments(1)
                                 .build())
                 .build();
