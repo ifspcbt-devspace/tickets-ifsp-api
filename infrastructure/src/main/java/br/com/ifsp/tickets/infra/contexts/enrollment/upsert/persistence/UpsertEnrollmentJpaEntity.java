@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "enrollments")
+@Table(name = "upsert_enrollments")
 @NoArgsConstructor
 @Getter
 public class UpsertEnrollmentJpaEntity implements Serializable {
