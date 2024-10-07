@@ -15,6 +15,9 @@ import br.com.ifsp.tickets.domain.event.Event;
 import br.com.ifsp.tickets.domain.event.EventID;
 import br.com.ifsp.tickets.domain.event.EventStatus;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
+import br.com.ifsp.tickets.domain.event.sale.ITicketSaleGateway;
+import br.com.ifsp.tickets.domain.event.sale.TicketSale;
+import br.com.ifsp.tickets.domain.event.sale.TicketSaleID;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
@@ -30,16 +33,18 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
     private final IEventGateway eventGateway;
     private final IEnrollmentGateway enrollmentGateway;
     private final ITicketGateway ticketGateway;
+    private final ITicketSaleGateway ticketSaleGateway;
     private final IMessageGateway messageGateway;
     private final ICompanyGateway companyGateway;
     private final IEmailGateway emailGateway;
     private final IFileStorage fileProvider;
     private final ITicketQRGenerator ticketGenerator;
 
-    public CreateEnrollmentUseCase(IEventGateway eventGateway, IEnrollmentGateway enrollmentGateway, ITicketGateway ticketGateway, IMessageGateway messageGateway, ICompanyGateway companyGateway, IEmailGateway emailGateway, IFileStorage fileProvider, ITicketQRGenerator ticketGenerator) {
+    public CreateEnrollmentUseCase(IEventGateway eventGateway, IEnrollmentGateway enrollmentGateway, ITicketGateway ticketGateway, ITicketSaleGateway ticketSaleGateway, IMessageGateway messageGateway, ICompanyGateway companyGateway, IEmailGateway emailGateway, IFileStorage fileProvider, ITicketQRGenerator ticketGenerator) {
         this.eventGateway = eventGateway;
         this.enrollmentGateway = enrollmentGateway;
         this.ticketGateway = ticketGateway;
+        this.ticketSaleGateway = ticketSaleGateway;
         this.messageGateway = messageGateway;
         this.companyGateway = companyGateway;
         this.emailGateway = emailGateway;
@@ -56,6 +61,8 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         String document = anIn.document();
         final boolean alreadyExists;
         final EventID eventID = EventID.with(anIn.eventId());
+        final TicketSaleID ticketSaleID = TicketSaleID.with(anIn.ticketSaleId());
+        final TicketSale ticketSale = this.ticketSaleGateway.findById(ticketSaleID).orElseThrow(() -> NotFoundException.with(TicketSale.class, ticketSaleID));
         final Event event = this.eventGateway.findById(eventID).orElseThrow(() -> NotFoundException.with(Event.class, eventID));
         final Company company = this.companyGateway.findById(event.getCompanyID()).orElseThrow(() -> NotFoundException.with(Company.class, event.getCompanyID()));
 
@@ -80,7 +87,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
                         userID, event.getId());
 
         final LocalDate expiredIn = event.getEndDate().plusDays(1);
-        final Ticket ticket = Ticket.newTicket(userID, document, event, "Ingresso sem limite de acompanhantes", event.getInitDate(), expiredIn);
+        final Ticket ticket = Ticket.newTicket(userID, document, event, ticketSale, "Ingresso sem limite de acompanhantes", event.getInitDate(), expiredIn);
         final Message message = this.messageGateway.findBySubjectAndType(MessageSubject.EVENT_TICKET, MessageType.HTML).orElseThrow(() -> NotFoundException.with("Email template not found"));
         final Notification notification = Notification.create();
         enrollment.validate(notification);

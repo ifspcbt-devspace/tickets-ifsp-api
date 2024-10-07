@@ -5,6 +5,8 @@ import br.com.ifsp.tickets.infra.api.controllers.ExceptionController;
 import br.com.ifsp.tickets.infra.contexts.event.core.models.CreateEventRequest;
 import br.com.ifsp.tickets.infra.contexts.event.core.models.EventResponse;
 import br.com.ifsp.tickets.infra.contexts.event.core.models.SearchEventResponse;
+import br.com.ifsp.tickets.infra.contexts.event.sale.ticket.models.CreateTicketSaleRequest;
+import br.com.ifsp.tickets.infra.contexts.event.sale.ticket.models.TicketSaleResponse;
 import br.com.ifsp.tickets.infra.shared.search.AdvancedSearchRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -114,4 +116,20 @@ public interface EventAPI {
             method = "POST"
     )
     ResponseEntity<?> uploadThumbnail(@PathVariable String id, @RequestParam("file") MultipartFile file, @RequestParam("fileName") String fileName);
+
+    @PostMapping(
+            value = "/{id}/ticketSale", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Ticket Sale created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    ResponseEntity<Void> createTicketSale(@PathVariable String id, @RequestBody CreateTicketSaleRequest request);
+
+    @GetMapping(
+            value = "/{id}/ticketSale", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Ticket Sale created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    ResponseEntity<Pagination<TicketSaleResponse>> getTicketSaleByEventId(@PathVariable String id);
 }

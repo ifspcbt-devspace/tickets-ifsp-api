@@ -4,6 +4,8 @@ import br.com.ifsp.tickets.app.event.EventService;
 import br.com.ifsp.tickets.app.event.create.CreateEventInput;
 import br.com.ifsp.tickets.app.event.create.CreateEventOutput;
 import br.com.ifsp.tickets.app.event.retrieve.get.EventOutput;
+import br.com.ifsp.tickets.app.event.sale.create.CreateTicket2SellInput;
+import br.com.ifsp.tickets.app.event.sale.create.CreateTicket2SellOutput;
 import br.com.ifsp.tickets.app.event.thumbnail.download.DownloadThumbnailOutput;
 import br.com.ifsp.tickets.app.event.thumbnail.reset.ResetThumbnailInput;
 import br.com.ifsp.tickets.app.event.thumbnail.upload.UploadThumbnailInput;
@@ -16,6 +18,8 @@ import br.com.ifsp.tickets.infra.contexts.event.core.models.CreateEventRequest;
 import br.com.ifsp.tickets.infra.contexts.event.core.models.EventResponse;
 import br.com.ifsp.tickets.infra.contexts.event.core.models.SearchEventResponse;
 import br.com.ifsp.tickets.infra.contexts.event.core.presenters.EventApiPresenter;
+import br.com.ifsp.tickets.infra.contexts.event.sale.ticket.models.CreateTicketSaleRequest;
+import br.com.ifsp.tickets.infra.contexts.event.sale.ticket.models.TicketSaleResponse;
 import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
 import br.com.ifsp.tickets.infra.shared.search.AdvancedSearchRequest;
 import br.com.ifsp.tickets.infra.shared.search.SearchFilterRequest;
@@ -94,5 +98,22 @@ public class EventController implements EventAPI {
         }
         this.eventService.uploadThumbnail(input);
         return ResponseEntity.accepted().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> createTicketSale(String id, CreateTicketSaleRequest request) {
+        final UserJpaEntity user = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        final CreateTicket2SellInput ticket2SellInput = CreateTicket2SellInput.of(user.toAggregate(), id, request.name(), request.description(), request.price(), request.entries());
+
+        final CreateTicket2SellOutput output = this.eventService.createTicketForSale(ticket2SellInput);
+
+        return ResponseEntity.created(URI.create("/v1/event/" + output.id())).build();
+    }
+
+    @Override
+    public ResponseEntity<Pagination<TicketSaleResponse>> getTicketSaleByEventId(String id) {
+        final Pagination<TicketSaleResponse> list = this.eventService.getTicketSaleByEvent(id).map(EventApiPresenter::present);
+        return ResponseEntity.ok(list);
     }
 }

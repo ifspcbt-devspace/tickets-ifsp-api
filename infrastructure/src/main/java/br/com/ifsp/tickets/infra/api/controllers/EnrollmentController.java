@@ -32,7 +32,8 @@ public class EnrollmentController implements EnrollmentAPI {
                 request.email(),
                 request.document(),
                 request.birthDate(),
-                request.eventId()
+                request.eventId(),
+                request.ticketSaleId()
         );
         final CreateEnrollmentOutput out = this.enrollmentService.create(input);
 

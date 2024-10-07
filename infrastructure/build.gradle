@@ -35,7 +35,10 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":application"))
 
+
     implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
+
+    implementation group: 'com.mercadopago', name: 'sdk-java', version: '2.1.29'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-mail'

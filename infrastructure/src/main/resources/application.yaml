@@ -9,6 +9,10 @@ security:
   jwt:
     secret-key: ${JWT_SECRET_KEY}
 
+mercadopago:
+  access:
+    token: ${MERCADOPAGO_ACCESSTOKEN}
+
 spring:
   mail:
     host: ${MAIL_HOST}

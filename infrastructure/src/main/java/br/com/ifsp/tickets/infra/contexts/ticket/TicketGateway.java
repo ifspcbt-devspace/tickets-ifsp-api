@@ -6,6 +6,7 @@ import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
 import br.com.ifsp.tickets.domain.ticket.Ticket;
 import br.com.ifsp.tickets.domain.ticket.TicketID;
+import br.com.ifsp.tickets.domain.ticket.payment.PaymentStatus;
 import br.com.ifsp.tickets.domain.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.user.UserID;
 import br.com.ifsp.tickets.infra.contexts.ticket.persistence.TicketJpaEntity;
@@ -90,5 +91,10 @@ public class TicketGateway implements ITicketGateway {
     @Override
     public boolean exists(TicketID id) {
         return this.repository.existsById(id.getValue());
+    }
+
+    @Override
+    public void checkPayment(TicketID id, PaymentStatus paymentStatus) {
+        this.repository.updatePaymentStatusById(id, paymentStatus);
     }
 }

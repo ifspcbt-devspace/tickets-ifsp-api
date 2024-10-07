@@ -15,8 +15,6 @@ public interface ITicketSaleGateway {
 
     Pagination<TicketSale> findAllByEventID(EventID id, SearchQuery sq);
 
-    Pagination<TicketSale> findAll(SearchQuery sq);
-
     Pagination<TicketSale> findAll(AdvancedSearchQuery sq);
 
     TicketSale update(TicketSale event);

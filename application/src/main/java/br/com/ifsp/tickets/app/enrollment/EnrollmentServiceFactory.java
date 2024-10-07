@@ -9,6 +9,7 @@ import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
 import br.com.ifsp.tickets.domain.enrollment.IEnrollmentGateway;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
+import br.com.ifsp.tickets.domain.event.sale.ITicketSaleGateway;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
 
@@ -23,13 +24,15 @@ public class EnrollmentServiceFactory {
             ITicketGateway ticketGateway,
             ICompanyGateway companyGateway,
             IFileStorage fileProvider,
-            ITicketQRGenerator ticketQRGenerator
+            ITicketQRGenerator ticketQRGenerator,
+            ITicketSaleGateway ticketSaleGateway
     ) {
         if (enrollmentService == null) {
             final ICreateEnrollmentUseCase createEnrollmentUseCase = new CreateEnrollmentUseCase(
                     eventGateway,
                     enrollmentGateway,
                     ticketGateway,
+                    ticketSaleGateway,
                     messageGateway,
                     companyGateway,
                     emailGateway,

@@ -1,9 +1,11 @@
 package br.com.ifsp.tickets.infra.contexts.ticket.persistence;
 
 import br.com.ifsp.tickets.domain.event.EventID;
+import br.com.ifsp.tickets.domain.event.sale.TicketSaleID;
 import br.com.ifsp.tickets.domain.ticket.Ticket;
 import br.com.ifsp.tickets.domain.ticket.TicketID;
 import br.com.ifsp.tickets.domain.ticket.TicketStatus;
+import br.com.ifsp.tickets.domain.ticket.payment.PaymentStatus;
 import br.com.ifsp.tickets.domain.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.user.UserID;
 import br.com.ifsp.tickets.infra.shared.encryption.EncryptionService;
@@ -34,10 +36,14 @@ public class TicketJpaEntity implements Serializable {
     private UUID userId;
     @Column(name = "event_id", nullable = false)
     private UUID eventId;
+    @Column(name = "ticket_sale_id", nullable = false)
+    private UUID ticketSaleId;
     @Column(name = "description", nullable = false)
     private String description;
     @Column(name = "status", nullable = false)
     private String status;
+    @Column(name = "payment_status", nullable = false)
+    private String paymentStatus;
     @Column(name = "code", nullable = false)
     private String code;
     @Column(name = "valid_in", nullable = false)
@@ -49,14 +55,16 @@ public class TicketJpaEntity implements Serializable {
     @Column(name = "last_time_consumed")
     private LocalDateTime lastTimeConsumed;
 
-    public TicketJpaEntity(UUID id, String document, UUID userId, UUID eventId, String description, String status, String code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+    public TicketJpaEntity(UUID id, String document, UUID userId, UUID eventId, UUID ticketSaleId, String description, String status, String paymentStatus, String code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         this.id = id;
         this.document = EncryptionService.encrypt(document);
         this.userId = userId;
-        this.eventId = eventId;
+        this.ticketSaleId = ticketSaleId;
         this.description = description;
         this.status = status;
+        this.paymentStatus = paymentStatus;
         this.code = code;
+        this.eventId = eventId;
         this.validIn = validIn;
         this.expiredIn = expiredIn;
         this.createdAt = createdAt;
@@ -69,8 +77,10 @@ public class TicketJpaEntity implements Serializable {
                 ticket.getDocument(),
                 ticket.getUserID().isPresent() ? ticket.getUserID().get().getValue() : null,
                 ticket.getEventID().getValue(),
+                ticket.getTicketSaleID().getValue(),
                 ticket.getDescription(),
                 ticket.getStatus().name(),
+                ticket.getPaymentStatus().name(),
                 ticket.getCode().getCode(),
                 ticket.getValidIn(),
                 ticket.getExpiredIn(),
@@ -84,8 +94,10 @@ public class TicketJpaEntity implements Serializable {
                 TicketID.with(this.id),
                 this.getDecryptedDocument(),
                 EventID.with(this.eventId),
+                TicketSaleID.with(this.ticketSaleId),
                 this.description,
                 TicketStatus.valueOf(this.status),
+                PaymentStatus.valueOf(this.paymentStatus),
                 new TicketCode(this.code),
                 this.validIn,
                 this.expiredIn,
@@ -95,7 +107,7 @@ public class TicketJpaEntity implements Serializable {
         );
     }
 
-    public String getDecryptedDocument(){
+    public String getDecryptedDocument() {
         return EncryptionService.decrypt(this.document);
     }
 }

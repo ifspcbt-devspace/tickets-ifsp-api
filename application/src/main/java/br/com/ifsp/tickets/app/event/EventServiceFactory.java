@@ -12,6 +12,8 @@ import br.com.ifsp.tickets.app.event.sale.delete.DeleteTicket2SellUseCase;
 import br.com.ifsp.tickets.app.event.sale.delete.IDeleteTicket2SellUseCase;
 import br.com.ifsp.tickets.app.event.sale.retrieve.get.GetTicket2SellUseCase;
 import br.com.ifsp.tickets.app.event.sale.retrieve.get.IGetTicket2SellUseCase;
+import br.com.ifsp.tickets.app.event.sale.retrieve.list.IListTicketSaleByEventUseCase;
+import br.com.ifsp.tickets.app.event.sale.retrieve.list.ListTicketSaleByEventUseCase;
 import br.com.ifsp.tickets.app.event.thumbnail.download.DownloadThumbnailUseCase;
 import br.com.ifsp.tickets.app.event.thumbnail.download.IDownloadThumbnailUseCase;
 import br.com.ifsp.tickets.app.event.thumbnail.reset.IResetThumbnailUseCase;
@@ -38,7 +40,8 @@ public class EventServiceFactory {
             final ICreateTicket2SellUseCase createTicket2SellUseCase = new CreateTicket2SellUseCase(ticketSaleGateway, eventGateway);
             final IDeleteTicket2SellUseCase deleteTicket2SellUseCase = new DeleteTicket2SellUseCase(ticketSaleGateway, eventGateway);
             final IGetTicket2SellUseCase getTicket2SellUseCase = new GetTicket2SellUseCase(ticketSaleGateway);
-            eventService = new EventService(createEventUseCase, getEventUseCase, searchEventUseCase, downloadThumbnailUseCase, uploadThumbnailUseCase, resetThumbnailUseCase, createTicket2SellUseCase, deleteTicket2SellUseCase, getTicket2SellUseCase);
+            final IListTicketSaleByEventUseCase listTicketSaleByEventUseCase = new ListTicketSaleByEventUseCase(ticketSaleGateway);
+            eventService = new EventService(createEventUseCase, getEventUseCase, searchEventUseCase, downloadThumbnailUseCase, uploadThumbnailUseCase, resetThumbnailUseCase, createTicket2SellUseCase, deleteTicket2SellUseCase, getTicket2SellUseCase, listTicketSaleByEventUseCase);
         }
         return eventService;
     }

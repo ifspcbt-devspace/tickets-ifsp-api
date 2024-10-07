@@ -3,6 +3,7 @@ package br.com.ifsp.tickets.infra.config.app;
 import br.com.ifsp.tickets.app.ticket.TicketService;
 import br.com.ifsp.tickets.app.ticket.TicketServiceFactory;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
+import br.com.ifsp.tickets.domain.event.sale.ITicketSaleGateway;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

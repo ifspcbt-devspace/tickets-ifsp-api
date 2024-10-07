@@ -3,6 +3,7 @@ package br.com.ifsp.tickets.domain.ticket;
 import br.com.ifsp.tickets.domain.event.EventID;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
+import br.com.ifsp.tickets.domain.ticket.payment.PaymentStatus;
 import br.com.ifsp.tickets.domain.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.user.UserID;
 
@@ -26,4 +27,6 @@ public interface ITicketGateway {
     void delete(Ticket id);
 
     boolean exists(TicketID id);
+
+    void checkPayment(TicketID id, PaymentStatus paymentStatus);
 }

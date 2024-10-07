@@ -10,9 +10,10 @@ public record CreateEnrollmentInput(
         String email,
         String document,
         LocalDate birthDate,
-        String eventId
+        String eventId,
+        String ticketSaleId
 ) {
-    public static CreateEnrollmentInput of(User aggregate, String name, String email, String document, LocalDate birthDate, String eventId) {
-        return new CreateEnrollmentInput(aggregate, name, email, document, birthDate, eventId);
+    public static CreateEnrollmentInput of(User aggregate, String name, String email, String document, LocalDate birthDate, String eventId, String ticketSaleId) {
+        return new CreateEnrollmentInput(aggregate, name, email, document, birthDate, eventId, ticketSaleId);
     }
 }

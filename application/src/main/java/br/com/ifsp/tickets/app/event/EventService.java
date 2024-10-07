@@ -8,11 +8,13 @@ import br.com.ifsp.tickets.app.event.retrieve.get.IGetEventUseCase;
 import br.com.ifsp.tickets.app.event.retrieve.search.ISearchEventUseCase;
 import br.com.ifsp.tickets.app.event.retrieve.search.SearchEventOutput;
 import br.com.ifsp.tickets.app.event.sale.create.CreateTicket2SellInput;
+import br.com.ifsp.tickets.app.event.sale.create.CreateTicket2SellOutput;
 import br.com.ifsp.tickets.app.event.sale.create.ICreateTicket2SellUseCase;
 import br.com.ifsp.tickets.app.event.sale.delete.DeleteTicket2SellInput;
 import br.com.ifsp.tickets.app.event.sale.delete.IDeleteTicket2SellUseCase;
 import br.com.ifsp.tickets.app.event.sale.retrieve.Ticket2SellOutput;
 import br.com.ifsp.tickets.app.event.sale.retrieve.get.IGetTicket2SellUseCase;
+import br.com.ifsp.tickets.app.event.sale.retrieve.list.IListTicketSaleByEventUseCase;
 import br.com.ifsp.tickets.app.event.thumbnail.download.DownloadThumbnailOutput;
 import br.com.ifsp.tickets.app.event.thumbnail.download.IDownloadThumbnailUseCase;
 import br.com.ifsp.tickets.app.event.thumbnail.reset.IResetThumbnailUseCase;
@@ -33,8 +35,9 @@ public class EventService {
     private final ICreateTicket2SellUseCase createTicket2SellUseCase;
     private final IDeleteTicket2SellUseCase deleteTicket2SellUseCase;
     private final IGetTicket2SellUseCase getTicket2SellUseCase;
+    private final IListTicketSaleByEventUseCase listTicketSaleByEventUseCase;
 
-    public EventService(ICreateEventUseCase createEventUseCase, IGetEventUseCase getEventUseCase, ISearchEventUseCase searchEventUseCase, IDownloadThumbnailUseCase downloadThumbnailUseCase, IUploadThumbnailUseCase uploadThumbnailUseCase, IResetThumbnailUseCase resetThumbnailUseCase, ICreateTicket2SellUseCase createTicket2SellUseCase, IDeleteTicket2SellUseCase deleteTicket2SellUseCase, IGetTicket2SellUseCase getTicket2SellUseCase) {
+    public EventService(ICreateEventUseCase createEventUseCase, IGetEventUseCase getEventUseCase, ISearchEventUseCase searchEventUseCase, IDownloadThumbnailUseCase downloadThumbnailUseCase, IUploadThumbnailUseCase uploadThumbnailUseCase, IResetThumbnailUseCase resetThumbnailUseCase, ICreateTicket2SellUseCase createTicket2SellUseCase, IDeleteTicket2SellUseCase deleteTicket2SellUseCase, IGetTicket2SellUseCase getTicket2SellUseCase, IListTicketSaleByEventUseCase listTicketSaleByEventUseCase) {
         this.createEventUseCase = createEventUseCase;
         this.getEventUseCase = getEventUseCase;
         this.searchEventUseCase = searchEventUseCase;
@@ -44,6 +47,7 @@ public class EventService {
         this.createTicket2SellUseCase = createTicket2SellUseCase;
         this.deleteTicket2SellUseCase = deleteTicket2SellUseCase;
         this.getTicket2SellUseCase = getTicket2SellUseCase;
+        this.listTicketSaleByEventUseCase = listTicketSaleByEventUseCase;
     }
 
     public CreateEventOutput create(CreateEventInput input) {
@@ -70,8 +74,12 @@ public class EventService {
         this.resetThumbnailUseCase.execute(input);
     }
 
-    public void createTicketForSale(CreateTicket2SellInput anIn) {
-        this.createTicket2SellUseCase.execute(anIn);
+    public CreateTicket2SellOutput createTicketForSale(CreateTicket2SellInput anIn) {
+        return this.createTicket2SellUseCase.execute(anIn);
+    }
+
+    public Pagination<Ticket2SellOutput> getTicketSaleByEvent(String anIn) {
+        return this.listTicketSaleByEventUseCase.execute(anIn);
     }
 
     public void deleteTicketForSale(DeleteTicket2SellInput anIn) {
