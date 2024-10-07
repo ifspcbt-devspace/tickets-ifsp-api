@@ -36,7 +36,6 @@ public class EnrollmentController implements EnrollmentAPI {
 
     private final EnrollmentService enrollmentService;
     private final PaymentService paymentService;
-    private final AuthService authService;
 
     @Override
     public ResponseEntity<String> create(CreateEnrollmentRequest request) {
@@ -104,6 +103,6 @@ public class EnrollmentController implements EnrollmentAPI {
                 output.ticketID()
         );
         CreateEnrollmentOutput out = this.enrollmentService.create(input);
-        return ResponseEntity.created(URI.create("/v1/enrollment/" + out.enrollmentId())).build();
+        return ResponseEntity.ok().build();
     }
 }
