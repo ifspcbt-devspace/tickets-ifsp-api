@@ -47,7 +47,7 @@ public class SecurityConfig {
             "/v1/auth/**",
             "/v1/cep/**",
             "/v1/event/*/ticketSale",
-            "/v1/payment/webhook"
+            "/v1/enrollment/webhook"
     };
 
     private final CustomUserDetailsService customUserDetailsService;
