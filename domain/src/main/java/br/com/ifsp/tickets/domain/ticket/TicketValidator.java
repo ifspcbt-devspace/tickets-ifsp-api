@@ -23,9 +23,6 @@ public class TicketValidator extends Validator {
         if(ticket.getEventID() == null)
             error("Event ID is required");
 
-        if(ticket.getPaymentStatus() == null)
-            error("Payment Status is required");
-
         if (ticket.getStatus() == null)
             error("Status is required");
 

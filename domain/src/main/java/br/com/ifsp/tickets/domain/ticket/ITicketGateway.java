@@ -27,6 +27,4 @@ public interface ITicketGateway {
     void delete(Ticket id);
 
     boolean exists(TicketID id);
-
-    void checkPayment(TicketID id, PaymentStatus paymentStatus);
 }

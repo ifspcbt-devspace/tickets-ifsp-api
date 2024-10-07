@@ -89,9 +89,7 @@ public class EnrollmentController implements EnrollmentAPI {
 
     @Override
     public ResponseEntity<Void> webhook(CreatePaymentRequest request) {
-        System.out.println(request.data().id());
         PaymentOutput p = this.paymentService.getPayment(request.data().id());
-        System.out.println(p.externalReference());
         GetUpsertEnrollmentInput in = new GetUpsertEnrollmentInput(p.externalReference());
 
         GetUpsertEnrollmentOutput output = this.enrollmentService.getUpsertEnrollment(in);
@@ -106,7 +104,6 @@ public class EnrollmentController implements EnrollmentAPI {
                 output.ticketID()
         );
         CreateEnrollmentOutput out = this.enrollmentService.create(input);
-        System.out.println(out);
         return ResponseEntity.created(URI.create("/v1/enrollment/" + out.enrollmentId())).build();
     }
 }

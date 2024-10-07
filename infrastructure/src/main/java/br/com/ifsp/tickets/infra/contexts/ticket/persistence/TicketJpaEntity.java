@@ -42,8 +42,6 @@ public class TicketJpaEntity implements Serializable {
     private String description;
     @Column(name = "status", nullable = false)
     private String status;
-    @Column(name = "payment_status", nullable = false)
-    private String paymentStatus;
     @Column(name = "code", nullable = false)
     private String code;
     @Column(name = "valid_in", nullable = false)
@@ -55,14 +53,13 @@ public class TicketJpaEntity implements Serializable {
     @Column(name = "last_time_consumed")
     private LocalDateTime lastTimeConsumed;
 
-    public TicketJpaEntity(UUID id, String document, UUID userId, UUID eventId, UUID ticketSaleId, String description, String status, String paymentStatus, String code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+    public TicketJpaEntity(UUID id, String document, UUID userId, UUID eventId, UUID ticketSaleId, String description, String status, String code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         this.id = id;
         this.document = EncryptionService.encrypt(document);
         this.userId = userId;
         this.ticketSaleId = ticketSaleId;
         this.description = description;
         this.status = status;
-        this.paymentStatus = paymentStatus;
         this.code = code;
         this.eventId = eventId;
         this.validIn = validIn;
@@ -80,7 +77,6 @@ public class TicketJpaEntity implements Serializable {
                 ticket.getTicketSaleID().getValue(),
                 ticket.getDescription(),
                 ticket.getStatus().name(),
-                ticket.getPaymentStatus().name(),
                 ticket.getCode().getCode(),
                 ticket.getValidIn(),
                 ticket.getExpiredIn(),
@@ -97,7 +93,6 @@ public class TicketJpaEntity implements Serializable {
                 TicketSaleID.with(this.ticketSaleId),
                 this.description,
                 TicketStatus.valueOf(this.status),
-                PaymentStatus.valueOf(this.paymentStatus),
                 new TicketCode(this.code),
                 this.validIn,
                 this.expiredIn,

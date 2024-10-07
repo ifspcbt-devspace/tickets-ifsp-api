@@ -92,9 +92,4 @@ public class TicketGateway implements ITicketGateway {
     public boolean exists(TicketID id) {
         return this.repository.existsById(id.getValue());
     }
-
-    @Override
-    public void checkPayment(TicketID id, PaymentStatus paymentStatus) {
-        this.repository.updatePaymentStatusById(id, paymentStatus);
-    }
 }
