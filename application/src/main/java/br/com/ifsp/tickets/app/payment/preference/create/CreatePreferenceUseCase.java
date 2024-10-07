@@ -2,6 +2,7 @@ package br.com.ifsp.tickets.app.payment.preference.create;
 
 import br.com.ifsp.tickets.domain.event.sale.ITicketSaleGateway;
 import br.com.ifsp.tickets.domain.event.sale.TicketSale;
+import br.com.ifsp.tickets.domain.event.sale.TicketSaleID;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
 import br.com.ifsp.tickets.domain.ticket.Ticket;
@@ -28,8 +29,7 @@ public class CreatePreferenceUseCase implements ICreatePreferenceUseCase{
     public CreatePreferenceOutput execute(CreatePreferenceInput anIn) {
         TicketID ticketId = TicketID.with(anIn.ticketId());
         User user = anIn.user();
-        final Ticket ticket = this.ticketGateway.findById(ticketId).orElseThrow(() -> NotFoundException.with(Ticket.class, ticketId));
-        final TicketSale ticketSale = this.ticketSaleGateway.findById(ticket.getTicketSaleID()).orElseThrow(() -> NotFoundException.with(TicketSale.class, ticket.getTicketSaleID()));
+        final TicketSale ticketSale = this.ticketSaleGateway.findById(TicketSaleID.with(anIn.ticket_sale_id())).orElseThrow(() -> NotFoundException.with(TicketSale.class, TicketSaleID.with(anIn.ticket_sale_id())));
 
         PreferenceClient client = new PreferenceClient();
 

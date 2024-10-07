@@ -67,7 +67,7 @@ public class EnrollmentController implements EnrollmentAPI {
     public ResponseEntity<String> createUpsertEnrollment(CreateUpsertEnrollmentRequest request) {
         final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        final CreatePreferenceInput input = CreatePreferenceInput.of(authenticatedUser.toAggregate());
+        final CreatePreferenceInput input = CreatePreferenceInput.of(authenticatedUser.toAggregate(), request.ticketSaleId());
         CreatePreferenceOutput preferenceOutput =  paymentService.CreatePreference(input);
 
         final CreateUpsertEnrollmentInput in = CreateUpsertEnrollmentInput.of(
