@@ -15,4 +15,5 @@ public interface EnrollmentRepository extends JpaRepository<EnrollmentJpaEntity,
     Optional<EnrollmentJpaEntity> findByUserIDAndEventID(UUID userID, UUID eventID);
     boolean existsByUserIDAndEventID(UUID userID, UUID eventID);
     boolean existsByDocumentAndEventID(String document, UUID eventID);
+    boolean existsByEmailAndEventID(String email, UUID eventID);
 }

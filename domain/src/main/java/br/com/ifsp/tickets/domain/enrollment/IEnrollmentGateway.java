@@ -21,6 +21,7 @@ public interface IEnrollmentGateway {
 
     boolean existsByUserIDAndEventID(UserID userID, EventID eventID);
     boolean existsByDocumentAndEventID(String document, EventID eventID);
+    boolean existsByEmailAndEventID(String document, EventID eventID);
 
     Enrollment update(Enrollment enrollment);
 

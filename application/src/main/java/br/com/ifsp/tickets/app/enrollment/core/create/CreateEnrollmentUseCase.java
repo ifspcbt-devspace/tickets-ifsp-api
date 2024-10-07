@@ -71,7 +71,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         if (!event.getStatus().equals(EventStatus.OPENED))
             Notification.create("Event is not opened").append("Event is not open for enrollment").throwPossibleErrors();
 
-        alreadyExists = this.enrollmentGateway.existsByDocumentAndEventID(document, eventID);
+        alreadyExists = this.enrollmentGateway.existsByEmailAndEventID(emailString, eventID);
         System.out.println(alreadyExists);
         if (alreadyExists) {
             Notification.create("Validation Error").append("User already enrolled in this event").throwPossibleErrors();
