@@ -46,7 +46,8 @@ public class SecurityConfig {
 //          Api endpoints
             "/v1/auth/**",
             "/v1/cep/**",
-            "/v1/event/*/ticketSale"
+            "/v1/event/*/ticketSale",
+            "/v1/payment/webhook"
     };
 
     private final CustomUserDetailsService customUserDetailsService;
