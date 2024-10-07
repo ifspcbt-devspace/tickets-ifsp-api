@@ -23,7 +23,7 @@ public class TicketSaleJpaEntity implements Serializable {
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
     @Column(name = "event_id", nullable = false)
-    private UUID eventID;
+    private UUID eventId;
     @Column(name = "name", nullable = false)
     private String name; // example: Ingresso Unitário + Meia entrada
     @Column(name = "description", nullable = false)
@@ -37,7 +37,7 @@ public class TicketSaleJpaEntity implements Serializable {
 
     public TicketSaleJpaEntity(UUID id, UUID eventID, String name, String description, BigDecimal price, int entries, boolean active) {
         this.id = id;
-        this.eventID = eventID;
+        this.eventId = eventID;
         this.name = name;
         this.description = description;
         this.price = price;
@@ -60,7 +60,7 @@ public class TicketSaleJpaEntity implements Serializable {
     public TicketSale toAggregate() {
         return new TicketSale(
                 TicketSaleID.with(this.getId()),
-                EventID.with(this.getEventID()),
+                EventID.with(this.getEventId()),
                 this.getName(),
                 this.getDescription(),
                 this.getPrice(),

@@ -10,13 +10,14 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "payments")
 @NoArgsConstructor
 @Getter
-public class PaymentJpaEntity {
+public class PaymentJpaEntity implements Serializable {
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
