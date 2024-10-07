@@ -55,7 +55,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
 
     @Override
     public CreateEnrollmentOutput execute(CreateEnrollmentInput anIn) {
-        final User user = anIn.user();
+        final UserID userID = UserID.with(anIn.userId());
         String name = anIn.name();
         String emailString = anIn.email();
         LocalDate birthDate = anIn.birthDate();
@@ -71,18 +71,11 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         if (!event.getStatus().equals(EventStatus.OPENED))
             Notification.create("Event is not opened").append("Event is not open for enrollment").throwPossibleErrors();
 
-        if (user != null) {
-            name = user.getName();
-            emailString = user.getEmail().getValue();
-            birthDate = user.getBirthDate();
-            document = user.getDocument().getValue();
-            alreadyExists = this.enrollmentGateway.existsByUserIDAndEventID(user.getId(), eventID);
-        } else alreadyExists = this.enrollmentGateway.existsByDocumentAndEventID(document, eventID);
+        alreadyExists = this.enrollmentGateway.existsByDocumentAndEventID(document, eventID);
 
         if (alreadyExists) {
             Notification.create("Validation Error").append("User already enrolled in this event").throwPossibleErrors();
         }
-        final UserID userID = user != null ? user.getId() : new UserID(null);
 
         final Enrollment enrollment = Enrollment
                 .newEnrollment(name, emailString, document, birthDate,

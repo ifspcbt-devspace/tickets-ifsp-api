@@ -42,7 +42,7 @@ public class EnrollmentController implements EnrollmentAPI {
     public ResponseEntity<String> create(CreateEnrollmentRequest request) {
         final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final CreateEnrollmentInput input = CreateEnrollmentInput.of(
-                authenticatedUser.toAggregate(),
+                authenticatedUser.toAggregate().getId().getValue().toString(),
                 request.name(),
                 request.email(),
                 request.document(),
@@ -96,7 +96,7 @@ public class EnrollmentController implements EnrollmentAPI {
 
         GetUpsertEnrollmentOutput output = this.enrollmentService.getUpsertEnrollment(in);
         final CreateEnrollmentInput input = CreateEnrollmentInput.of(
-                null,
+                output.userID(),
                 output.name(),
                 output.email(),
                 output.document(),
