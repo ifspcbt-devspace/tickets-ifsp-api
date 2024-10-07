@@ -37,6 +37,7 @@ public class PaymentController implements PaymentAPI {
     @Override
     public ResponseEntity<Void> paymentWebhook(CreatePaymentRequest request) {
         PaymentOutput p = paymentService.getPayment(request.data().id());
+        System.out.println("AAAAAAAAAAAAAAAAAAA" + p.externalReference());
         CheckPaymentInput checkPaymentInput = new CheckPaymentInput(p.externalReference(), p.status());
 
         ticketService.changePaymentStatus(checkPaymentInput);
