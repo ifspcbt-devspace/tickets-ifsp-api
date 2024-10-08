@@ -93,16 +93,10 @@ public class CreateUpsertUpsertEnrollmentUseCase implements ICreateUpsertEnrollm
         final UpsertEnrollment enrollment = UpsertEnrollment
                 .newUpsertEnrollment(name, emailString, document, birthDate, userID, eventID, ticketSaleID, ticketID);
 
-        final Message message = this.messageGateway.findBySubjectAndType(MessageSubject.PAYMENT_EMAIL, MessageType.HTML).orElseThrow(() -> NotFoundException.with("Email template not found"));
         final Notification notification = Notification.create();
         enrollment.validate(notification);
         notification.throwPossibleErrors();
         final UpsertEnrollment createdEnrollment = this.upsertEnrollmentGateway.create(enrollment);
-
-        final Email email = Email.createDynamic(emailString, message, name, company.getName(), preference);
-        email.validate(notification);
-        notification.throwPossibleErrors();
-        final Email createdEmail = this.emailGateway.create(email);
 
         return createdEnrollment.getId().getValue().toString();
     }
