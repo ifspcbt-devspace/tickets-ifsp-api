@@ -1,7 +1,5 @@
 package br.com.ifsp.tickets.infra.api.controllers;
 
-import br.com.ifsp.tickets.app.auth.AuthService;
-import br.com.ifsp.tickets.app.auth.get.GetUserByIdInput;
 import br.com.ifsp.tickets.app.enrollment.EnrollmentService;
 import br.com.ifsp.tickets.app.enrollment.core.create.CreateEnrollmentInput;
 import br.com.ifsp.tickets.app.enrollment.core.create.CreateEnrollmentOutput;
@@ -13,7 +11,6 @@ import br.com.ifsp.tickets.app.payment.preference.create.CreatePreferenceInput;
 import br.com.ifsp.tickets.app.payment.preference.create.CreatePreferenceOutput;
 import br.com.ifsp.tickets.app.payment.retrieve.PaymentOutput;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
-import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.infra.api.EnrollmentAPI;
 import br.com.ifsp.tickets.infra.contexts.enrollment.core.models.CreateEnrollmentRequest;
 import br.com.ifsp.tickets.infra.contexts.enrollment.core.models.EnrollmentResponse;
@@ -22,7 +19,6 @@ import br.com.ifsp.tickets.infra.contexts.enrollment.upsert.models.CreateUpsertE
 import br.com.ifsp.tickets.infra.contexts.event.sale.payment.models.CreatePaymentRequest;
 import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections4.Get;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -67,7 +63,7 @@ public class EnrollmentController implements EnrollmentAPI {
         final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         final CreatePreferenceInput input = CreatePreferenceInput.of(authenticatedUser.toAggregate(), request.ticketSaleId());
-        CreatePreferenceOutput preferenceOutput =  paymentService.CreatePreference(input);
+        CreatePreferenceOutput preferenceOutput = paymentService.CreatePreference(input);
 
         final CreateUpsertEnrollmentInput in = CreateUpsertEnrollmentInput.of(
                 authenticatedUser.toAggregate(),
@@ -90,6 +86,9 @@ public class EnrollmentController implements EnrollmentAPI {
     public ResponseEntity<Void> webhook(CreatePaymentRequest request) {
         PaymentOutput p = this.paymentService.getPayment(request.data().id());
         GetUpsertEnrollmentInput in = new GetUpsertEnrollmentInput(p.externalReference());
+
+        if (!p.status().equalsIgnoreCase("approved"))
+            return ResponseEntity.ok().build();
 
         GetUpsertEnrollmentOutput output = this.enrollmentService.getUpsertEnrollment(in);
         final CreateEnrollmentInput input = CreateEnrollmentInput.of(
