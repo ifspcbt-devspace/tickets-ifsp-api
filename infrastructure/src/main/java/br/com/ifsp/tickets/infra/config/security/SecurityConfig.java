@@ -2,6 +2,7 @@ package br.com.ifsp.tickets.infra.config.security;
 
 import br.com.ifsp.tickets.app.auth.IAuthUtils;
 import br.com.ifsp.tickets.infra.config.security.entrypoint.AuthEntryPointJwt;
+import br.com.ifsp.tickets.infra.config.security.filter.BasicAuthFilter;
 import br.com.ifsp.tickets.infra.config.security.filter.JwtAuthFilter;
 import br.com.ifsp.tickets.infra.config.security.service.CustomUserDetailsService;
 import br.com.ifsp.tickets.infra.contexts.user.AuthUtils;
@@ -26,6 +27,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 @EnableWebSecurity
@@ -40,11 +42,11 @@ public class SecurityConfig {
             "/docs/swagger.html",
             "/error",
             "/error/**",
-//          Spring Actuator
-            "/actuator/**",
-            "/health/**",
 //          Api endpoints
-            "/v1/auth/**",
+            "/v1/auth/login",
+            "/v1/auth/register",
+            "/v1/auth/activate/*",
+            "/v1/auth/recovery/**",
             "/v1/cep/**",
             "/v1/event/*/ticketSale",
             "/v1/enrollment/webhook"
@@ -91,6 +93,7 @@ public class SecurityConfig {
         cors.addAllowedMethod(HttpMethod.GET);
         cors.addAllowedMethod(HttpMethod.DELETE);
         return httpSecurity
+                .addFilterAfter(new BasicAuthFilter(customUserDetailsService), BasicAuthenticationFilter.class)
                 .addFilterAfter(new JwtAuthFilter(authService, customUserDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .cors(crs -> crs.configurationSource(request -> cors))
                 .authorizeHttpRequests(authorize -> authorize
@@ -98,6 +101,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/v1/event/*/thumbnail").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/event/search").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers("/actuator/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider)

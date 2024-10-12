@@ -1,7 +1,5 @@
 package br.com.ifsp.tickets.app.enrollment.core.create;
 
-import br.com.ifsp.tickets.domain.user.User;
-
 import java.time.LocalDate;
 
 public record CreateEnrollmentInput(

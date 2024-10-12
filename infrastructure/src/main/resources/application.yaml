@@ -13,6 +13,21 @@ mercadopago:
   access:
     token: ${MERCADOPAGO_ACCESSTOKEN}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [ "prometheus", "health" ]
+  endpoint:
+    metrics:
+      enabled: true
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
 spring:
   mail:
     host: ${MAIL_HOST}

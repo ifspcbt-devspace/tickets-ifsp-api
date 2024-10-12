@@ -19,4 +19,8 @@ public class CustomUserDetailsService {
     public User getByUUID(UUID uuid) {
         return userRepository.findById(uuid).orElseThrow(() -> new UsernameNotFoundException("Token is not valid")).toAggregate();
     }
+
+    public User getByEmail(String email) {
+        return userRepository.findByUsernameOrEmail(email).orElseThrow(() -> new UsernameNotFoundException("Credentials is not valid")).toAggregate();
+    }
 }

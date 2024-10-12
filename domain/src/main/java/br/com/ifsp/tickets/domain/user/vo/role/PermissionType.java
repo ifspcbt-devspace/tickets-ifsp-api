@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum PermissionType {
 
+    ADMIN("Acesso a recursos restritos"),
     MANAGE_ANY_USER("Gerenciar usuários"),
     MANAGE_ANY_COMPANY("Gerenciar companhias"),
     MANAGE_ANY_TICKET("Gerenciar ingressos"),
