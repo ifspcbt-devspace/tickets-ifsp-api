@@ -21,8 +21,6 @@ public record TicketResponse(
         LocalDate validIn,
         @JsonProperty("expired_in")
         LocalDate expiredIn,
-        @JsonProperty("expired_at")
-        LocalDateTime expiredAt,
         @JsonProperty("status")
         TicketStatus status,
         @JsonProperty("code")

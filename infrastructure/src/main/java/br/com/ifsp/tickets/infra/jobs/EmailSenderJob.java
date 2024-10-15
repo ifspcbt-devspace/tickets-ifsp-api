@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class EmailSenderJob {
     private final IEmailGateway emailGateway;
 
-    @Scheduled(fixedDelay = 10 * 1000)
+    //@Scheduled(fixedDelay = 10 * 1000)
     public void sendEmails() {
         this.emailGateway.findNotSent().forEach(this.emailGateway::send);
     }

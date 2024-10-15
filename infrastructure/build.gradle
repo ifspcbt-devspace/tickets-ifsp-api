@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'br.com.ifsp.tickets'
-version = '1.0.0'
+version = '0.2.0'
 description = 'infrastructure'
 
 java {
@@ -47,7 +47,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 
     implementation 'jakarta.mail:jakarta.mail-api:2.1.3'
     implementation 'jakarta.activation:jakarta.activation-api:2.1.3'
@@ -89,7 +89,7 @@ springBoot {
             artifact = "tickets-ifsp-api.jar"
             group = "br.com.ifsp.tickets"
             name = "TicketsIFSP API"
-            version = "1.0.0"
+            version = "0.2.0"
         }
     }
 }

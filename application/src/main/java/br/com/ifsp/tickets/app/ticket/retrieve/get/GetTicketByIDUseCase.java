@@ -1,5 +1,6 @@
 package br.com.ifsp.tickets.app.ticket.retrieve.get;
 
+import br.com.ifsp.tickets.app.ticket.retrieve.TicketOutput;
 import br.com.ifsp.tickets.domain.event.Event;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
 import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccessException;
@@ -24,7 +25,8 @@ public class GetTicketByIDUseCase implements IGetTicketByIDUseCase {
         final User user = anIn.user();
         final TicketID ticketID = TicketID.with(anIn.ticketID());
         final Ticket ticket = this.ticketGateway.findById(ticketID).orElseThrow(() -> NotFoundException.with(Ticket.class, ticketID));
-        if (ticket.getUserID().equals(user.getId()) || user.canManageAnyTicket())
+        final boolean isUserTicket = ticket.getUserID().isPresent() ? ticket.getUserID().get().equals(user.getId()) : ticket.getDocument().equalsIgnoreCase(user.getDocument().getValue());
+        if (isUserTicket || user.canManageAnyTicket())
             return TicketOutput.from(ticket);
 
         final Event event = this.eventGateway.findById(ticket.getEventID()).orElseThrow(() -> NotFoundException.with(Event.class, ticket.getEventID()));

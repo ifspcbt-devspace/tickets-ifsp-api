@@ -59,7 +59,7 @@ public class CreatePreferenceUseCase implements ICreatePreferenceUseCase{
                                 .name(user.getName())
                                 .surname(user.getUsername())
                                 .email(user.getEmail().toString())
-                                .phone(PhoneRequest.builder().number(user.getPhoneNumber().toString()).build())
+                                .phone(PhoneRequest.builder().number(user.getPhoneNumber().getValue()).build())
                                 .identification(
                                         IdentificationRequest.builder().type("RG").number(user.getDocument().toString()).build())
                                 .build())

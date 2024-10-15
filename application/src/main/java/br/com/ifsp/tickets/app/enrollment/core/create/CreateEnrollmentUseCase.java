@@ -82,7 +82,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
                         userID, event.getId());
 
         final LocalDate expiredIn = event.getEndDate().plusDays(1);
-        final Ticket ticket = Ticket.newTicketWithId(ticketID, userID, document, event, ticketSale, "Ingresso sem limite de acompanhantes", event.getInitDate(), expiredIn);
+        final Ticket ticket = Ticket.newTicketWithId(ticketID, userID, document, event, ticketSale, ticketSale.getDescription(), event.getInitDate(), expiredIn);
         final Message message = this.messageGateway.findBySubjectAndType(MessageSubject.EVENT_TICKET, MessageType.HTML).orElseThrow(() -> NotFoundException.with("Email template not found"));
         final Notification notification = Notification.create();
         enrollment.validate(notification);
