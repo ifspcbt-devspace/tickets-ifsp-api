@@ -4,8 +4,6 @@ import br.com.ifsp.tickets.domain.event.sale.ITicketSaleGateway;
 import br.com.ifsp.tickets.domain.event.sale.TicketSale;
 import br.com.ifsp.tickets.domain.event.sale.TicketSaleID;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
-import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
-import br.com.ifsp.tickets.domain.ticket.Ticket;
 import br.com.ifsp.tickets.domain.ticket.TicketID;
 import br.com.ifsp.tickets.domain.user.User;
 import com.mercadopago.client.common.IdentificationRequest;
@@ -16,12 +14,11 @@ import com.mercadopago.resources.preference.Preference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreatePreferenceUseCase implements ICreatePreferenceUseCase{
-    private final ITicketGateway ticketGateway;
+public class CreatePreferenceUseCase implements ICreatePreferenceUseCase {
+
     private final ITicketSaleGateway ticketSaleGateway;
 
-    public CreatePreferenceUseCase(ITicketGateway ticketGateway, ITicketSaleGateway ticketSaleGateway) {
-        this.ticketGateway = ticketGateway;
+    public CreatePreferenceUseCase(ITicketSaleGateway ticketSaleGateway) {
         this.ticketSaleGateway = ticketSaleGateway;
     }
 
@@ -74,9 +71,9 @@ public class CreatePreferenceUseCase implements ICreatePreferenceUseCase{
                 .build();
 
         Preference preference = null;
-        try{
+        try {
             preference = client.create(preferenceRequest);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return new CreatePreferenceOutput(preference.getInitPoint(), ticketId.getValue().toString());

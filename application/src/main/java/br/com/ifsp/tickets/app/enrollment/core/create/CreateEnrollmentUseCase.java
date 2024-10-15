@@ -24,7 +24,6 @@ import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
 import br.com.ifsp.tickets.domain.ticket.Ticket;
 import br.com.ifsp.tickets.domain.ticket.TicketID;
-import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
 
 import java.time.LocalDate;
