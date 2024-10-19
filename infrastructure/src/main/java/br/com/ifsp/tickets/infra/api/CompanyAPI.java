@@ -60,7 +60,7 @@ public interface CompanyAPI {
             summary = "Search companies",
             description = "Search companies by name, cnpj, state, city, neighborhood, street, number, complement, zip code, phone, email, website, and contact name",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Companies found", content = @Content(schema = @Schema(implementation = Pagination.class))),
+                    @ApiResponse(responseCode = "200", description = "Companies found"),
                     @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
             }
     )

@@ -56,7 +56,7 @@ public interface TicketAPI {
                     @SecurityRequirement(name = "bearer")
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Tickets retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Pagination.class))),
+                    @ApiResponse(responseCode = "200", description = "Tickets retrieved successfully"),
                     @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content(mediaType = "application/json", schema = @Schema(implementation = APIErrorResponse.class))),
                     @ApiResponse(responseCode = "403", description = "Access denied", content = @Content(mediaType = "application/json", schema = @Schema(implementation = APIErrorResponse.class))),
                     @ApiResponse(responseCode = "404", description = "Tickets not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = APIErrorResponse.class)))
