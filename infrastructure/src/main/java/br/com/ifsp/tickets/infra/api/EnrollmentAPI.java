@@ -7,7 +7,6 @@ import br.com.ifsp.tickets.infra.contexts.enrollment.upsert.models.CreateUpsertE
 import br.com.ifsp.tickets.infra.contexts.event.sale.payment.models.CreatePaymentRequest;
 import br.com.ifsp.tickets.infra.shared.APIErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Webhook;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -58,16 +57,13 @@ public interface EnrollmentAPI {
     ResponseEntity<String> createUpsertEnrollment(@RequestBody CreateUpsertEnrollmentRequest request);
 
     @PostMapping(consumes = "application/json", value = "/webhook")
-    @Webhook(
-            name = "Payment Webhook",
-            operation = @Operation(
-                    summary = "Payment webhook",
-                    description = "Webhook for payment",
-                    responses = {
-                            @ApiResponse(responseCode = "201", description = "Webhook received successfully"),
-                            @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class), mediaType = "application/json"))
-                    }
-            )
+    @Operation(
+            summary = "Payment",
+            description = "Receive payment webhook",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Webhook received successfully"),
+                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class), mediaType = "application/json"))
+            }
     )
     ResponseEntity<Void> webhook(@RequestBody CreatePaymentRequest request);
 }

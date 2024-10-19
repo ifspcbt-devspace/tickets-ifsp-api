@@ -5,8 +5,12 @@ import br.com.ifsp.tickets.domain.communication.message.Message;
 import br.com.ifsp.tickets.domain.communication.message.type.MessageSubject;
 import br.com.ifsp.tickets.domain.communication.message.type.MessageType;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import io.swagger.v3.oas.models.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -33,6 +37,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @OpenAPIDefinition(
         info = @Info(title = "Tickets API", version = "v1", description = "Tickets API Documentation", contact = @Contact(name = "IFSP CBT - Informática", email = "ifspcbt.informatica@gmail.com", url = "https://linktr.ee/_oleonardosilva"))
+)
+@SecuritySchemes(
+        value = @SecurityScheme(
+                name = "bearer",
+                in = SecuritySchemeIn.HEADER,
+                description = "Bearer Token",
+                paramName = "Authorization",
+                type = SecuritySchemeType.HTTP,
+                bearerFormat = "JWT",
+                scheme = "bearer"
+        )
 )
 public class WebServerConfig {
 
