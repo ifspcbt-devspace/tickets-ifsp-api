@@ -1,20 +1,18 @@
 package br.com.ifsp.tickets.infra.api;
 
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
-import br.com.ifsp.tickets.infra.api.controllers.ExceptionController;
 import br.com.ifsp.tickets.infra.contexts.event.core.models.CreateEventRequest;
 import br.com.ifsp.tickets.infra.contexts.event.core.models.EventResponse;
 import br.com.ifsp.tickets.infra.contexts.event.core.models.SearchEventResponse;
 import br.com.ifsp.tickets.infra.contexts.event.sale.ticket.models.CreateTicketSaleRequest;
 import br.com.ifsp.tickets.infra.contexts.event.sale.ticket.models.TicketSaleResponse;
+import br.com.ifsp.tickets.infra.shared.APIErrorResponse;
 import br.com.ifsp.tickets.infra.shared.search.AdvancedSearchRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,43 +24,63 @@ import org.springframework.web.multipart.MultipartFile;
 public interface EventAPI {
 
     @PostMapping(consumes = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Event created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request")
-    })
+    @Operation(
+            summary = "Create event",
+            description = "Create a new event",
+            security = {
+                    @SecurityRequirement(name = "bearer")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Event created successfully"),
+                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "403", description = "Access denied", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
+            }
+    )
     ResponseEntity<Void> create(@RequestBody CreateEventRequest request);
 
     @PostMapping(
             value = "/search",
             produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Events list"),
-            @ApiResponse(responseCode = "400", description = "Invalid request")
-    })
+    @Operation(
+            summary = "Search events",
+            description = "Search events by name, date, location, or category",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Events retrieved successfully"),
+                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
+            }
+    )
     ResponseEntity<Pagination<SearchEventResponse>> search(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                            @RequestParam(name = "perPage", required = false, defaultValue = "10") Integer perPage,
                                                            @RequestBody AdvancedSearchRequest request);
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Event found"),
-            @ApiResponse(responseCode = "404", description = "Event not found")
-    })
+    @Operation(
+            summary = "Get event by id",
+            description = "Get event information by id",
+            security = {
+                    @SecurityRequirement(name = "bearer")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Event found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EventResponse.class))),
+                    @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content(mediaType = "application/json", schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "403", description = "Access denied", content = @Content(mediaType = "application/json", schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Event not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = APIErrorResponse.class)))
+            }
+    )
     ResponseEntity<EventResponse> get(@PathVariable String id);
 
     @GetMapping(
             value = "/{id}/thumbnail"
     )
     @Operation(
-            operationId = "getThumbnail",
             summary = "Obter thumbnail",
             description = "Obter thumbnail do evento.",
-            parameters = @Parameter(name = "id", description = "ID do evento a ser consultado", in = ParameterIn.PATH, example = "c971869b-2dd3-4934-beac-172a9a229735", required = true),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Thumbnail found", content = @Content(mediaType = "image/png", schema = @Schema(type = "string", format = "binary"))),
-                    @ApiResponse(responseCode = "400", description = "Invalid id", content = @Content(schema = @Schema(implementation = ExceptionController.CustomErrorResponse.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ExceptionController.CustomErrorResponse.class))),
-                    @ApiResponse(responseCode = "404", description = "Thumbnail not found", content = @Content(schema = @Schema(implementation = ExceptionController.CustomErrorResponse.class)))
+                    @ApiResponse(responseCode = "400", description = "Invalid id", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Thumbnail not found", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
             },
             method = "GET"
     )
@@ -71,25 +89,17 @@ public interface EventAPI {
     @DeleteMapping(
             value = "/{id}/thumbnail"
     )
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "204", description = "Thumbnail deleted"),
-                    @ApiResponse(responseCode = "400", description = "Invalid id"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "404", description = "Thumbnail not found")
-            }
-    )
     @Operation(
-            operationId = "deleteThumbnail",
             summary = "Deletar thumbnail",
             description = "Deletar thumbnail do evento.",
-            parameters = @Parameter(name = "id", description = "ID do evento a ser consultado", in = ParameterIn.PATH, example = "c971869b-2dd3-4934-beac-172a9a229735", required = true),
-            method = "DELETE",
+            security = {
+                    @SecurityRequirement(name = "bearer")
+            },
             responses = {
                     @ApiResponse(responseCode = "204", description = "Thumbnail deleted"),
-                    @ApiResponse(responseCode = "400", description = "Invalid id", content = @Content(schema = @Schema(implementation = ExceptionController.CustomErrorResponse.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ExceptionController.CustomErrorResponse.class))),
-                    @ApiResponse(responseCode = "404", description = "Thumbnail not found", content = @Content(schema = @Schema(implementation = ExceptionController.CustomErrorResponse.class)))
+                    @ApiResponse(responseCode = "400", description = "Invalid id", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Thumbnail not found", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
             }
     )
     ResponseEntity<?> deleteThumbnail(@PathVariable String id);
@@ -99,37 +109,46 @@ public interface EventAPI {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     @Operation(
-            operationId = "uploadThumbnail",
             summary = "Upload thumbnail",
             description = "Upload thumbnail do evento.",
-            parameters = {
-                    @Parameter(name = "id", description = "ID do evento a ser consultado", in = ParameterIn.PATH, example = "c971869b-2dd3-4934-beac-172a9a229735", required = true),
-                    @Parameter(name = "file", description = "Arquivo de imagem", in = ParameterIn.QUERY, required = true, content = @Content(mediaType = "multipart/form-data", schema = @Schema(type = "string", format = "binary"))),
-                    @Parameter(name = "fileName", description = "Nome do arquivo", in = ParameterIn.QUERY, required = true, example = "thumbnail")
+            security = {
+                    @SecurityRequirement(name = "bearer")
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Thumbnail uploaded"),
-                    @ApiResponse(responseCode = "400", description = "Invalid id", content = @Content(schema = @Schema(implementation = ExceptionController.CustomErrorResponse.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ExceptionController.CustomErrorResponse.class))),
-                    @ApiResponse(responseCode = "404", description = "Event not found", content = @Content(schema = @Schema(implementation = ExceptionController.CustomErrorResponse.class)))
-            },
-            method = "POST"
+                    @ApiResponse(responseCode = "202", description = "Thumbnail uploaded"),
+                    @ApiResponse(responseCode = "400", description = "Invalid id", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Event not found", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
+            }
     )
     ResponseEntity<?> uploadThumbnail(@PathVariable String id, @RequestParam("file") MultipartFile file, @RequestParam("fileName") String fileName);
 
     @PostMapping(
             value = "/{id}/ticketSale", consumes = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Ticket Sale created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request")
-    })
+    @Operation(
+            summary = "Create ticket sale",
+            description = "Create a new ticket sale",
+            security = {
+                    @SecurityRequirement(name = "bearer")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Ticket Sale created successfully"),
+                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+                    @ApiResponse(responseCode = "403", description = "Access denied", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
+            }
+    )
     ResponseEntity<Void> createTicketSale(@PathVariable String id, @RequestBody CreateTicketSaleRequest request);
 
     @GetMapping(
             value = "/{id}/ticketSale", consumes = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ticket Sale list"),
-            @ApiResponse(responseCode = "400", description = "Invalid request")
-    })
+    @Operation(
+            summary = "Get ticket sale by event id",
+            description = "Get ticket sale by event id",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Ticket Sale list"),
+                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
+            }
+    )
     ResponseEntity<Pagination<TicketSaleResponse>> getTicketSaleByEventId(@PathVariable String id);
 }

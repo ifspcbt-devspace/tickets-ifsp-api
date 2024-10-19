@@ -4,14 +4,13 @@ import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
 import br.com.ifsp.tickets.domain.communication.message.Message;
 import br.com.ifsp.tickets.domain.communication.message.type.MessageSubject;
 import br.com.ifsp.tickets.domain.communication.message.type.MessageType;
-import br.com.ifsp.tickets.domain.company.ICompanyGateway;
-import br.com.ifsp.tickets.domain.event.IEventGateway;
-import br.com.ifsp.tickets.domain.user.IUserGateway;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.models.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
+import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,24 +19,27 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableScheduling
 @EnableAsync
 @ComponentScan("br.com.ifsp.tickets.infra")
 @Slf4j
-@OpenAPIDefinition(info = @Info(title = "Tickets API", version = "v1", description = "Tickets API Documentation", contact = @Contact(name = "Leonardo da Silva", email = "oproprioleonardo@gmail.com", url = "https://linktr.ee/_oleonardosilva")))
+@OpenAPIDefinition(
+        info = @Info(title = "Tickets API", version = "v1", description = "Tickets API Documentation", contact = @Contact(name = "IFSP CBT - Informática", email = "ifspcbt.informatica@gmail.com", url = "https://linktr.ee/_oleonardosilva"))
+)
 public class WebServerConfig {
 
     private final ResourceLoader resourceLoader;
 
     @Autowired
-    public WebServerConfig(ResourceLoader resourceLoader, IMessageGateway messageGateway, PasswordEncoder passwordEncoder, IUserGateway userGateway, ICompanyGateway companyGateway, IEventGateway eventGateway) {
+    public WebServerConfig(ResourceLoader resourceLoader, IMessageGateway messageGateway) {
         this.resourceLoader = resourceLoader;
 
         log.info("Creating default messages...");
@@ -77,4 +79,18 @@ public class WebServerConfig {
         return new OkHttpClient.Builder().build();
     }
 
+    @Bean
+    public OpenApiCustomizer alphabeticalTagsCustomizer() {
+        return openApi -> {
+            final List<Tag> tags = openApi.getTags();
+
+            if (tags != null) {
+                final List<Tag> sortedTags = tags.stream()
+                        .sorted((tag1, tag2) -> tag1.getName().compareToIgnoreCase(tag2.getName()))
+                        .collect(Collectors.toList());
+
+                openApi.setTags(sortedTags);
+            }
+        };
+    }
 }

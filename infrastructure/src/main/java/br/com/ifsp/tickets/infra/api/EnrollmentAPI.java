@@ -5,9 +5,15 @@ import br.com.ifsp.tickets.infra.contexts.enrollment.core.models.CreateEnrollmen
 import br.com.ifsp.tickets.infra.contexts.enrollment.core.models.EnrollmentResponse;
 import br.com.ifsp.tickets.infra.contexts.enrollment.upsert.models.CreateUpsertEnrollmentRequest;
 import br.com.ifsp.tickets.infra.contexts.event.sale.payment.models.CreatePaymentRequest;
+import br.com.ifsp.tickets.infra.shared.APIErrorResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Webhook;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,30 +25,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface EnrollmentAPI {
 
     @PostMapping(consumes = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Enrollment created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request")
-    })
+    @Operation(
+            summary = "Create enrollment",
+            description = "Create a new enrollment",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Enrollment created successfully", content = @Content(schema = @Schema(implementation = String.class), mediaType = MediaType.TEXT_PLAIN_VALUE, examples = @ExampleObject(value = "3266a228-d496-4841-b31c-195d1a3e9ee5"))),
+                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class), mediaType = "application/json"))
+            }
+    )
     ResponseEntity<String> create(@RequestBody CreateEnrollmentRequest request);
 
     @GetMapping(value = "/list", produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Enrollments retrieved successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request")
-    })
+    @Operation(
+            summary = "List enrollments",
+            description = "List enrollments by user",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Enrollments retrieved successfully"),
+                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class), mediaType = "application/json"))
+            }
+    )
     ResponseEntity<Pagination<EnrollmentResponse>> findByUser();
 
     @PostMapping(consumes = "application/json", value = "/upsert")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Upsert enrollment created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request")
-    })
+    @Operation(
+            summary = "Create or update enrollment",
+            description = "Create or update an enrollment",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Upsert enrollment created successfully"),
+                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class), mediaType = "application/json"))
+            }
+    )
     ResponseEntity<String> createUpsertEnrollment(@RequestBody CreateUpsertEnrollmentRequest request);
 
     @PostMapping(consumes = "application/json", value = "/webhook")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Upsert enrollment created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request")
-    })
+    @Webhook(
+            name = "Payment Webhook",
+            operation = @Operation(
+                    summary = "Payment webhook",
+                    description = "Webhook for payment",
+                    responses = {
+                            @ApiResponse(responseCode = "201", description = "Webhook received successfully"),
+                            @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class), mediaType = "application/json"))
+                    }
+            )
+    )
     ResponseEntity<Void> webhook(@RequestBody CreatePaymentRequest request);
 }
