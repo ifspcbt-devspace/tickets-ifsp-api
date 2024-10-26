@@ -9,7 +9,6 @@ import br.com.ifsp.tickets.domain.shared.exceptions.ChangeTicketStatusException;
 import br.com.ifsp.tickets.domain.shared.exceptions.TicketConsumeException;
 import br.com.ifsp.tickets.domain.shared.exceptions.TicketExpiredException;
 import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
-import br.com.ifsp.tickets.domain.ticket.payment.PaymentStatus;
 import br.com.ifsp.tickets.domain.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.user.UserID;
 import lombok.Getter;
@@ -94,7 +93,7 @@ public class Ticket extends Entity<TicketID> {
     public void consume(Event event) {
         if (!event.getStatus().isOpened() && !event.getStatus().isInProgress())
             throw new TicketConsumeException("Event is not open and is not in progress");
-        if (!event.getId().equals(this.ticketSaleID))
+        if (!event.getId().equals(this.eventID))
             throw new TicketConsumeException("Ticket does not belong to this event");
         if (this.status.isCanceled())
             throw new TicketConsumeException("Ticket is canceled");
