@@ -21,11 +21,11 @@ public class PaymentService {
         this.createPaymentUseCase = createPaymentUseCase;
     }
 
-    public CreatePreferenceOutput CreatePreference(CreatePreferenceInput anIn) {
+    public CreatePreferenceOutput createPreference(CreatePreferenceInput anIn) {
         return this.createPreferenceUseCase.execute(anIn);
     }
 
-    public CreatePaymentOutput CreatePayment(CreatePaymentInput anIn) {
+    public CreatePaymentOutput createPayment(CreatePaymentInput anIn) {
         return this.createPaymentUseCase.execute(anIn);
     }
 

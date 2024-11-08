@@ -7,17 +7,6 @@ import java.util.regex.Pattern;
 
 public class ValidationUtils {
 
-
-    public static boolean isValidMobilePhoneNumber(String s) {
-        s = s.replaceAll("[^0-9]", "");
-        return s.length() == 11;
-    }
-
-    public static boolean isValidPhoneNumber(String s) {
-        s = s.replaceAll("[^0-9]", "");
-        return s.length() == 10;
-    }
-
     public static boolean isRG(String rg) {
         // Remove todos os caracteres não numéricos (pontos, hífens, espaços)
         final String cleanRG = rg.replaceAll("[^\\dXx]", "");
@@ -128,12 +117,9 @@ public class ValidationUtils {
     }
 
     public static boolean isValidEmail(String email) {
+        if (email == null || email.isBlank()) return false;
         final Pattern pattern = Pattern.compile("^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
         return pattern.matcher(email).matches();
-    }
-
-    public static boolean isValidDocument(String document) {
-        return isCPF(document) || isCNPJ(document);
     }
 
 }

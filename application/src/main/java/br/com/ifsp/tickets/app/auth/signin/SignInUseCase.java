@@ -3,6 +3,7 @@ package br.com.ifsp.tickets.app.auth.signin;
 import br.com.ifsp.tickets.app.auth.IAuthManager;
 import br.com.ifsp.tickets.app.auth.IAuthUtils;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
+import br.com.ifsp.tickets.domain.shared.utils.ValidationUtils;
 import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import br.com.ifsp.tickets.domain.user.IUserGateway;
 import br.com.ifsp.tickets.domain.user.User;
@@ -25,13 +26,11 @@ public class SignInUseCase implements ISignInUseCase {
 
     @Override
     public SignInOutput execute(SignInInput anIn) {
-        EmailAddress emailAddress = null;
-        try {
-            emailAddress = new EmailAddress(anIn.login());
-        } catch (Exception ignored) {
+        if (ValidationUtils.isValidEmail(anIn.login())) {
+            final EmailAddress emailAddress = new EmailAddress(anIn.login());
+            if (this.upsertEmailGateway.existsByEmail(emailAddress))
+                Notification.create("Validation error").append("Activate your account first, check your email").throwPossibleErrors();
         }
-        if (emailAddress != null && this.upsertEmailGateway.existsByEmail(emailAddress))
-            Notification.create("Validation error").append("Activate your account first, check your email").throwPossibleErrors();
 
         final User user = this.userGateway.findByUsernameOrEmail(anIn.login())
                 .orElseThrow(() -> NotFoundException.with("User not found with login: " + anIn.login()));

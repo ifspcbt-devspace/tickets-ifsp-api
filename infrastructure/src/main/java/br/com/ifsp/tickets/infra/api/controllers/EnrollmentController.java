@@ -63,7 +63,7 @@ public class EnrollmentController implements EnrollmentAPI {
         final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         final CreatePreferenceInput input = CreatePreferenceInput.of(authenticatedUser.toAggregate(), request.ticketSaleId());
-        CreatePreferenceOutput preferenceOutput = paymentService.CreatePreference(input);
+        final CreatePreferenceOutput preferenceOutput = paymentService.createPreference(input);
 
         final CreateUpsertEnrollmentInput in = CreateUpsertEnrollmentInput.of(
                 authenticatedUser.toAggregate(),
@@ -90,7 +90,7 @@ public class EnrollmentController implements EnrollmentAPI {
         if (!p.status().equalsIgnoreCase("approved"))
             return ResponseEntity.ok().build();
 
-        GetUpsertEnrollmentOutput output = this.enrollmentService.getUpsertEnrollment(in);
+        final GetUpsertEnrollmentOutput output = this.enrollmentService.getUpsertEnrollment(in);
         final CreateEnrollmentInput input = CreateEnrollmentInput.of(
                 output.userID(),
                 output.name(),
@@ -101,7 +101,8 @@ public class EnrollmentController implements EnrollmentAPI {
                 output.ticketSaleId(),
                 output.ticketID()
         );
-        CreateEnrollmentOutput out = this.enrollmentService.create(input);
+
+        this.enrollmentService.create(input);
         return ResponseEntity.ok().build();
     }
 }
