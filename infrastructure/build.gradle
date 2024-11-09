@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.10'
+    id 'org.springframework.boot' version '3.2.11'
     id 'io.spring.dependency-management' version '1.1.5'
 }
 
@@ -66,9 +66,9 @@ dependencies {
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'com.google.zxing:javase:3.4.1'
 
-    compileOnly 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.34'
     runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.springframework.security:spring-security-test'
