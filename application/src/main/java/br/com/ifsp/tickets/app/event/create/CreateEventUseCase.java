@@ -14,7 +14,6 @@ import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import br.com.ifsp.tickets.domain.user.User;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,10 +31,12 @@ public class CreateEventUseCase implements ICreateEventUseCase {
     public CreateEventOutput execute(CreateEventInput anIn) {
         final User user = anIn.user();
         final CompanyID companyID = CompanyID.with(anIn.companyId());
-        if (!user.canManageEvents() && !user.canManageAnyEvent()) throw new IllegalResourceAccessException("User does not have permission to create events");
+        if (!user.canManageEvents() && !user.canManageAnyEvent())
+            throw new IllegalResourceAccessException("User does not have permission to create events");
         if (!user.hasCompany() && !user.canManageAnyEvent()) throw new NoCompanyException();
         final CompanyID userCompanyID = user.getCompanyID();
-        if (!user.canManageAnyEvent() && !userCompanyID.equals(companyID)) throw new IllegalResourceAccessException("User does not have permission to create events for this company");
+        if (!user.canManageAnyEvent() && !userCompanyID.equals(companyID))
+            throw new IllegalResourceAccessException("User does not have permission to create events for this company");
         final Company company = this.companyGateway.findById(companyID).orElseThrow(() -> NotFoundException.with(Company.class, companyID));
         final String name = anIn.name();
         final String description = anIn.description();
