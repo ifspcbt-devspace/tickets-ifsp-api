@@ -4,6 +4,12 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.5'
 }
 
+dependencyManagement {
+    imports {
+        mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.6.0")
+    }
+}
+
 group = 'br.com.ifsp.tickets'
 version = '0.2.0'
 description = 'infrastructure'
@@ -35,12 +41,12 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":application"))
 
-
     implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
 
+    // mercadopago sdk
     implementation group: 'com.mercadopago', name: 'sdk-java', version: '2.1.29'
 
-    implementation 'io.micrometer:micrometer-registry-prometheus'
+    // spring boot
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -48,6 +54,26 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+    implementation "org.springframework.boot:spring-boot-starter-aop"
+
+    // observability
+    implementation 'io.micrometer:micrometer-registry-otlp'
+
+    implementation 'io.micrometer:micrometer-tracing-bridge-otel'
+    implementation 'io.opentelemetry:opentelemetry-api:1.38.0'
+    implementation 'io.opentelemetry:opentelemetry-context:1.38.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk:1.38.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk-trace:1.38.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk-metrics:1.38.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk-common:1.38.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi:1.38.0'
+    implementation 'io.opentelemetry:opentelemetry-extension-trace-propagators:1.38.0'
+    implementation 'io.opentelemetry:opentelemetry-exporter-common:1.38.0'
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.38.0'
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp-common:1.38.0'
+    implementation 'io.opentelemetry.instrumentation:opentelemetry-instrumentation-api-semconv:1.33.6-alpha'
+
+    implementation 'io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0:1.33.6-alpha'
 
     implementation 'jakarta.mail:jakarta.mail-api:2.1.3'
     implementation 'jakarta.activation:jakarta.activation-api:2.1.3'
@@ -75,7 +101,7 @@ dependencies {
 }
 
 bootJar {
-    archiveFileName.set("tickets-ifsp-api.${archiveExtension.get()}")
+    archiveFileName.set("tickets-api.${archiveExtension.get()}")
     destinationDirectory = file("../build/libs")
 }
 
@@ -86,9 +112,9 @@ test {
 springBoot {
     buildInfo {
         properties {
-            artifact = "tickets-ifsp-api.jar"
+            artifact = "tickets-api.jar"
             group = "br.com.ifsp.tickets"
-            name = "TicketsIFSP API"
+            name = "Tickets API"
             version = "0.2.0"
         }
     }

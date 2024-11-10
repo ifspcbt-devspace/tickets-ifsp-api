@@ -9,4 +9,12 @@ public interface IDomainEvent extends Serializable {
 
     String subject();
 
+    String message();
+
+    String source();
+
+    String id();
+
+
+
 }

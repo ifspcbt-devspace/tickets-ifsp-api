@@ -13,20 +13,35 @@ mercadopago:
   access:
     token: ${MERCADOPAGO_ACCESSTOKEN}
 
+logging:
+  file:
+    path: ${LOG_PATH}
+  pattern:
+    dateformat: "dd/MM/yyyy HH:mm:ss.SSS"
+
 management:
   endpoints:
     web:
       exposure:
-        include: [ "prometheus", "health" ]
-  endpoint:
-    metrics:
-      enabled: true
-    health:
-      show-details: always
-  prometheus:
+        include: health,metrics
+      base-path: /v1/actuator
+  otlp:
     metrics:
       export:
-        enabled: true
+        url: http://localhost:4318/v1/metrics
+        step: 10s
+    tracing:
+      endpoint: http://localhost:4318/v1/traces
+  tracing:
+    sampling:
+      probability: 1.0
+  metrics:
+    tags:
+      department: ${SERVICE_DEPARTMENT:software}
+      service: ${spring.application.name}
+      env: ${SERVICE_ENV:${ENV_NAME}}
+      region: ${SERVICE_REGION:brazil-south}
+      instance.id: ${SERVICE_INSTANCE_ID:default}
 
 spring:
   mail:
@@ -65,6 +80,8 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
+  application:
+    name: tickets-api
 
 server:
   error:
@@ -81,4 +98,4 @@ server:
       force: true
 
 fe-ticket-check-url: ${FRONTEND_TICKET_CHECK_URL}
-upload-dir: ticketsifsp/uploads/
+upload-dir: ${UPLOAD_PATH}

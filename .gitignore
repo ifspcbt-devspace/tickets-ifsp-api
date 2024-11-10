@@ -47,3 +47,5 @@ app.key
 app.pub
 *.key
 *.pub
+
+prometheus-data/

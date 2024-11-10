@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.nio.file.FileSystems;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -17,12 +17,11 @@ import java.util.Optional;
 @Slf4j
 public class LocalFileStorage implements IFileStorage {
 
-    private final Path rootPath = FileSystems.getDefault().getRootDirectories().iterator().next();
     @Value("${upload-dir}")
     private String uploadDir;
 
     private Path getUploadDir() {
-        final Path path = rootPath.resolve(uploadDir);
+        final Path path = Path.of(URI.create(uploadDir));
         if (Files.notExists(path)) {
             try {
                 Files.createDirectories(path);

@@ -1,0 +1,60 @@
+services:
+  db:
+    container_name: psql-db
+    image: postgres:16.4
+    environment:
+      POSTGRES_DB: ifspcbt
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      TZ: America/Sao_Paulo
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - ifspcbt
+    restart: always
+
+  backend:
+    container_name: ifspcbt-api
+    image: ghcr.io/ifspcbt-devspace/ifspcbt-devspace/tickets-ifsp-api:latest
+    environment:
+      - TZ=America/Sao_Paulo
+      - JWT_SECRET_KEY=secret
+      - MAIL_HOST=smtp.gmail.com
+      - MAIL_PORT=587
+      - MAIL_USERNAME=example@gmail.com
+      - MAIL_PASSWORD=password
+      - DATASOURCE_URL=jdbc:postgresql://localhost:5432/ifspcbt
+      - DATASOURCE_USERNAME=root
+      - DATASOURCE_PASSWORD=password
+      - ENCRYPTOR_VALUE=secret
+      - FRONTEND_TICKET_CHECK_URL=https://eventos.ifspcbt.shop/admin/ticket/%s/check
+      - MERCADOPAGO_ACCESSTOKEN=token
+      - ENV_NAME=dev
+      - LOG_PATH=/ticketsapi/logs/
+      - UPLOAD_PATH=/ticketsapi/uploads/
+    volumes:
+      - /home/ticketsapi/uploads:/ticketsapi/uploads
+      - /home/ticketsapi/logs:/ticketsapi/logs
+    ports:
+      - "8091:8091"
+    depends_on:
+      - db
+    networks:
+      - ifspcbt
+
+  watchtower:
+    privileged: true
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    command: --interval 30
+
+volumes:
+  db_data:
+
+networks:
+  ifspcbt:
+    driver: bridge

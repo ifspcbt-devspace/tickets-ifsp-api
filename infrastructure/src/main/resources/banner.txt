@@ -5,8 +5,8 @@
    ##     ##  ##       ##  ##   ##          ##          ##                ######### ##         ##
    ##     ##  ##    ## ##   ##  ##          ##    ##    ##                ##     ## ##         ##
    ##    ####  ######  ##    ## ########    ##     ######                 ##     ## ##        ####
- Application: TicketsIFSP-API
- Version: v1.0.0
+ Application: Tickets-API
+ Version: v0.2.0
  Authors:
    - Leonardo
    - Gustavo
