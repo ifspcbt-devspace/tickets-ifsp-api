@@ -33,4 +33,5 @@ public class DomainEventListener implements ApplicationListener<InfraAppEvent> {
             case DEBUG -> log.debug(message);
         }
     }
+
 }

@@ -4,12 +4,15 @@ import br.com.ifsp.tickets.domain.event.Event;
 import br.com.ifsp.tickets.domain.event.EventID;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
 import br.com.ifsp.tickets.domain.shared.IDomainEventPublisher;
-import br.com.ifsp.tickets.domain.shared.event.ConsumeTicketError;
-import br.com.ifsp.tickets.domain.shared.exceptions.*;
+import br.com.ifsp.tickets.domain.shared.exceptions.DomainException;
+import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccessException;
+import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
 import br.com.ifsp.tickets.domain.ticket.Ticket;
 import br.com.ifsp.tickets.domain.ticket.TicketID;
 import br.com.ifsp.tickets.domain.user.User;
+
+import java.util.Optional;
 
 public class CheckTicketUseCase implements ICheckTicketUseCase {
     private final ITicketGateway ticketGateway;
@@ -33,16 +36,11 @@ public class CheckTicketUseCase implements ICheckTicketUseCase {
         if ((!user.canManageTickets() || !user.getCompanyID().equals(event.getCompanyID())) && !user.canManageAnyTicket())
             throw new IllegalResourceAccessException("You don't have permission to check this ticket");
 
-        DomainException exception = null;
-        try {
-            ticket.consume(event);
-        } catch (TicketConsumeException | TicketExpiredException e) {
-            ticket.registerEvent(new ConsumeTicketError(ticket, e.getMessage()));
-            exception = e;
-        }
-        ticket.publishDomainEvents(eventPublisher);
-        if (exception != null) throw exception;
+        final Optional<DomainException> optionalException = ticket.consume(event);
 
         this.ticketGateway.update(ticket);
+
+        ticket.publishDomainEvents(eventPublisher);
+        if (optionalException.isPresent()) throw optionalException.get();
     }
 }

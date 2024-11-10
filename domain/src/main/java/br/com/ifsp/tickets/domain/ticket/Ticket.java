@@ -5,10 +5,11 @@ import br.com.ifsp.tickets.domain.event.EventID;
 import br.com.ifsp.tickets.domain.event.sale.TicketSale;
 import br.com.ifsp.tickets.domain.event.sale.TicketSaleID;
 import br.com.ifsp.tickets.domain.shared.Entity;
+import br.com.ifsp.tickets.domain.shared.event.ConsumeTicketError;
 import br.com.ifsp.tickets.domain.shared.event.ConsumeTicketSuccess;
 import br.com.ifsp.tickets.domain.shared.exceptions.ChangeTicketStatusException;
+import br.com.ifsp.tickets.domain.shared.exceptions.DomainException;
 import br.com.ifsp.tickets.domain.shared.exceptions.TicketConsumeException;
-import br.com.ifsp.tickets.domain.shared.exceptions.TicketExpiredException;
 import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.user.UserID;
@@ -73,35 +74,58 @@ public class Ticket extends Entity<TicketID> {
         } else return false;
     }
 
+    public boolean isValidToConsume() {
+        final LocalDateTime now = LocalDateTime.now();
+        return !now.toLocalDate().isBefore(this.validIn);
+    }
+
     public void cancel() {
         if (this.status.isCanceled())
             throw new ChangeTicketStatusException("Ticket is already canceled");
         this.status = TicketStatus.CANCELED;
     }
 
-    public void consume(Event event) {
-        if (!event.getStatus().isOpened() && !event.getStatus().isInProgress())
-            throw new TicketConsumeException("Event is not open and is not in progress");
-        if (!event.getId().equals(this.eventID))
-            throw new TicketConsumeException("Ticket does not belong to this event");
-        if (this.status.isCanceled())
-            throw new TicketConsumeException("Ticket is canceled");
-        if (this.status.isConsumed())
-            throw new TicketConsumeException("Ticket is already consumed");
-        if (this.status.isExpired() || this.expire())
-            throw new TicketExpiredException(this.getId());
+    public Optional<DomainException> consume(Event event) {
+        if (!event.getStatus().isOpened() && !event.getStatus().isInProgress()) {
+            final TicketConsumeException exception = new TicketConsumeException("Event is not open and is not in progress");
+            this.registerEvent(new ConsumeTicketError(this, exception.getMessage()));
+            return Optional.of(exception);
+        }
 
-        final LocalDateTime now = LocalDateTime.now();
+        if (!event.getId().equals(this.eventID)) {
+            final TicketConsumeException exception = new TicketConsumeException("Ticket does not belong to this event");
+            this.registerEvent(new ConsumeTicketError(this, exception.getMessage()));
+            return Optional.of(exception);
+        }
 
-        if (now.toLocalDate().isBefore(this.validIn))
-            throw new TicketConsumeException("Ticket is not valid yet");
+        if (this.status.isCanceled()) {
+            final TicketConsumeException exception = new TicketConsumeException("Ticket is canceled");
+            this.registerEvent(new ConsumeTicketError(this, exception.getMessage()));
+            return Optional.of(exception);
+        }
 
-        if (now.toLocalDate().isAfter(this.expiredIn))
-            throw new TicketExpiredException(this.getId());
+        if (this.status.isConsumed()) {
+            final TicketConsumeException exception = new TicketConsumeException("Ticket is already consumed");
+            this.registerEvent(new ConsumeTicketError(this, exception.getMessage()));
+            return Optional.of(exception);
+        }
+
+        if (this.status.isExpired() || this.expire()) {
+            final TicketConsumeException exception = new TicketConsumeException("Ticket is expired");
+            this.registerEvent(new ConsumeTicketError(this, exception.getMessage()));
+            return Optional.of(exception);
+        }
+
+        if (this.isValidToConsume()) {
+            final TicketConsumeException exception = new TicketConsumeException("Ticket is not valid yet");
+            this.registerEvent(new ConsumeTicketError(this, exception.getMessage()));
+            return Optional.of(exception);
+        }
 
         this.status = TicketStatus.CONSUMED;
-        this.lastTimeConsumed = now;
+        this.lastTimeConsumed = LocalDateTime.now();
         this.registerEvent(new ConsumeTicketSuccess(this));
+        return Optional.empty();
     }
 
     @Override
