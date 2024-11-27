@@ -3,6 +3,8 @@ package br.com.ifsp.tickets.app.company.create;
 import br.com.ifsp.tickets.domain.company.Company;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
 import br.com.ifsp.tickets.domain.company.vo.CNPJ;
+import br.com.ifsp.tickets.domain.shared.IDomainEventPublisher;
+import br.com.ifsp.tickets.domain.shared.event.CompanyCreated;
 import br.com.ifsp.tickets.domain.shared.exceptions.AlreadyJoinedACompany;
 import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccessException;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
@@ -16,10 +18,12 @@ public class CreateCompanyUseCase implements ICreateCompanyUseCase {
 
     private final IUserGateway userGateway;
     private final ICompanyGateway companyGateway;
+    private final IDomainEventPublisher eventPublisher;
 
-    public CreateCompanyUseCase(IUserGateway userGateway, ICompanyGateway companyGateway) {
+    public CreateCompanyUseCase(IUserGateway userGateway, ICompanyGateway companyGateway, IDomainEventPublisher eventPublisher) {
         this.userGateway = userGateway;
         this.companyGateway = companyGateway;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -56,12 +60,16 @@ public class CreateCompanyUseCase implements ICreateCompanyUseCase {
                 address
         );
 
-        final Notification notification = Notification.create();
+        final Notification notification = Notification.create("An error occurred while validating the company");
         company.validate(notification);
         notification.throwPossibleErrors();
         company = this.companyGateway.create(company);
         owner.joinCompany(company.getId());
         this.userGateway.update(owner);
+
+        company.registerEvent(new CompanyCreated(company, creator));
+        company.publishDomainEvents(this.eventPublisher);
+
         return CreateCompanyOutput.from(company);
     }
 }

@@ -44,7 +44,7 @@ public class RecoveryRequestUseCase implements IRecoveryRequestUseCase {
         }
         final PasswordRecovery passwordRecovery = PasswordRecovery.create(user, ipAddress, userAgent);
 
-        final Notification notification = Notification.create();
+        final Notification notification = Notification.create("An error occurred while validating the password recovery request");
         passwordRecovery.validate(notification);
         notification.throwPossibleErrors();
 

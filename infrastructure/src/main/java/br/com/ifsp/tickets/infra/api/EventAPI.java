@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Tag(name = "Event", description = "Event API - manage events from a company")
 public interface EventAPI {
 
-    @PostMapping(consumes = "application/json")
+    @PostMapping(value = "/", consumes = "application/json")
     @Operation(
             summary = "Create event",
             description = "Create a new event",

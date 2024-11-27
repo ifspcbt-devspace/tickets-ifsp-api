@@ -23,15 +23,16 @@ import br.com.ifsp.tickets.app.event.thumbnail.upload.UploadThumbnailUseCase;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
 import br.com.ifsp.tickets.domain.event.sale.ITicketSaleGateway;
+import br.com.ifsp.tickets.domain.shared.IDomainEventPublisher;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 
 public class EventServiceFactory {
 
     private static EventService eventService;
 
-    public static EventService create(ICompanyGateway companyGateway, IEventGateway eventGateway, ITicketSaleGateway ticketSaleGateway, IFileStorage fileStorage) {
+    public static EventService create(ICompanyGateway companyGateway, IEventGateway eventGateway, ITicketSaleGateway ticketSaleGateway, IFileStorage fileStorage, IDomainEventPublisher eventPublisher) {
         if (eventService == null) {
-            final ICreateEventUseCase createEventUseCase = new CreateEventUseCase(companyGateway, eventGateway);
+            final ICreateEventUseCase createEventUseCase = new CreateEventUseCase(companyGateway, eventGateway, eventPublisher);
             final IGetEventUseCase getEventUseCase = new GetEventUseCase(eventGateway);
             final ISearchEventUseCase searchEventUseCase = new SearchEventUseCase(eventGateway);
             final IDownloadThumbnailUseCase downloadThumbnailUseCase = new DownloadThumbnailUseCase(fileStorage, eventGateway);

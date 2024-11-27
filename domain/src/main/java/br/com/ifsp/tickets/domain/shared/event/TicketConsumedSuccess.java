@@ -5,13 +5,14 @@ import br.com.ifsp.tickets.domain.shared.IDomainEvent;
 import br.com.ifsp.tickets.domain.ticket.Ticket;
 
 import java.time.Instant;
+import java.util.UUID;
 
-public class ConsumeTicketSuccess implements IDomainEvent {
+public class TicketConsumedSuccess implements IDomainEvent {
 
-    private final String id;
+    private final String targetId;
 
-    public ConsumeTicketSuccess(Ticket ticket) {
-        this.id = ticket.getId().getValue().toString();
+    public TicketConsumedSuccess(Ticket ticket) {
+        this.targetId = ticket.getId().getValue().toString();
     }
 
     @Override
@@ -21,7 +22,7 @@ public class ConsumeTicketSuccess implements IDomainEvent {
 
     @Override
     public String subject() {
-        return "ConsumeTicket";
+        return "TicketConsumed";
     }
 
     @Override
@@ -45,7 +46,12 @@ public class ConsumeTicketSuccess implements IDomainEvent {
     }
 
     @Override
+    public String targetId() {
+        return this.targetId;
+    }
+
+    @Override
     public String id() {
-        return this.id;
+        return UUID.randomUUID().toString();
     }
 }

@@ -35,12 +35,14 @@ services:
   loki:
     image: grafana/loki:latest
     command: -config.file=/etc/loki/local-config.yaml
+    restart: always
     ports:
       - "3100:3100"
 
   tempo:
     image: grafana/tempo:latest
     command: [ "-config.file=/etc/tempo.yml" ]
+    restart: always
     volumes:
       - ./docker/tempo/tempo.yml:/etc/tempo.yml
     ports:
@@ -50,6 +52,7 @@ services:
   grafana:
     container_name: grafana
     image: grafana/grafana
+    restart: always
     volumes:
       - ./docker/grafana/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
     environment:

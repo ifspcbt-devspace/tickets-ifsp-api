@@ -33,7 +33,7 @@ public class UpdateCompanyUseCase implements IUpdateCompanyUseCase {
 
         final Company company = this.companyGateway.findById(companyID).orElseThrow(() -> NotFoundException.with(Company.class, companyID));
         company.updateCompanyInfo(name, description, cnpj);
-        final Notification notification = Notification.create();
+        final Notification notification = Notification.create("An error occurred while validating the company");
         company.validate(notification);
         notification.throwPossibleErrors();
         return UpdateCompanyOutput.from(this.companyGateway.update(company));

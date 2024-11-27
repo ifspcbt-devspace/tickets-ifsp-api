@@ -1,16 +1,10 @@
 package br.com.ifsp.tickets.app.enrollment.upsert.create;
 
 import br.com.ifsp.tickets.app.enrollment.ITicketQRGenerator;
-import br.com.ifsp.tickets.app.enrollment.core.create.CreateEnrollmentOutput;
-import br.com.ifsp.tickets.domain.communication.email.Email;
 import br.com.ifsp.tickets.domain.communication.email.IEmailGateway;
 import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
-import br.com.ifsp.tickets.domain.communication.message.Message;
-import br.com.ifsp.tickets.domain.communication.message.type.MessageSubject;
-import br.com.ifsp.tickets.domain.communication.message.type.MessageType;
 import br.com.ifsp.tickets.domain.company.Company;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
-import br.com.ifsp.tickets.domain.enrollment.Enrollment;
 import br.com.ifsp.tickets.domain.enrollment.IEnrollmentGateway;
 import br.com.ifsp.tickets.domain.enrollment.upsert.IUpsertEnrollmentGateway;
 import br.com.ifsp.tickets.domain.enrollment.upsert.UpsertEnrollment;
@@ -25,7 +19,6 @@ import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
-import br.com.ifsp.tickets.domain.ticket.Ticket;
 import br.com.ifsp.tickets.domain.ticket.TicketID;
 import br.com.ifsp.tickets.domain.user.User;
 import br.com.ifsp.tickets.domain.user.UserID;
@@ -93,7 +86,7 @@ public class CreateUpsertUpsertEnrollmentUseCase implements ICreateUpsertEnrollm
         final UpsertEnrollment enrollment = UpsertEnrollment
                 .newUpsertEnrollment(name, emailString, document, birthDate, userID, eventID, ticketSaleID, ticketID);
 
-        final Notification notification = Notification.create();
+        final Notification notification = Notification.create("An error occurred while validating the enrollment");
         enrollment.validate(notification);
         notification.throwPossibleErrors();
         final UpsertEnrollment createdEnrollment = this.upsertEnrollmentGateway.create(enrollment);

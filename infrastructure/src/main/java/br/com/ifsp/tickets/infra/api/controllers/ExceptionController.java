@@ -26,6 +26,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getErrors().stream().map(APIError::from).toList()
         );
+        log.error(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.badRequest().body(APIErrorResponse);
     }
@@ -37,6 +38,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 Stream.of(new Error(ex.getMessage())).map(APIError::from).toList()
         );
+        log.error(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.badRequest().body(APIErrorResponse);
     }
@@ -48,6 +50,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getErrors().stream().map(APIError::from).toList()
         );
+        log.error(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.badRequest().body(APIErrorResponse);
     }
@@ -59,6 +62,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.NOT_FOUND.value(),
                 null
         );
+        log.error(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIErrorResponse);
     }
@@ -70,6 +74,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.UNAUTHORIZED.value(),
                 null
         );
+        log.error(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(APIErrorResponse);
     }
@@ -81,6 +86,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.FORBIDDEN.value(),
                 null
         );
+        log.error(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(APIErrorResponse);
     }
@@ -92,11 +98,10 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 null
         );
-        log.warn(ex.getMessage(), ex.getCause());
+        log.error(ex.getMessage(), ex.getCause());
 
         return ResponseEntity.badRequest().body(APIErrorResponse);
     }
-
 
     public record APIError(
             @JsonProperty("message")

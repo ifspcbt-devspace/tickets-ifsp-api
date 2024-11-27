@@ -11,17 +11,18 @@ import br.com.ifsp.tickets.app.company.retrieve.search.SearchCompanyUseCase;
 import br.com.ifsp.tickets.app.company.update.IUpdateCompanyUseCase;
 import br.com.ifsp.tickets.app.company.update.UpdateCompanyUseCase;
 import br.com.ifsp.tickets.domain.company.ICompanyGateway;
+import br.com.ifsp.tickets.domain.shared.IDomainEventPublisher;
 import br.com.ifsp.tickets.domain.user.IUserGateway;
 
 public class CompanyServiceFactory {
 
     private static CompanyService companyService;
 
-    public static CompanyService create(ICompanyGateway companyGateway, IUserGateway userGateway) {
+    public static CompanyService create(ICompanyGateway companyGateway, IUserGateway userGateway, IDomainEventPublisher eventPublisher) {
         if (companyService == null) {
-            final ICreateCompanyUseCase companyUseCase = new CreateCompanyUseCase(userGateway, companyGateway);
+            final ICreateCompanyUseCase companyUseCase = new CreateCompanyUseCase(userGateway, companyGateway, eventPublisher);
             final IGetCompanyByIdUseCase getCompanyByIdUseCase = new GetCompanyByIdUseCase(companyGateway);
-            final IDeleteCompanyUseCase deleteCompanyUseCase = new DeleteCompanyUseCase(companyGateway);
+            final IDeleteCompanyUseCase deleteCompanyUseCase = new DeleteCompanyUseCase(companyGateway, eventPublisher);
             final IUpdateCompanyUseCase updateCompanyUseCase = new UpdateCompanyUseCase(companyGateway);
             final ISearchCompanyUseCase searchCompanyUseCase = new SearchCompanyUseCase(companyGateway);
 

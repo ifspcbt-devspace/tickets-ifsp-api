@@ -41,7 +41,7 @@ public class CreateTicket2SellUseCase implements ICreateTicket2SellUseCase {
         final BigDecimal price = anIn.price();
         final int entries = anIn.entries();
         final TicketSale ticketSale = TicketSale.newTicketSale(event, name, description, price, entries);
-        final Notification notification = Notification.create();
+        final Notification notification = Notification.create("An error occurred while validating a ticket sale");
         ticketSale.validate(notification);
         notification.throwPossibleErrors();
         return CreateTicket2SellOutput.from(this.ticketSaleGateway.create(ticketSale));

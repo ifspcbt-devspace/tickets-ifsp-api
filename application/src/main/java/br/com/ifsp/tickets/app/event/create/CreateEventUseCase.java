@@ -7,6 +7,8 @@ import br.com.ifsp.tickets.domain.event.Event;
 import br.com.ifsp.tickets.domain.event.EventConfig;
 import br.com.ifsp.tickets.domain.event.EventConfigKey;
 import br.com.ifsp.tickets.domain.event.IEventGateway;
+import br.com.ifsp.tickets.domain.shared.IDomainEventPublisher;
+import br.com.ifsp.tickets.domain.shared.event.EventCreated;
 import br.com.ifsp.tickets.domain.shared.exceptions.IllegalResourceAccessException;
 import br.com.ifsp.tickets.domain.shared.exceptions.NoCompanyException;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
@@ -21,22 +23,29 @@ public class CreateEventUseCase implements ICreateEventUseCase {
 
     private final ICompanyGateway companyGateway;
     private final IEventGateway eventGateway;
+    private final IDomainEventPublisher eventPublisher;
 
-    public CreateEventUseCase(ICompanyGateway companyGateway, IEventGateway eventGateway) {
+    public CreateEventUseCase(ICompanyGateway companyGateway, IEventGateway eventGateway, IDomainEventPublisher eventPublisher) {
         this.companyGateway = companyGateway;
         this.eventGateway = eventGateway;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
     public CreateEventOutput execute(CreateEventInput anIn) {
         final User user = anIn.user();
         final CompanyID companyID = CompanyID.with(anIn.companyId());
+
         if (!user.canManageEvents() && !user.canManageAnyEvent())
             throw new IllegalResourceAccessException("User does not have permission to create events");
+
         if (!user.hasCompany() && !user.canManageAnyEvent()) throw new NoCompanyException();
+
         final CompanyID userCompanyID = user.getCompanyID();
+
         if (!user.canManageAnyEvent() && !userCompanyID.equals(companyID))
             throw new IllegalResourceAccessException("User does not have permission to create events for this company");
+
         final Company company = this.companyGateway.findById(companyID).orElseThrow(() -> NotFoundException.with(Company.class, companyID));
         final String name = anIn.name();
         final String description = anIn.description();
@@ -55,11 +64,14 @@ public class CreateEventUseCase implements ICreateEventUseCase {
                 config
         );
 
-        final Notification notification = Notification.create();
+        final Notification notification = Notification.create("An error occurred while validating the event");
         event.validate(notification);
         notification.throwPossibleErrors();
 
         final Event eventCreated = this.eventGateway.create(event);
+        eventCreated.registerEvent(new EventCreated(eventCreated, user));
+        eventCreated.publishDomainEvents(this.eventPublisher);
+
         return CreateEventOutput.from(eventCreated);
     }
 

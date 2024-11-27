@@ -17,6 +17,8 @@ public interface IDomainEvent extends Serializable {
 
     DomainEventType type();
 
+    String targetId();
+
     String id();
 
 
