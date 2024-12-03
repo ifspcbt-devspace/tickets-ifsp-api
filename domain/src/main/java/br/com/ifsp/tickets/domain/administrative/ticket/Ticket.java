@@ -1,7 +1,9 @@
 package br.com.ifsp.tickets.domain.administrative.ticket;
 
+import br.com.ifsp.tickets.domain.administrative.enrollment.Enrollment;
 import br.com.ifsp.tickets.domain.administrative.event.Event;
 import br.com.ifsp.tickets.domain.administrative.event.EventID;
+import br.com.ifsp.tickets.domain.administrative.ticket.vo.TicketCode;
 import br.com.ifsp.tickets.domain.financial.product.TicketSale;
 import br.com.ifsp.tickets.domain.financial.product.TicketSaleID;
 import br.com.ifsp.tickets.domain.shared.Entity;
@@ -11,8 +13,6 @@ import br.com.ifsp.tickets.domain.shared.exceptions.ChangeTicketStatusException;
 import br.com.ifsp.tickets.domain.shared.exceptions.DomainException;
 import br.com.ifsp.tickets.domain.shared.exceptions.TicketConsumeException;
 import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
-import br.com.ifsp.tickets.domain.administrative.ticket.vo.TicketCode;
-import br.com.ifsp.tickets.domain.administrative.user.UserID;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -22,22 +22,20 @@ import java.util.Optional;
 @Getter
 public class Ticket extends Entity<TicketID> {
 
-    private final UserID userID;
-    private final String document;
+    private final Enrollment enrollment;
     private final TicketSaleID ticketSaleID;
     private final EventID eventID;
     private final String description;
     private final LocalDate validIn;
     private final LocalDate expiredIn;
     private final LocalDateTime createdAt;
-    private TicketStatus status;
     private final TicketCode code;
+    private TicketStatus status;
     private LocalDateTime lastTimeConsumed;
 
-    public Ticket(TicketID ticketID, String document, EventID eventID, TicketSaleID ticketSaleID, String description, TicketStatus status, TicketCode code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed, UserID userID) {
+    public Ticket(TicketID ticketID, Enrollment enrollment, EventID eventID, TicketSaleID ticketSaleID, String description, TicketStatus status, TicketCode code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         super(ticketID);
-        this.userID = userID;
-        this.document = document;
+        this.enrollment = enrollment;
         this.eventID = eventID;
         this.ticketSaleID = ticketSaleID;
         this.description = description;
@@ -49,20 +47,12 @@ public class Ticket extends Entity<TicketID> {
         this.lastTimeConsumed = lastTimeConsumed;
     }
 
-    public static Ticket with(TicketID ticketID, String document, EventID eventID, TicketSaleID ticketSaleID, String description, TicketStatus status, TicketCode code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed, UserID userID) {
-        return new Ticket(ticketID, document, eventID, ticketSaleID, description, status, code, validIn, expiredIn, createdAt, lastTimeConsumed, userID);
+    public static Ticket with(TicketID ticketID, Enrollment enrollment, EventID eventID, TicketSaleID ticketSaleID, String description, TicketStatus status, TicketCode code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+        return new Ticket(ticketID, enrollment, eventID, ticketSaleID, description, status, code, validIn, expiredIn, createdAt, lastTimeConsumed);
     }
 
-    public static Ticket newTicket(UserID userID, String document, Event event, TicketSale ticketSale, String description, LocalDate validIn, LocalDate expiredIn) {
-        return new Ticket(TicketID.unique(), document, event.getId(), ticketSale.getId(), description, TicketStatus.AVAILABLE, TicketCode.generate(), validIn, expiredIn, LocalDateTime.now(), null, userID);
-    }
-
-    public static Ticket newTicketWithId(TicketID ticketID, UserID userID, String document, Event event, TicketSale ticketSale, String description, LocalDate validIn, LocalDate expiredIn) {
-        return new Ticket(ticketID, document, event.getId(), ticketSale.getId(), description, TicketStatus.AVAILABLE, TicketCode.generate(), validIn, expiredIn, LocalDateTime.now(), null, userID);
-    }
-
-    public Optional<UserID> getUserID() {
-        return Optional.ofNullable(this.userID);
+    public static Ticket newTicket(Enrollment enrollment, Event event, TicketSale ticketSale, String description, LocalDate validIn, LocalDate expiredIn) {
+        return new Ticket(TicketID.unique(), enrollment, event.getId(), ticketSale.getId(), description, TicketStatus.AVAILABLE, TicketCode.generate(), validIn, expiredIn, LocalDateTime.now(), null);
     }
 
     private boolean expire() {

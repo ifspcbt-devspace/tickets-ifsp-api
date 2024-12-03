@@ -4,7 +4,6 @@ import br.com.ifsp.tickets.domain.administrative.company.CompanyID;
 import br.com.ifsp.tickets.domain.administrative.event.Event;
 import br.com.ifsp.tickets.domain.administrative.event.EventID;
 import br.com.ifsp.tickets.domain.administrative.event.IEventGateway;
-import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.shared.search.AdvancedSearchQuery;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
@@ -26,16 +25,15 @@ import java.util.Optional;
 public class EventGateway implements IEventGateway {
 
     private final EventRepository repository;
-    private final IFileStorage fileStorage;
 
     @Override
     public Event create(Event event) {
-        return this.repository.save(EventJpaEntity.from(event)).toAggregate(fileStorage);
+        return this.repository.save(EventJpaEntity.from(event)).toAggregate();
     }
 
     @Override
     public Optional<Event> findById(EventID id) {
-        return this.repository.findById(id.getValue()).map(eventJpaEntity -> eventJpaEntity.toAggregate(fileStorage));
+        return this.repository.findById(id.getValue()).map(EventJpaEntity::toAggregate);
     }
 
     @Override
@@ -46,7 +44,7 @@ public class EventGateway implements IEventGateway {
                 Sort.by(Sort.Direction.fromString(sq.direction()), sq.sort())
         );
 
-        final Page<Event> page = this.repository.findAllByCompanyId(id.getValue(), request).map(eventJpaEntity -> eventJpaEntity.toAggregate(fileStorage));
+        final Page<Event> page = this.repository.findAllByCompanyId(id.getValue(), request).map(EventJpaEntity::toAggregate);
 
         return Pagination.of(
                 page.getNumber(),
@@ -68,7 +66,7 @@ public class EventGateway implements IEventGateway {
                 orders
         );
 
-        final Page<Event> page = this.repository.findAll(specification, request).map(eventJpaEntity -> eventJpaEntity.toAggregate(fileStorage));
+        final Page<Event> page = this.repository.findAll(specification, request).map(EventJpaEntity::toAggregate);
 
         return Pagination.of(
                 page.getNumber(),
@@ -80,7 +78,7 @@ public class EventGateway implements IEventGateway {
 
     @Override
     public Event update(Event event) {
-        return this.repository.save(EventJpaEntity.from(event)).toAggregate(fileStorage);
+        return this.repository.save(EventJpaEntity.from(event)).toAggregate();
     }
 
     @Override

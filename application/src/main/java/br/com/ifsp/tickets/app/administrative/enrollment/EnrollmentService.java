@@ -5,26 +5,17 @@ import br.com.ifsp.tickets.app.administrative.enrollment.core.create.CreateEnrol
 import br.com.ifsp.tickets.app.administrative.enrollment.core.create.ICreateEnrollmentUseCase;
 import br.com.ifsp.tickets.app.administrative.enrollment.core.retrieve.EnrollmentOutput;
 import br.com.ifsp.tickets.app.administrative.enrollment.core.retrieve.list.IListEnrollmentsByUserUseCase;
-import br.com.ifsp.tickets.app.administrative.enrollment.upsert.create.CreateUpsertEnrollmentInput;
-import br.com.ifsp.tickets.app.administrative.enrollment.upsert.create.ICreateUpsertEnrollmentUseCase;
-import br.com.ifsp.tickets.app.administrative.enrollment.upsert.retrieve.GetUpsertEnrollmentInput;
-import br.com.ifsp.tickets.app.administrative.enrollment.upsert.retrieve.GetUpsertEnrollmentOutput;
-import br.com.ifsp.tickets.app.administrative.enrollment.upsert.retrieve.IGetUpsertEnrollmentUseCase;
-import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.administrative.user.User;
+import br.com.ifsp.tickets.domain.shared.search.Pagination;
 
 public class EnrollmentService {
 
     private final ICreateEnrollmentUseCase createEnrollmentUseCase;
     private final IListEnrollmentsByUserUseCase listEnrollmentsByUserUseCase;
-    private final ICreateUpsertEnrollmentUseCase createUpsertEnrollmentUseCase;
-    private final IGetUpsertEnrollmentUseCase getUpsertEnrollmentUseCase;
 
-    public EnrollmentService(ICreateEnrollmentUseCase createEnrollmentUseCase, IListEnrollmentsByUserUseCase listEnrollmentsByUserUseCase, ICreateUpsertEnrollmentUseCase createUpsertEnrollmentUseCase, IGetUpsertEnrollmentUseCase getUpsertEnrollmentUseCase) {
+    public EnrollmentService(ICreateEnrollmentUseCase createEnrollmentUseCase, IListEnrollmentsByUserUseCase listEnrollmentsByUserUseCase) {
         this.createEnrollmentUseCase = createEnrollmentUseCase;
         this.listEnrollmentsByUserUseCase = listEnrollmentsByUserUseCase;
-        this.createUpsertEnrollmentUseCase = createUpsertEnrollmentUseCase;
-        this.getUpsertEnrollmentUseCase = getUpsertEnrollmentUseCase;
     }
 
     public CreateEnrollmentOutput create(CreateEnrollmentInput input) {
@@ -35,11 +26,4 @@ public class EnrollmentService {
         return this.listEnrollmentsByUserUseCase.execute(authenticatedUser);
     }
 
-    public String createUpsertEnrollment(CreateUpsertEnrollmentInput input) {
-        return this.createUpsertEnrollmentUseCase.execute(input);
-    }
-
-    public GetUpsertEnrollmentOutput getUpsertEnrollment(GetUpsertEnrollmentInput in) {
-        return this.getUpsertEnrollmentUseCase.execute(in);
-    }
 }

@@ -3,21 +3,20 @@ package br.com.ifsp.tickets.infra.api.controllers;
 import br.com.ifsp.tickets.app.administrative.enrollment.EnrollmentService;
 import br.com.ifsp.tickets.app.administrative.enrollment.core.create.CreateEnrollmentInput;
 import br.com.ifsp.tickets.app.administrative.enrollment.core.create.CreateEnrollmentOutput;
-import br.com.ifsp.tickets.app.administrative.enrollment.upsert.create.CreateUpsertEnrollmentInput;
-import br.com.ifsp.tickets.app.administrative.enrollment.upsert.retrieve.GetUpsertEnrollmentInput;
-import br.com.ifsp.tickets.app.administrative.enrollment.upsert.retrieve.GetUpsertEnrollmentOutput;
 import br.com.ifsp.tickets.app.financial.payment.PaymentService;
-import br.com.ifsp.tickets.app.financial.payment.preference.create.CreatePreferenceInput;
-import br.com.ifsp.tickets.app.financial.payment.preference.create.CreatePreferenceOutput;
-import br.com.ifsp.tickets.app.financial.payment.retrieve.PaymentOutput;
+import br.com.ifsp.tickets.app.financial.payment.handle.HandlePaymentInput;
+import br.com.ifsp.tickets.domain.financial.payment.PaymentStatus;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.infra.api.EnrollmentAPI;
 import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.models.CreateEnrollmentRequest;
 import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.models.EnrollmentResponse;
 import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.presenters.EnrollmentApiPresenter;
-import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.upsert.models.CreateUpsertEnrollmentRequest;
-import br.com.ifsp.tickets.infra.contexts.financial.payment.models.CreatePaymentRequest;
 import br.com.ifsp.tickets.infra.contexts.administrative.user.persistence.UserJpaEntity;
+import br.com.ifsp.tickets.infra.contexts.financial.payment.models.CreatePaymentRequest;
+import com.mercadopago.client.payment.PaymentClient;
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.payment.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,50 +58,28 @@ public class EnrollmentController implements EnrollmentAPI {
     }
 
     @Override
-    public ResponseEntity<String> createUpsertEnrollment(CreateUpsertEnrollmentRequest request) {
-        final UserJpaEntity authenticatedUser = (UserJpaEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        final CreatePreferenceInput input = CreatePreferenceInput.of(authenticatedUser.toAggregate(), request.ticketSaleId());
-        final CreatePreferenceOutput preferenceOutput = paymentService.createPreference(input);
-
-        final CreateUpsertEnrollmentInput in = CreateUpsertEnrollmentInput.of(
-                authenticatedUser.toAggregate(),
-                request.name(),
-                request.email(),
-                request.document(),
-                request.birthDate(),
-                request.eventId(),
-                request.ticketSaleId(),
-                preferenceOutput.preferenceUrl(),
-                preferenceOutput.ticketId()
-        );
-
-        final String out = this.enrollmentService.createUpsertEnrollment(in);
-
-        return ResponseEntity.created(URI.create("/v1/enrollment/" + out)).body(preferenceOutput.preferenceUrl());
-    }
-
-    @Override
     public ResponseEntity<Void> webhook(CreatePaymentRequest request) {
-        PaymentOutput p = this.paymentService.getPayment(request.data().id());
-        GetUpsertEnrollmentInput in = new GetUpsertEnrollmentInput(p.externalReference());
+        final PaymentClient paymentClient = new PaymentClient();
+        final Payment payment;
+        try {
+            payment = paymentClient.get(request.data().id());
+        } catch (MPException | MPApiException e) {
+            return ResponseEntity.badRequest().build();
+        }
 
-        if (!p.status().equalsIgnoreCase("approved"))
-            return ResponseEntity.ok().build();
-
-        final GetUpsertEnrollmentOutput output = this.enrollmentService.getUpsertEnrollment(in);
-        final CreateEnrollmentInput input = CreateEnrollmentInput.of(
-                output.userID(),
-                output.name(),
-                output.email(),
-                output.document(),
-                output.birthDate(),
-                output.eventId(),
-                output.ticketSaleId(),
-                output.ticketID()
+        final HandlePaymentInput input = HandlePaymentInput.of(
+                payment.getId().toString(),
+                Long.valueOf(payment.getExternalReference()),
+                PaymentStatus.valueOf(payment.getStatus().toUpperCase()),
+                payment.getCurrencyId(),
+                payment.getTransactionAmount(),
+                payment.getPaymentTypeId(),
+                payment.getDateCreated().toLocalDateTime(),
+                payment.getDateLastUpdated().toLocalDateTime(),
+                payment.getDateApproved() == null ? null : payment.getDateApproved().toLocalDateTime()
         );
 
-        this.enrollmentService.create(input);
+        this.paymentService.handle(input);
         return ResponseEntity.ok().build();
     }
 }
