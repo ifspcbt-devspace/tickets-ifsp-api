@@ -55,23 +55,29 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
     @Override
     public CreateEnrollmentOutput execute(CreateEnrollmentInput anIn) {
         final UserID userID = UserID.with(anIn.userId());
-        String name = anIn.name();
-        String emailString = anIn.email();
-        LocalDate birthDate = anIn.birthDate();
-        String document = anIn.document();
-        TicketID ticketID = TicketID.with(anIn.ticketId());
-        final boolean alreadyExists;
+        final String name = anIn.name();
+        final String emailString = anIn.email();
+        final LocalDate birthDate = anIn.birthDate();
+        final String document = anIn.document();
+        final TicketID ticketID = TicketID.with(anIn.ticketId());
+
         final EventID eventID = EventID.with(anIn.eventId());
         final TicketSaleID ticketSaleID = TicketSaleID.with(anIn.ticketSaleId());
         final TicketSale ticketSale = this.ticketSaleGateway.findById(ticketSaleID).orElseThrow(() -> NotFoundException.with(TicketSale.class, ticketSaleID));
         final Event event = this.eventGateway.findById(eventID).orElseThrow(() -> NotFoundException.with(Event.class, eventID));
         final Company company = this.companyGateway.findById(event.getCompanyID()).orElseThrow(() -> NotFoundException.with(Company.class, event.getCompanyID()));
 
+        if (!ticketSale.getEventID().equals(eventID))
+            Notification.create("Validation Error").append("Ticket sale is not for this event").throwAnyErrors();
+
+        if (ticketSale.getPrice().doubleValue() > 0)
+            Notification.create("Validation Error").append("Ticket sale is not free").throwAnyErrors();
+
         if (!event.getStatus().equals(EventStatus.OPENED))
             Notification.create("Event is not opened").append("Event is not open for enrollment").throwAnyErrors();
 
-        alreadyExists = this.enrollmentGateway.existsByEmailAndEventID(emailString, eventID);
-        System.out.println(alreadyExists);
+        final boolean alreadyExists = this.enrollmentGateway.existsByEmailAndEventID(emailString, eventID);
+
         if (alreadyExists) {
             Notification.create("Validation Error").append("User already enrolled in this event").throwAnyErrors();
         }
@@ -81,7 +87,7 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
                         userID, event.getId());
 
         final LocalDate expiredIn = event.getEndDate().plusDays(1);
-        final Ticket ticket = Ticket.newTicketWithId(ticketID, userID, document, event, ticketSale, ticketSale.getDescription(), event.getInitDate(), expiredIn);
+        final Ticket ticket = Ticket.newTicket(enrollment, event, ticketSale, ticketSale.getDescription(), event.getInitDate(), expiredIn);
         final Message message = this.messageGateway.findBySubjectAndType(MessageSubject.EVENT_TICKET, MessageType.HTML).orElseThrow(() -> NotFoundException.with("Email template not found"));
         final Notification notification = Notification.create("An error occurred while validating the enrollment");
         enrollment.validate(notification);

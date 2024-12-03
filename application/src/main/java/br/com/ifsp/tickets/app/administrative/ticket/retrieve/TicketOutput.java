@@ -1,16 +1,15 @@
 package br.com.ifsp.tickets.app.administrative.ticket.retrieve;
 
+import br.com.ifsp.tickets.app.administrative.enrollment.core.retrieve.EnrollmentOutput;
 import br.com.ifsp.tickets.domain.administrative.ticket.Ticket;
 import br.com.ifsp.tickets.domain.administrative.ticket.TicketStatus;
-import br.com.ifsp.tickets.domain.administrative.user.vo.RG;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record TicketOutput(
         String id,
-        String userId,
-        String document,
+        EnrollmentOutput enrollment,
         String eventId,
         String ticketSaleId,
         String description,
@@ -24,8 +23,7 @@ public record TicketOutput(
     public static TicketOutput from(Ticket ticket) {
         return new TicketOutput(
                 ticket.getId().getValue().toString(),
-                ticket.getUserID().isEmpty() ? null : ticket.getUserID().get().getValue().toString(),
-                new RG(ticket.getDocument()).getInitials(),
+                EnrollmentOutput.from(ticket.getEnrollment()),
                 ticket.getEventID().getValue().toString(),
                 ticket.getTicketSaleID().getValue().toString(),
                 ticket.getDescription(),

@@ -4,8 +4,6 @@ import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.infra.contexts.administrative.event.models.CreateEventRequest;
 import br.com.ifsp.tickets.infra.contexts.administrative.event.models.EventResponse;
 import br.com.ifsp.tickets.infra.contexts.administrative.event.models.SearchEventResponse;
-import br.com.ifsp.tickets.infra.contexts.financial.product.models.CreateTicketSaleRequest;
-import br.com.ifsp.tickets.infra.contexts.financial.product.models.TicketSaleResponse;
 import br.com.ifsp.tickets.infra.shared.APIErrorResponse;
 import br.com.ifsp.tickets.infra.shared.search.AdvancedSearchRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -123,32 +121,4 @@ public interface EventAPI {
     )
     ResponseEntity<?> uploadThumbnail(@PathVariable String id, @RequestParam("file") MultipartFile file, @RequestParam("fileName") String fileName);
 
-    @PostMapping(
-            value = "/{id}/ticketSale", consumes = "application/json")
-    @Operation(
-            summary = "Create ticket sale",
-            description = "Create a new ticket sale",
-            security = {
-                    @SecurityRequirement(name = "bearer")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "Ticket Sale created successfully"),
-                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
-                    @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
-                    @ApiResponse(responseCode = "403", description = "Access denied", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
-            }
-    )
-    ResponseEntity<Void> createTicketSale(@PathVariable String id, @RequestBody CreateTicketSaleRequest request);
-
-    @GetMapping(
-            value = "/{id}/ticketSale", consumes = "application/json")
-    @Operation(
-            summary = "Get ticket sale by event id",
-            description = "Get ticket sale by event id",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Ticket Sale list"),
-                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
-            }
-    )
-    ResponseEntity<Pagination<TicketSaleResponse>> getTicketSaleByEventId(@PathVariable String id);
 }

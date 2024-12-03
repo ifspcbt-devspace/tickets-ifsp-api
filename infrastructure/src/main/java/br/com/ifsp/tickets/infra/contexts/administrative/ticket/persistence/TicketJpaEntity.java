@@ -1,17 +1,13 @@
 package br.com.ifsp.tickets.infra.contexts.administrative.ticket.persistence;
 
 import br.com.ifsp.tickets.domain.administrative.event.EventID;
-import br.com.ifsp.tickets.domain.financial.product.TicketSaleID;
 import br.com.ifsp.tickets.domain.administrative.ticket.Ticket;
 import br.com.ifsp.tickets.domain.administrative.ticket.TicketID;
 import br.com.ifsp.tickets.domain.administrative.ticket.TicketStatus;
 import br.com.ifsp.tickets.domain.administrative.ticket.vo.TicketCode;
-import br.com.ifsp.tickets.domain.administrative.user.UserID;
-import br.com.ifsp.tickets.infra.shared.encryption.EncryptionService;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import br.com.ifsp.tickets.domain.financial.product.TicketSaleID;
+import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.persistence.EnrollmentJpaEntity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,10 +25,9 @@ public class TicketJpaEntity implements Serializable {
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
-    @Column(name = "document", nullable = false)
-    private String document;
-    @Column(name = "user_id")
-    private UUID userId;
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "enrollment_id", referencedColumnName = "id", nullable = false)
+    private EnrollmentJpaEntity enrollment;
     @Column(name = "event_id", nullable = false)
     private UUID eventId;
     @Column(name = "ticket_sale_id", nullable = false)
@@ -52,10 +47,9 @@ public class TicketJpaEntity implements Serializable {
     @Column(name = "last_time_consumed")
     private LocalDateTime lastTimeConsumed;
 
-    public TicketJpaEntity(UUID id, String document, UUID userId, UUID eventId, UUID ticketSaleId, String description, String status, String code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
+    public TicketJpaEntity(UUID id, EnrollmentJpaEntity enrollment, UUID eventId, UUID ticketSaleId, String description, String status, String code, LocalDate validIn, LocalDate expiredIn, LocalDateTime createdAt, LocalDateTime lastTimeConsumed) {
         this.id = id;
-        this.document = EncryptionService.encrypt(document);
-        this.userId = userId;
+        this.enrollment = enrollment;
         this.ticketSaleId = ticketSaleId;
         this.description = description;
         this.status = status;
@@ -70,8 +64,7 @@ public class TicketJpaEntity implements Serializable {
     public static TicketJpaEntity from(Ticket ticket) {
         return new TicketJpaEntity(
                 ticket.getId().getValue(),
-                ticket.getDocument(),
-                ticket.getUserID().isPresent() ? ticket.getUserID().get().getValue() : null,
+                EnrollmentJpaEntity.from(ticket.getEnrollment()),
                 ticket.getEventID().getValue(),
                 ticket.getTicketSaleID().getValue(),
                 ticket.getDescription(),
@@ -87,7 +80,7 @@ public class TicketJpaEntity implements Serializable {
     public Ticket toAggregate() {
         return Ticket.with(
                 TicketID.with(this.id),
-                this.getDecryptedDocument(),
+                this.enrollment.toAggregate(),
                 EventID.with(this.eventId),
                 TicketSaleID.with(this.ticketSaleId),
                 this.description,
@@ -96,12 +89,8 @@ public class TicketJpaEntity implements Serializable {
                 this.validIn,
                 this.expiredIn,
                 this.createdAt,
-                this.lastTimeConsumed,
-                UserID.with(this.userId)
+                this.lastTimeConsumed
         );
     }
 
-    public String getDecryptedDocument() {
-        return EncryptionService.decrypt(this.document);
-    }
 }

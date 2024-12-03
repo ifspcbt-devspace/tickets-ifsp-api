@@ -9,7 +9,6 @@ import br.com.ifsp.tickets.domain.administrative.event.Event;
 import br.com.ifsp.tickets.domain.administrative.event.IEventGateway;
 import br.com.ifsp.tickets.domain.administrative.ticket.ITicketGateway;
 import br.com.ifsp.tickets.domain.administrative.ticket.Ticket;
-import br.com.ifsp.tickets.domain.administrative.ticket.TicketID;
 import br.com.ifsp.tickets.domain.administrative.user.User;
 import br.com.ifsp.tickets.domain.administrative.user.UserID;
 import br.com.ifsp.tickets.domain.communication.email.Email;
@@ -84,7 +83,7 @@ public class PaymentSuccessHandler {
 
             final LocalDate expiredIn = event.getEndDate().plusDays(1);
 
-            final Ticket ticket = Ticket.newTicketWithId(TicketID.unique(), userID, document, event, ticketSale, ticketSale.getDescription(), event.getInitDate(), expiredIn);
+            final Ticket ticket = Ticket.newTicket(enrollment, event, ticketSale, ticketSale.getDescription(), event.getInitDate(), expiredIn);
 
             final Message message = this.messageGateway.findBySubjectAndType(MessageSubject.EVENT_TICKET, MessageType.HTML).orElseThrow(() -> NotFoundException.with("Email template not found"));
 

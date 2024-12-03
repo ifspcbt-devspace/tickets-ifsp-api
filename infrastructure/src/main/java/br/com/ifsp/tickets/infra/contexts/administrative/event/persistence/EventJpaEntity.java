@@ -1,11 +1,12 @@
 package br.com.ifsp.tickets.infra.contexts.administrative.event.persistence;
 
 import br.com.ifsp.tickets.domain.administrative.company.CompanyID;
-import br.com.ifsp.tickets.domain.administrative.event.*;
+import br.com.ifsp.tickets.domain.administrative.event.Event;
+import br.com.ifsp.tickets.domain.administrative.event.EventID;
+import br.com.ifsp.tickets.domain.administrative.event.EventStatus;
 import br.com.ifsp.tickets.domain.administrative.event.vo.EventConfig;
 import br.com.ifsp.tickets.domain.administrative.event.vo.EventConfigKey;
 import br.com.ifsp.tickets.domain.administrative.event.vo.EventThumbnail;
-import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.infra.contexts.administrative.event.persistence.converter.EventStatusConverter;
 import br.com.ifsp.tickets.infra.shared.address.AddressJpaEntity;
 import jakarta.persistence.*;
@@ -89,7 +90,7 @@ public class EventJpaEntity implements Serializable {
                 configuration.isEmpty() ? null : configuration);
     }
 
-    public Event toAggregate(IFileStorage fileStorage) {
+    public Event toAggregate() {
         final List<EventConfig> eventConfigs = this.configuration.entrySet().stream()
                 .map(e -> new EventConfig(EventConfigKey.valueOf(e.getKey()), e.getValue()))
                 .collect(Collectors.toList());

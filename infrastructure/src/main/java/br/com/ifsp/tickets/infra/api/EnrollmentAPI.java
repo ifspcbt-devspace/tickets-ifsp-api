@@ -3,7 +3,6 @@ package br.com.ifsp.tickets.infra.api;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.models.CreateEnrollmentRequest;
 import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.models.EnrollmentResponse;
-import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.upsert.models.CreateUpsertEnrollmentRequest;
 import br.com.ifsp.tickets.infra.contexts.financial.payment.models.CreatePaymentRequest;
 import br.com.ifsp.tickets.infra.shared.APIErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,16 +44,6 @@ public interface EnrollmentAPI {
     )
     ResponseEntity<Pagination<EnrollmentResponse>> findByUser();
 
-    @PostMapping(consumes = "application/json", value = "/upsert")
-    @Operation(
-            summary = "Create or update enrollment",
-            description = "Create or update an enrollment",
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "Upsert enrollment created successfully"),
-                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class), mediaType = "application/json"))
-            }
-    )
-    ResponseEntity<String> createUpsertEnrollment(@RequestBody CreateUpsertEnrollmentRequest request);
 
     @PostMapping(consumes = "application/json", value = "/webhook")
     @Operation(

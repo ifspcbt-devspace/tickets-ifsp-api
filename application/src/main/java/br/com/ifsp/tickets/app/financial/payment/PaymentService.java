@@ -12,7 +12,7 @@ public class PaymentService {
         this.createPaymentUseCase = createPaymentUseCase;
     }
 
-    public HandlePaymentOutput createPayment(HandlePaymentInput anIn) {
+    public HandlePaymentOutput handle(HandlePaymentInput anIn) {
         return this.createPaymentUseCase.execute(anIn);
     }
 

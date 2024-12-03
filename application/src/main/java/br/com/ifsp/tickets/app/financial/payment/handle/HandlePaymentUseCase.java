@@ -30,7 +30,7 @@ public class HandlePaymentUseCase implements IHandlePaymentUseCase {
 
     @Override
     public HandlePaymentOutput execute(HandlePaymentInput anIn) {
-        final Payment payment;
+        Payment payment;
         final Optional<Payment> paymentOptional = this.paymentGateway.findByExternalId(anIn.externalId());
         if (paymentOptional.isPresent()) payment = paymentOptional.get();
         else {
@@ -60,7 +60,9 @@ public class HandlePaymentUseCase implements IHandlePaymentUseCase {
             );
         }
 
-        Order order = this.orderGateway.findById(payment.getOrderId()).orElseThrow(() -> NotFoundException.with(Order.class, payment.getOrderId()));
+        final OrderID orderId = payment.getOrderId();
+
+        Order order = this.orderGateway.findById(orderId).orElseThrow(() -> NotFoundException.with(Order.class, orderId));
 
         switch (payment.getStatus()) {
             case APPROVED -> this.paymentSuccessHandler.handle(order);
@@ -72,7 +74,9 @@ public class HandlePaymentUseCase implements IHandlePaymentUseCase {
             }
         }
 
-        return HandlePaymentOutput.from(paymentGateway.create(payment));
+        payment = paymentOptional.isPresent() ? this.paymentGateway.update(payment) : this.paymentGateway.create(payment);
+
+        return HandlePaymentOutput.from(payment);
     }
 
 
