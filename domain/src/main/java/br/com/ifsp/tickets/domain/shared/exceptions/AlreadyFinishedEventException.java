@@ -1,6 +1,6 @@
 package br.com.ifsp.tickets.domain.shared.exceptions;
 
-import br.com.ifsp.tickets.domain.event.EventID;
+import br.com.ifsp.tickets.domain.administrative.event.EventID;
 
 public class AlreadyFinishedEventException extends DomainException {
 

@@ -1,8 +1,8 @@
 package br.com.ifsp.tickets.infra.config.security.filter;
 
-import br.com.ifsp.tickets.domain.user.User;
+import br.com.ifsp.tickets.domain.administrative.user.User;
 import br.com.ifsp.tickets.infra.config.security.service.CustomUserDetailsService;
-import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
+import br.com.ifsp.tickets.infra.contexts.administrative.user.persistence.UserJpaEntity;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

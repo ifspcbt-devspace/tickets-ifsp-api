@@ -73,7 +73,7 @@ public class Notification implements IValidationHandler {
     }
 
 
-    public Notification throwPossibleErrors() throws ValidationException {
+    public Notification throwAnyErrors() throws ValidationException {
         if (this.hasError()) throw new ValidationException(this.message, this);
         return this;
     }

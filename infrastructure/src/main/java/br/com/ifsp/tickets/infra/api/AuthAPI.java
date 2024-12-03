@@ -1,11 +1,11 @@
 package br.com.ifsp.tickets.infra.api;
 
-import br.com.ifsp.tickets.infra.contexts.user.contexts.recovery.models.RecoveryRequest;
-import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginRequest;
-import br.com.ifsp.tickets.infra.contexts.user.models.login.LoginResponse;
-import br.com.ifsp.tickets.infra.contexts.user.models.register.RegisterRequest;
-import br.com.ifsp.tickets.infra.contexts.user.models.update.UpdateUserRequest;
-import br.com.ifsp.tickets.infra.contexts.user.models.user.UserResponse;
+import br.com.ifsp.tickets.infra.contexts.administrative.user.contexts.recovery.models.RecoveryRequest;
+import br.com.ifsp.tickets.infra.contexts.administrative.user.models.login.LoginRequest;
+import br.com.ifsp.tickets.infra.contexts.administrative.user.models.login.LoginResponse;
+import br.com.ifsp.tickets.infra.contexts.administrative.user.models.register.RegisterRequest;
+import br.com.ifsp.tickets.infra.contexts.administrative.user.models.update.UpdateUserRequest;
+import br.com.ifsp.tickets.infra.contexts.administrative.user.models.user.UserResponse;
 import br.com.ifsp.tickets.infra.shared.APIErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

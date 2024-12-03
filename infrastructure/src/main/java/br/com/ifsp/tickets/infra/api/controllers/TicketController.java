@@ -1,15 +1,15 @@
 package br.com.ifsp.tickets.infra.api.controllers;
 
-import br.com.ifsp.tickets.app.ticket.TicketService;
-import br.com.ifsp.tickets.app.ticket.check.CheckTicketInput;
-import br.com.ifsp.tickets.app.ticket.retrieve.get.GetTicketInput;
-import br.com.ifsp.tickets.app.ticket.retrieve.list.ListTicketsByUserInput;
+import br.com.ifsp.tickets.app.administrative.ticket.TicketService;
+import br.com.ifsp.tickets.app.administrative.ticket.check.CheckTicketInput;
+import br.com.ifsp.tickets.app.administrative.ticket.retrieve.get.GetTicketInput;
+import br.com.ifsp.tickets.app.administrative.ticket.retrieve.list.ListTicketsByUserInput;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.domain.shared.search.SearchQuery;
 import br.com.ifsp.tickets.infra.api.TicketAPI;
-import br.com.ifsp.tickets.infra.contexts.ticket.models.TicketResponse;
-import br.com.ifsp.tickets.infra.contexts.ticket.presenters.TicketApiPresenter;
-import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
+import br.com.ifsp.tickets.infra.contexts.administrative.ticket.models.TicketResponse;
+import br.com.ifsp.tickets.infra.contexts.administrative.ticket.presenters.TicketApiPresenter;
+import br.com.ifsp.tickets.infra.contexts.administrative.user.persistence.UserJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

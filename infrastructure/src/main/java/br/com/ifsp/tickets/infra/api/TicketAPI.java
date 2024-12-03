@@ -1,7 +1,7 @@
 package br.com.ifsp.tickets.infra.api;
 
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
-import br.com.ifsp.tickets.infra.contexts.ticket.models.TicketResponse;
+import br.com.ifsp.tickets.infra.contexts.administrative.ticket.models.TicketResponse;
 import br.com.ifsp.tickets.infra.shared.APIErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

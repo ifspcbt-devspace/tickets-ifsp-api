@@ -1,10 +1,10 @@
 package br.com.ifsp.tickets.infra.api;
 
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
-import br.com.ifsp.tickets.infra.contexts.company.models.CompanyResponse;
-import br.com.ifsp.tickets.infra.contexts.company.models.CreateCompanyRequest;
-import br.com.ifsp.tickets.infra.contexts.company.models.SearchCompanyResponse;
-import br.com.ifsp.tickets.infra.contexts.company.models.UpdateCompanyRequest;
+import br.com.ifsp.tickets.infra.contexts.administrative.company.models.CompanyResponse;
+import br.com.ifsp.tickets.infra.contexts.administrative.company.models.CreateCompanyRequest;
+import br.com.ifsp.tickets.infra.contexts.administrative.company.models.SearchCompanyResponse;
+import br.com.ifsp.tickets.infra.contexts.administrative.company.models.UpdateCompanyRequest;
 import br.com.ifsp.tickets.infra.shared.APIErrorResponse;
 import br.com.ifsp.tickets.infra.shared.search.AdvancedSearchRequest;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,10 +1,10 @@
 package br.com.ifsp.tickets.infra.api;
 
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
-import br.com.ifsp.tickets.infra.contexts.enrollment.core.models.CreateEnrollmentRequest;
-import br.com.ifsp.tickets.infra.contexts.enrollment.core.models.EnrollmentResponse;
-import br.com.ifsp.tickets.infra.contexts.enrollment.upsert.models.CreateUpsertEnrollmentRequest;
-import br.com.ifsp.tickets.infra.contexts.event.sale.payment.models.CreatePaymentRequest;
+import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.models.CreateEnrollmentRequest;
+import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.models.EnrollmentResponse;
+import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.upsert.models.CreateUpsertEnrollmentRequest;
+import br.com.ifsp.tickets.infra.contexts.financial.payment.models.CreatePaymentRequest;
 import br.com.ifsp.tickets.infra.shared.APIErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

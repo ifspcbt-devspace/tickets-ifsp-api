@@ -1,18 +1,18 @@
 package br.com.ifsp.tickets.infra.config.app;
 
 
-import br.com.ifsp.tickets.app.enrollment.EnrollmentService;
-import br.com.ifsp.tickets.app.enrollment.EnrollmentServiceFactory;
-import br.com.ifsp.tickets.app.enrollment.ITicketQRGenerator;
+import br.com.ifsp.tickets.app.administrative.enrollment.EnrollmentService;
+import br.com.ifsp.tickets.app.administrative.enrollment.EnrollmentServiceFactory;
+import br.com.ifsp.tickets.app.administrative.enrollment.ITicketQRGenerator;
 import br.com.ifsp.tickets.domain.communication.email.IEmailGateway;
 import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
-import br.com.ifsp.tickets.domain.company.ICompanyGateway;
-import br.com.ifsp.tickets.domain.enrollment.IEnrollmentGateway;
-import br.com.ifsp.tickets.domain.enrollment.upsert.IUpsertEnrollmentGateway;
-import br.com.ifsp.tickets.domain.event.IEventGateway;
-import br.com.ifsp.tickets.domain.event.sale.ITicketSaleGateway;
+import br.com.ifsp.tickets.domain.administrative.company.ICompanyGateway;
+import br.com.ifsp.tickets.domain.administrative.enrollment.IEnrollmentGateway;
+import br.com.ifsp.tickets.domain.administrative.enrollment.upsert.IUpsertEnrollmentGateway;
+import br.com.ifsp.tickets.domain.administrative.event.IEventGateway;
+import br.com.ifsp.tickets.domain.financial.product.ITicketSaleGateway;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
-import br.com.ifsp.tickets.domain.ticket.ITicketGateway;
+import br.com.ifsp.tickets.domain.administrative.ticket.ITicketGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

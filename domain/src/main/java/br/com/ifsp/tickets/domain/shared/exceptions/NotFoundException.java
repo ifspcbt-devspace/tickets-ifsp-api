@@ -5,8 +5,7 @@ import br.com.ifsp.tickets.domain.shared.Entity;
 import br.com.ifsp.tickets.domain.shared.Identifier;
 import br.com.ifsp.tickets.domain.shared.ValueObject;
 import br.com.ifsp.tickets.domain.shared.validation.Error;
-import br.com.ifsp.tickets.domain.ticket.Ticket;
-import br.com.ifsp.tickets.domain.ticket.TicketID;
+import br.com.ifsp.tickets.domain.administrative.ticket.TicketID;
 
 import java.util.Collections;
 import java.util.List;

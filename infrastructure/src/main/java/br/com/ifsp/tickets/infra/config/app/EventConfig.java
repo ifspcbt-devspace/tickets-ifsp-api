@@ -1,10 +1,10 @@
 package br.com.ifsp.tickets.infra.config.app;
 
-import br.com.ifsp.tickets.app.event.EventService;
-import br.com.ifsp.tickets.app.event.EventServiceFactory;
-import br.com.ifsp.tickets.domain.company.ICompanyGateway;
-import br.com.ifsp.tickets.domain.event.IEventGateway;
-import br.com.ifsp.tickets.domain.event.sale.ITicketSaleGateway;
+import br.com.ifsp.tickets.app.administrative.event.EventService;
+import br.com.ifsp.tickets.app.administrative.event.EventServiceFactory;
+import br.com.ifsp.tickets.domain.administrative.company.ICompanyGateway;
+import br.com.ifsp.tickets.domain.administrative.event.IEventGateway;
+import br.com.ifsp.tickets.domain.financial.product.ITicketSaleGateway;
 import br.com.ifsp.tickets.domain.shared.IDomainEventPublisher;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import lombok.RequiredArgsConstructor;

@@ -1,23 +1,23 @@
 package br.com.ifsp.tickets.infra.api.controllers;
 
-import br.com.ifsp.tickets.app.enrollment.EnrollmentService;
-import br.com.ifsp.tickets.app.enrollment.core.create.CreateEnrollmentInput;
-import br.com.ifsp.tickets.app.enrollment.core.create.CreateEnrollmentOutput;
-import br.com.ifsp.tickets.app.enrollment.upsert.create.CreateUpsertEnrollmentInput;
-import br.com.ifsp.tickets.app.enrollment.upsert.retrieve.GetUpsertEnrollmentInput;
-import br.com.ifsp.tickets.app.enrollment.upsert.retrieve.GetUpsertEnrollmentOutput;
-import br.com.ifsp.tickets.app.payment.PaymentService;
-import br.com.ifsp.tickets.app.payment.preference.create.CreatePreferenceInput;
-import br.com.ifsp.tickets.app.payment.preference.create.CreatePreferenceOutput;
-import br.com.ifsp.tickets.app.payment.retrieve.PaymentOutput;
+import br.com.ifsp.tickets.app.administrative.enrollment.EnrollmentService;
+import br.com.ifsp.tickets.app.administrative.enrollment.core.create.CreateEnrollmentInput;
+import br.com.ifsp.tickets.app.administrative.enrollment.core.create.CreateEnrollmentOutput;
+import br.com.ifsp.tickets.app.administrative.enrollment.upsert.create.CreateUpsertEnrollmentInput;
+import br.com.ifsp.tickets.app.administrative.enrollment.upsert.retrieve.GetUpsertEnrollmentInput;
+import br.com.ifsp.tickets.app.administrative.enrollment.upsert.retrieve.GetUpsertEnrollmentOutput;
+import br.com.ifsp.tickets.app.financial.payment.PaymentService;
+import br.com.ifsp.tickets.app.financial.payment.preference.create.CreatePreferenceInput;
+import br.com.ifsp.tickets.app.financial.payment.preference.create.CreatePreferenceOutput;
+import br.com.ifsp.tickets.app.financial.payment.retrieve.PaymentOutput;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.infra.api.EnrollmentAPI;
-import br.com.ifsp.tickets.infra.contexts.enrollment.core.models.CreateEnrollmentRequest;
-import br.com.ifsp.tickets.infra.contexts.enrollment.core.models.EnrollmentResponse;
-import br.com.ifsp.tickets.infra.contexts.enrollment.core.presenters.EnrollmentApiPresenter;
-import br.com.ifsp.tickets.infra.contexts.enrollment.upsert.models.CreateUpsertEnrollmentRequest;
-import br.com.ifsp.tickets.infra.contexts.event.sale.payment.models.CreatePaymentRequest;
-import br.com.ifsp.tickets.infra.contexts.user.persistence.UserJpaEntity;
+import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.models.CreateEnrollmentRequest;
+import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.models.EnrollmentResponse;
+import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.presenters.EnrollmentApiPresenter;
+import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.upsert.models.CreateUpsertEnrollmentRequest;
+import br.com.ifsp.tickets.infra.contexts.financial.payment.models.CreatePaymentRequest;
+import br.com.ifsp.tickets.infra.contexts.administrative.user.persistence.UserJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -69,7 +69,7 @@ public class EnrollmentController implements EnrollmentAPI {
                 authenticatedUser.toAggregate(),
                 request.name(),
                 request.email(),
-                request.email(),
+                request.document(),
                 request.birthDate(),
                 request.eventId(),
                 request.ticketSaleId(),
