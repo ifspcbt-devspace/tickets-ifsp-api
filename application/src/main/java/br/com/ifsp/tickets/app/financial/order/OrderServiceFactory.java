@@ -8,6 +8,7 @@ import br.com.ifsp.tickets.app.financial.order.retrieve.get.GetOrderByIDUseCase;
 import br.com.ifsp.tickets.app.financial.order.retrieve.get.IGetOrderByIDUseCase;
 import br.com.ifsp.tickets.app.financial.order.retrieve.list.IListCustomerOrdersUseCase;
 import br.com.ifsp.tickets.app.financial.order.retrieve.list.ListCustomerOrdersUseCase;
+import br.com.ifsp.tickets.domain.administrative.event.IEventGateway;
 import br.com.ifsp.tickets.domain.financial.order.IOrderGateway;
 import br.com.ifsp.tickets.domain.financial.order.IPaymentURLGenerator;
 import br.com.ifsp.tickets.domain.financial.product.ITicketSaleGateway;
@@ -18,10 +19,11 @@ public class OrderServiceFactory {
 
     public static OrderService create(
             IPaymentURLGenerator paymentURLGenerator,
+            IEventGateway eventGateway,
             IOrderGateway orderGateway,
             ITicketSaleGateway ticketSaleGateway) {
         if (orderService == null) {
-            final ICreateOrderUseCase createOrderUseCase = new CreateOrderUseCase(orderGateway, paymentURLGenerator, ticketSaleGateway);
+            final ICreateOrderUseCase createOrderUseCase = new CreateOrderUseCase(orderGateway, eventGateway, paymentURLGenerator, ticketSaleGateway);
             final IGetOrderByIDUseCase getOrderByIDUseCase = new GetOrderByIDUseCase(orderGateway);
             final IListCustomerOrdersUseCase listCustomerOrdersUseCase = new ListCustomerOrdersUseCase(orderGateway);
             final ICancelOrderUseCase cancelOrderUseCase = new CancelOrderUseCase(orderGateway, ticketSaleGateway);

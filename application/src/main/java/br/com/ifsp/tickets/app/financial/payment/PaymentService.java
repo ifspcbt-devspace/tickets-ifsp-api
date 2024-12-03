@@ -1,26 +1,19 @@
 package br.com.ifsp.tickets.app.financial.payment;
 
-import br.com.ifsp.tickets.app.financial.payment.create.CreatePaymentInput;
-import br.com.ifsp.tickets.app.financial.payment.create.CreatePaymentOutput;
-import br.com.ifsp.tickets.app.financial.payment.create.ICreatePaymentUseCase;
-import br.com.ifsp.tickets.app.financial.payment.retrieve.IGetPaymentUseCase;
-import br.com.ifsp.tickets.app.financial.payment.retrieve.PaymentOutput;
+import br.com.ifsp.tickets.app.financial.payment.handle.HandlePaymentInput;
+import br.com.ifsp.tickets.app.financial.payment.handle.HandlePaymentOutput;
+import br.com.ifsp.tickets.app.financial.payment.handle.IHandlePaymentUseCase;
 
 public class PaymentService {
 
-    private final IGetPaymentUseCase getPaymentUseCase;
-    private final ICreatePaymentUseCase createPaymentUseCase;
+    private final IHandlePaymentUseCase createPaymentUseCase;
 
-    public PaymentService(IGetPaymentUseCase getPaymentUseCase, ICreatePaymentUseCase createPaymentUseCase) {
-        this.getPaymentUseCase = getPaymentUseCase;
+    public PaymentService(IHandlePaymentUseCase createPaymentUseCase) {
         this.createPaymentUseCase = createPaymentUseCase;
     }
 
-    public CreatePaymentOutput createPayment(CreatePaymentInput anIn) {
+    public HandlePaymentOutput createPayment(HandlePaymentInput anIn) {
         return this.createPaymentUseCase.execute(anIn);
     }
 
-    public PaymentOutput getPayment(String id) {
-        return this.getPaymentUseCase.execute(id);
-    }
 }

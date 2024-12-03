@@ -1,5 +1,8 @@
 package br.com.ifsp.tickets.app.financial.order.create;
 
+import br.com.ifsp.tickets.domain.administrative.event.Event;
+import br.com.ifsp.tickets.domain.administrative.event.EventStatus;
+import br.com.ifsp.tickets.domain.administrative.event.IEventGateway;
 import br.com.ifsp.tickets.domain.administrative.user.User;
 import br.com.ifsp.tickets.domain.administrative.user.vo.Document;
 import br.com.ifsp.tickets.domain.administrative.user.vo.EmailAddress;
@@ -23,11 +26,13 @@ import java.util.Optional;
 public class CreateOrderUseCase implements ICreateOrderUseCase {
 
     private final IOrderGateway orderGateway;
+    private final IEventGateway eventGateway;
     private final IPaymentURLGenerator paymentURLGenerator;
     private final ITicketSaleGateway ticketSaleGateway;
 
-    public CreateOrderUseCase(IOrderGateway orderGateway, IPaymentURLGenerator paymentURLGenerator, ITicketSaleGateway ticketSaleGateway) {
+    public CreateOrderUseCase(IOrderGateway orderGateway, IEventGateway eventGateway, IPaymentURLGenerator paymentURLGenerator, ITicketSaleGateway ticketSaleGateway) {
         this.orderGateway = orderGateway;
+        this.eventGateway = eventGateway;
         this.paymentURLGenerator = paymentURLGenerator;
         this.ticketSaleGateway = ticketSaleGateway;
     }
@@ -77,15 +82,18 @@ public class CreateOrderUseCase implements ICreateOrderUseCase {
 
             for (CreateOrderInput.OrderItemInput item : anIn.items()) {
                 final TicketSaleID ticketSaleID = TicketSaleID.with(item.ticketSaleId());
-
                 final TicketSale ticketSale = this.ticketSaleGateway.findById(ticketSaleID).orElseThrow(() -> NotFoundException.with(TicketSale.class, ticketSaleID));
+                final Event event = this.eventGateway.findById(ticketSale.getEventID()).orElseThrow(() -> NotFoundException.with(Event.class, ticketSale.getEventID()));
 
-                if (ticketSale.getStock() < item.quantity())
+                if (!event.getStatus().equals(EventStatus.OPENED))
+                    Notification.create("Event is not opened").append("Event is not open for enrollment").throwAnyErrors();
+
+                if (ticketSale.getStock() < 1)
                     notification.append("Ticket #%s has insufficient stock".formatted(ticketSale.getId().toString())).throwAnyErrors();
 
-                ticketSale.removeStock(item.quantity());
+                ticketSale.removeStock(1);
 
-                final OrderItem orderItem = OrderItem.newOrderItem(createdOrder.getId(), ticketSale, item.quantity());
+                final OrderItem orderItem = OrderItem.newOrderItem(createdOrder.getId(), ticketSale, 1);
                 orderItem.validate(notification);
 
                 items.add(orderItem);

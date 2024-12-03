@@ -41,7 +41,6 @@ repositories {
 dependencies {
     implementation(project(":domain"))
     implementation 'io.vavr:vavr:0.10.4'
-    implementation group: 'com.mercadopago', name: 'sdk-java', version: '2.1.29'
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'

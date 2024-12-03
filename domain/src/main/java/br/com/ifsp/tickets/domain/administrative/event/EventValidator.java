@@ -1,6 +1,5 @@
 package br.com.ifsp.tickets.domain.administrative.event;
 
-import br.com.ifsp.tickets.domain.administrative.event.vo.EventConfig;
 import br.com.ifsp.tickets.domain.administrative.event.vo.EventConfigKey;
 import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.shared.validation.Validator;
@@ -22,7 +21,7 @@ public class EventValidator extends Validator {
         this.validateEndDate();
         this.validateAddress();
         this.validateCompanyID();
-        this.validateMaxTickets();
+        this.validateConfiguration();
     }
 
     public void validateName() {
@@ -63,10 +62,11 @@ public class EventValidator extends Validator {
         }
     }
 
-    public void validateMaxTickets() {
-        final EventConfig config = this.event.getConfiguration(EventConfigKey.MAX_AVAILABLE_ENTRIES);
-        if (config == null || config.getValueAsInteger() <= 0) {
-            error("MaxTickets is required and must be greater than 0");
+    public void validateConfiguration() {
+        for (EventConfigKey value : EventConfigKey.values()) {
+            if (this.event.getConfiguration(value) == null) {
+                error("Configuration " + value + " is required");
+            }
         }
     }
 
