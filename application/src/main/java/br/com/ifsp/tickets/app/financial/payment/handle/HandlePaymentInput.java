@@ -1,11 +1,11 @@
-package br.com.ifsp.tickets.app.financial.payment.create;
+package br.com.ifsp.tickets.app.financial.payment.handle;
 
 import br.com.ifsp.tickets.domain.financial.payment.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record CreatePaymentInput(
+public record HandlePaymentInput(
         String externalId,
         Long orderId,
         PaymentStatus status,
@@ -17,7 +17,7 @@ public record CreatePaymentInput(
         LocalDateTime approvalDate
 ) {
 
-    public static CreatePaymentInput of(
+    public static HandlePaymentInput of(
             String externalId,
             Long orderId,
             PaymentStatus status,
@@ -28,7 +28,7 @@ public record CreatePaymentInput(
             LocalDateTime updatedAt,
             LocalDateTime approvalDate
     ) {
-        return new CreatePaymentInput(
+        return new HandlePaymentInput(
                 externalId,
                 orderId,
                 status,

@@ -21,11 +21,10 @@ public record CreateOrderInput(
     }
 
     public record OrderItemInput(
-            UUID ticketSaleId,
-            int quantity
+            UUID ticketSaleId
     ) {
-        public static OrderItemInput of(UUID ticketSaleId, int quantity) {
-            return new OrderItemInput(ticketSaleId, quantity);
+        public static OrderItemInput of(UUID ticketSaleId) {
+            return new OrderItemInput(ticketSaleId);
         }
     }
 }

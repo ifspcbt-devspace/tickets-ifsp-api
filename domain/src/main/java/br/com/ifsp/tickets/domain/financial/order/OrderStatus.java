@@ -8,11 +8,9 @@ public enum OrderStatus {
     RESERVED(10, "Reservado"),
     PENDING(11, "Pendente"),
     APPROVED(20, "Aprovado"),
-    REFUSED(21, "Recusado"),
+    FAILED(21, "Recusado"),
     CANCELED(22, "Cancelado"),
-    FORCED_CANCELED(23, "Cancelado Forçadamente"),
-    REFUNDED(30, "Reembolsado"),
-    ;
+    FORCED_CANCELED(23, "Cancelado Forçadamente");
 
     private final int code;
     private final String description;

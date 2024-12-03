@@ -28,7 +28,6 @@ public class Order extends AggregateRoot<OrderID> {
     private String paymentUrl;
     private OrderStatus status;
     private LocalDateTime updatedAt;
-    // todo: payment -> orderId
 
     public Order(OrderID orderID, User customer, String name, EmailAddress email, PhoneNumber phoneNumber, Document document, LocalDate birthDate, List<OrderItem> items, String paymentUrl, OrderStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(orderID);
@@ -53,13 +52,11 @@ public class Order extends AggregateRoot<OrderID> {
         return new Order(new OrderID(null), customer, name, email, phoneNumber, document, birthDate, items, null, OrderStatus.PENDING, LocalDateTime.now(), LocalDateTime.now());
     }
 
-    public String generatePaymentUrl(IPaymentURLGenerator paymentURLGenerator) {
-        if (this.paymentUrl != null) return this.paymentUrl;
+    public void generatePaymentUrl(IPaymentURLGenerator paymentURLGenerator) {
+        if (this.paymentUrl != null) return;
 
         this.paymentUrl = paymentURLGenerator.generateURL(this);
-
         this.status = OrderStatus.PENDING;
-        return this.paymentUrl;
     }
 
     public void addItems(List<OrderItem> items) {
@@ -78,8 +75,8 @@ public class Order extends AggregateRoot<OrderID> {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void refuse() {
-        this.status = OrderStatus.REFUSED;
+    public void fail() {
+        this.status = OrderStatus.FAILED;
         this.updatedAt = LocalDateTime.now();
     }
 
