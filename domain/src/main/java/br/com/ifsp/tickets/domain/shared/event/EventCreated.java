@@ -1,9 +1,9 @@
 package br.com.ifsp.tickets.domain.shared.event;
 
-import br.com.ifsp.tickets.domain.event.Event;
+import br.com.ifsp.tickets.domain.administrative.event.Event;
 import br.com.ifsp.tickets.domain.shared.DomainEventType;
 import br.com.ifsp.tickets.domain.shared.IDomainEvent;
-import br.com.ifsp.tickets.domain.user.User;
+import br.com.ifsp.tickets.domain.administrative.user.User;
 
 import java.time.Instant;
 import java.util.UUID;

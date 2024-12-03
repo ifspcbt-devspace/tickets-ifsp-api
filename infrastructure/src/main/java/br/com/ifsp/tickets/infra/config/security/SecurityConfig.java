@@ -1,12 +1,12 @@
 package br.com.ifsp.tickets.infra.config.security;
 
-import br.com.ifsp.tickets.app.auth.IAuthUtils;
+import br.com.ifsp.tickets.app.administrative.auth.IAuthUtils;
 import br.com.ifsp.tickets.infra.config.security.entrypoint.AuthEntryPointJwt;
 import br.com.ifsp.tickets.infra.config.security.filter.BasicAuthFilter;
 import br.com.ifsp.tickets.infra.config.security.filter.JwtAuthFilter;
 import br.com.ifsp.tickets.infra.config.security.service.CustomUserDetailsService;
-import br.com.ifsp.tickets.infra.contexts.user.AuthUtils;
-import br.com.ifsp.tickets.infra.contexts.user.persistence.UserRepository;
+import br.com.ifsp.tickets.infra.contexts.administrative.user.AuthUtils;
+import br.com.ifsp.tickets.infra.contexts.administrative.user.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

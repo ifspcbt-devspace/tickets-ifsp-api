@@ -1,9 +1,9 @@
 package br.com.ifsp.tickets.infra.api.controllers;
 
-import br.com.ifsp.tickets.domain.zipcode.IZipCodeGateway;
+import br.com.ifsp.tickets.domain.shared.zipcode.IZipCodeGateway;
 import br.com.ifsp.tickets.infra.api.CepAPI;
-import br.com.ifsp.tickets.infra.contexts.zipcode.models.ZipCodeResponse;
-import br.com.ifsp.tickets.infra.contexts.zipcode.presenters.ZipCodeApiPresenter;
+import br.com.ifsp.tickets.infra.shared.zipcode.models.ZipCodeResponse;
+import br.com.ifsp.tickets.infra.shared.zipcode.presenters.ZipCodeApiPresenter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
