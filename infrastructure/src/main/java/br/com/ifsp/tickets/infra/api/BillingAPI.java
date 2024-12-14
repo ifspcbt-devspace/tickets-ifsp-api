@@ -7,8 +7,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/v1/billing")
@@ -24,6 +26,6 @@ public interface BillingAPI {
                     @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class), mediaType = "application/json"))
             }
     )
-    ResponseEntity<Void> listener(PaymentListenerRequest request);
+    ResponseEntity<Void> listener(@RequestBody PaymentListenerRequest request, HttpHeaders headers);
 
 }

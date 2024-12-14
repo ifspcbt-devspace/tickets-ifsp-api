@@ -73,9 +73,8 @@ public class PaymentSuccessHandler {
 
             final boolean alreadyExists = this.enrollmentGateway.existsByEmailAndEventID(emailString, event.getId());
 
-            if (alreadyExists) {
+            if (alreadyExists)
                 Notification.create("Validation Error").append("User already enrolled in this event").throwAnyErrors();
-            }
 
             final Enrollment enrollment = Enrollment
                     .newEnrollment(name, emailString, document, birthDate,
