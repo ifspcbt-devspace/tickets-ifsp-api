@@ -3,7 +3,6 @@ package br.com.ifsp.tickets.infra.api;
 import br.com.ifsp.tickets.domain.shared.search.Pagination;
 import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.models.CreateEnrollmentRequest;
 import br.com.ifsp.tickets.infra.contexts.administrative.enrollment.core.models.EnrollmentResponse;
-import br.com.ifsp.tickets.infra.contexts.financial.payment.models.CreatePaymentRequest;
 import br.com.ifsp.tickets.infra.shared.APIErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,15 +43,4 @@ public interface EnrollmentAPI {
     )
     ResponseEntity<Pagination<EnrollmentResponse>> findByUser();
 
-
-    @PostMapping(consumes = "application/json", value = "/webhook")
-    @Operation(
-            summary = "Payment",
-            description = "Receive payment webhook",
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "Webhook received successfully"),
-                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = APIErrorResponse.class), mediaType = "application/json"))
-            }
-    )
-    ResponseEntity<Void> webhook(@RequestBody CreatePaymentRequest request);
 }

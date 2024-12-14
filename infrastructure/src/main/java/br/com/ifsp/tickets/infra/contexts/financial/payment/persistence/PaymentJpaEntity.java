@@ -1,16 +1,15 @@
 package br.com.ifsp.tickets.infra.contexts.financial.payment.persistence;
 
+import br.com.ifsp.tickets.domain.financial.order.OrderID;
 import br.com.ifsp.tickets.domain.financial.payment.Payment;
 import br.com.ifsp.tickets.domain.financial.payment.PaymentID;
 import br.com.ifsp.tickets.domain.financial.payment.PaymentStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,36 +20,79 @@ public class PaymentJpaEntity implements Serializable {
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
-    @Column(name = "payment_date", nullable = false, updatable = false)
-    private LocalDateTime paymentDate;
+    @Column(name = "external_id", nullable = false, updatable = false)
+    private String externalId;
     @Column(name = "status", nullable = false, updatable = false)
-    private String status;
-    @Column(name = "external_reference", nullable = false)
-    private String externalReference;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
+    @Column(name = "order_id", nullable = false, updatable = false)
+    private Long orderId;
+    @Column(name = "currency", nullable = false, updatable = false)
+    private String currency;
+    @Column(name = "amount", nullable = false, updatable = false)
+    private BigDecimal amount;
+    @Column(name = "payment_type", nullable = false, updatable = false)
+    private String paymentType;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    @Column(name = "updated_at", nullable = false, updatable = false)
+    private LocalDateTime updatedAt;
+    @Column(name = "approval_date", nullable = false, updatable = false)
+    private LocalDateTime approvalDate;
 
-    public PaymentJpaEntity(Long id, LocalDateTime paymentDate, String status, String externalReference) {
+    public PaymentJpaEntity(
+            Long id,
+            String externalId,
+            PaymentStatus status,
+            Long orderId,
+            String currency,
+            BigDecimal amount,
+            String paymentType,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            LocalDateTime approvalDate
+    ) {
         this.id = id;
-        this.paymentDate = paymentDate;
+        this.externalId = externalId;
         this.status = status;
-        this.externalReference = externalReference;
+        this.orderId = orderId;
+        this.currency = currency;
+        this.amount = amount;
+        this.paymentType = paymentType;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.approvalDate = approvalDate;
     }
 
     public static PaymentJpaEntity from(Payment payment) {
         return new PaymentJpaEntity(
                 payment.getId().getValue(),
-                payment.getPaymentDate(),
-                payment.getAction(),
-                payment.getExternalReference()
+                payment.getExternalId(),
+                payment.getStatus(),
+                payment.getOrderId().getValue(),
+                payment.getCurrency(),
+                payment.getAmount(),
+                payment.getPaymentType(),
+                payment.getCreatedAt(),
+                payment.getUpdatedAt(),
+                payment.getApprovalDate()
         );
     }
 
     public Payment toAggregate() {
         return new Payment(
-                PaymentID.with(this.getId()),
-                PaymentStatus.IN_PROCESS,
-                this.getPaymentDate(),
-                this.getStatus(),
-                this.getExternalReference()
+                new PaymentID(this.id),
+                this.externalId,
+                this.status,
+                new OrderID(this.orderId),
+                this.currency,
+                this.amount,
+                this.paymentType,
+                this.createdAt,
+                this.updatedAt,
+                this.approvalDate
         );
     }
+
+
 }

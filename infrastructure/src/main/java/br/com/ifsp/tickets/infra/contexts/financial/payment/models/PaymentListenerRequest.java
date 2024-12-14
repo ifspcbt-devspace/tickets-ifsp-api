@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 
-public record CreatePaymentRequest(
+public record PaymentListenerRequest(
         @JsonProperty("data") DataModel data,
         @JsonProperty("date_created") LocalDateTime dateCreated,
         @JsonProperty("type") String type,

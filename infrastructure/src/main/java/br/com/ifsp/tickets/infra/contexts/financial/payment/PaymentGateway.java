@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor(onConstructor_ = @__(@Autowired))
 public class PaymentGateway implements IPaymentGateway {
@@ -15,6 +17,16 @@ public class PaymentGateway implements IPaymentGateway {
 
     @Override
     public Payment create(Payment payment) {
+        return paymentRepository.save(PaymentJpaEntity.from(payment)).toAggregate();
+    }
+
+    @Override
+    public Optional<Payment> findByExternalId(String externalId) {
+        return paymentRepository.findByExternalId(externalId).map(PaymentJpaEntity::toAggregate);
+    }
+
+    @Override
+    public Payment update(Payment payment) {
         return paymentRepository.save(PaymentJpaEntity.from(payment)).toAggregate();
     }
 }

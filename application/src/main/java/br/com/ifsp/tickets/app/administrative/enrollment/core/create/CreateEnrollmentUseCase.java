@@ -1,12 +1,6 @@
 package br.com.ifsp.tickets.app.administrative.enrollment.core.create;
 
 import br.com.ifsp.tickets.app.administrative.enrollment.ITicketQRGenerator;
-import br.com.ifsp.tickets.domain.communication.email.Email;
-import br.com.ifsp.tickets.domain.communication.email.IEmailGateway;
-import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
-import br.com.ifsp.tickets.domain.communication.message.Message;
-import br.com.ifsp.tickets.domain.communication.message.type.MessageSubject;
-import br.com.ifsp.tickets.domain.communication.message.type.MessageType;
 import br.com.ifsp.tickets.domain.administrative.company.Company;
 import br.com.ifsp.tickets.domain.administrative.company.ICompanyGateway;
 import br.com.ifsp.tickets.domain.administrative.enrollment.Enrollment;
@@ -15,16 +9,21 @@ import br.com.ifsp.tickets.domain.administrative.event.Event;
 import br.com.ifsp.tickets.domain.administrative.event.EventID;
 import br.com.ifsp.tickets.domain.administrative.event.EventStatus;
 import br.com.ifsp.tickets.domain.administrative.event.IEventGateway;
+import br.com.ifsp.tickets.domain.administrative.ticket.ITicketGateway;
+import br.com.ifsp.tickets.domain.administrative.ticket.Ticket;
+import br.com.ifsp.tickets.domain.administrative.user.UserID;
+import br.com.ifsp.tickets.domain.communication.email.Email;
+import br.com.ifsp.tickets.domain.communication.email.IEmailGateway;
+import br.com.ifsp.tickets.domain.communication.message.IMessageGateway;
+import br.com.ifsp.tickets.domain.communication.message.Message;
+import br.com.ifsp.tickets.domain.communication.message.type.MessageSubject;
+import br.com.ifsp.tickets.domain.communication.message.type.MessageType;
 import br.com.ifsp.tickets.domain.financial.product.ITicketSaleGateway;
 import br.com.ifsp.tickets.domain.financial.product.TicketSale;
 import br.com.ifsp.tickets.domain.financial.product.TicketSaleID;
 import br.com.ifsp.tickets.domain.shared.exceptions.NotFoundException;
 import br.com.ifsp.tickets.domain.shared.file.IFileStorage;
 import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
-import br.com.ifsp.tickets.domain.administrative.ticket.ITicketGateway;
-import br.com.ifsp.tickets.domain.administrative.ticket.Ticket;
-import br.com.ifsp.tickets.domain.administrative.ticket.TicketID;
-import br.com.ifsp.tickets.domain.administrative.user.UserID;
 
 import java.time.LocalDate;
 
@@ -59,7 +58,6 @@ public class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
         final String emailString = anIn.email();
         final LocalDate birthDate = anIn.birthDate();
         final String document = anIn.document();
-        final TicketID ticketID = TicketID.with(anIn.ticketId());
 
         final EventID eventID = EventID.with(anIn.eventId());
         final TicketSaleID ticketSaleID = TicketSaleID.with(anIn.ticketSaleId());
