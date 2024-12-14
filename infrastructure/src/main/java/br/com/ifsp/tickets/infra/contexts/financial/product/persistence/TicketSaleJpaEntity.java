@@ -30,17 +30,20 @@ public class TicketSaleJpaEntity implements Serializable {
     private String description; // example: válido para uma pessoa e uma criança de até 12 anos
     @Column(name = "price", nullable = false)
     private BigDecimal price; // example: 20.00
+    @Column(name = "stock", nullable = false)
+    private int stock;
     @Column(name = "entries", nullable = false)
     private int entries; // example: 2
     @Column(name = "active", nullable = false)
     private boolean active;
 
-    public TicketSaleJpaEntity(UUID id, UUID eventID, String name, String description, BigDecimal price, int entries, boolean active) {
+    public TicketSaleJpaEntity(UUID id, UUID eventID, String name, String description, BigDecimal price, int stock, int entries, boolean active) {
         this.id = id;
         this.eventId = eventID;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.stock = stock;
         this.entries = entries;
         this.active = active;
     }
@@ -52,9 +55,9 @@ public class TicketSaleJpaEntity implements Serializable {
                 ticketSale.getName(),
                 ticketSale.getDescription(),
                 ticketSale.getPrice(),
+                ticketSale.getStock(),
                 ticketSale.getEntries(),
-                ticketSale.isActive()
-        );
+                ticketSale.isActive());
     }
 
     public TicketSale toAggregate() {
@@ -63,7 +66,8 @@ public class TicketSaleJpaEntity implements Serializable {
                 EventID.with(this.getEventId()),
                 this.getName(),
                 this.getDescription(),
-                this.getPrice(), ,
+                this.getPrice(),
+                this.getStock(),
                 this.getEntries(),
                 this.isActive());
     }

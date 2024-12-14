@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 public record HandlePaymentOutput(
         String id,
         LocalDateTime paymentDate,
-        String externalReference
+        String externalId
 ) {
 
     public static HandlePaymentOutput from(Payment payment) {
-        return new HandlePaymentOutput(payment.getId().toString(), payment.getPaymentDate(), payment.getAction(), payment.getExternalReference());
+        return new HandlePaymentOutput(payment.getId().toString(), payment.getApprovalDate(), payment.getExternalId());
     }
 }

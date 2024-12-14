@@ -10,8 +10,6 @@ public record CreateEnrollmentRequest(
         @JsonProperty("email") String email,
         @JsonProperty("document") String document,
         @JsonProperty("birth_date") LocalDate birthDate,
-        @JsonProperty("ticket_sale_id") String ticketSaleId,
-        @JsonProperty("ticket_id") String ticketId
-
+        @JsonProperty("ticket_sale_id") String ticketSaleId
 ) {
 }
