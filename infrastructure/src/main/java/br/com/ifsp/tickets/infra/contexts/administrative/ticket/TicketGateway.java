@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Component
@@ -36,7 +37,7 @@ public class TicketGateway implements ITicketGateway {
 
     @Override
     public Ticket findByCodeAndNotExpired(TicketCode code) {
-        return this.repository.findByCodeAndExpiredInBefore(code.getCode(), new java.util.Date())
+        return this.repository.findByCodeAndExpiredInBefore(code.getCode(), LocalDate.now())
                 .map(TicketJpaEntity::toAggregate).orElse(null);
     }
 
@@ -48,7 +49,7 @@ public class TicketGateway implements ITicketGateway {
                 Sort.by(Sort.Direction.fromString(sq.direction()), sq.sort())
         );
 
-        final Page<Ticket> page = this.repository.findAllByUserId(id.getValue(), request).map(TicketJpaEntity::toAggregate);
+        final Page<Ticket> page = this.repository.findAllByEnrollmentUserID(id.getValue(), request).map(TicketJpaEntity::toAggregate);
 
         return Pagination.of(
                 page.getNumber(),
@@ -66,7 +67,7 @@ public class TicketGateway implements ITicketGateway {
                 Sort.by(Sort.Direction.fromString(sq.direction()), sq.sort())
         );
 
-        final Page<Ticket> page = this.repository.findAllByUserIdAndEventId(userID.getValue(), eventID.getValue(), request)
+        final Page<Ticket> page = this.repository.findAllByEnrollmentUserIDAndEventId(userID.getValue(), eventID.getValue(), request)
                 .map(TicketJpaEntity::toAggregate);
 
         return Pagination.of(
