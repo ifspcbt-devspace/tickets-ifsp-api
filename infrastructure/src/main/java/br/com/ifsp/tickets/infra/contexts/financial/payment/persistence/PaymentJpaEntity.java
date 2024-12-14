@@ -22,7 +22,7 @@ public class PaymentJpaEntity implements Serializable {
     private Long id;
     @Column(name = "external_id", nullable = false, updatable = false)
     private String externalId;
-    @Column(name = "status", nullable = false, updatable = false)
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
     @Column(name = "order_id", nullable = false, updatable = false)
@@ -35,9 +35,9 @@ public class PaymentJpaEntity implements Serializable {
     private String paymentType;
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-    @Column(name = "updated_at", nullable = false, updatable = false)
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-    @Column(name = "approval_date", nullable = false, updatable = false)
+    @Column(name = "approval_date", nullable = false)
     private LocalDateTime approvalDate;
 
     public PaymentJpaEntity(

@@ -32,7 +32,10 @@ public class HandlePaymentUseCase implements IHandlePaymentUseCase {
     public HandlePaymentOutput execute(HandlePaymentInput anIn) {
         Payment payment;
         final Optional<Payment> paymentOptional = this.paymentGateway.findByExternalId(anIn.externalId());
-        if (paymentOptional.isPresent()) payment = paymentOptional.get();
+        if (paymentOptional.isPresent()) {
+            payment = paymentOptional.get();
+            payment.changeStatus(anIn.status());
+        }
         else {
             final OrderID orderID = OrderID.with(anIn.orderId());
             final LocalDateTime createdAt = anIn.createdAt();
