@@ -6,7 +6,7 @@ plugins {
 
 dependencyManagement {
     imports {
-        mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.6.0")
+        mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.12.0")
     }
 }
 
@@ -60,19 +60,20 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-otlp'
 
     implementation 'io.micrometer:micrometer-tracing-bridge-otel'
-    implementation 'io.opentelemetry:opentelemetry-api:1.38.0'
-    implementation 'io.opentelemetry:opentelemetry-context:1.38.0'
-    implementation 'io.opentelemetry:opentelemetry-sdk:1.38.0'
-    implementation 'io.opentelemetry:opentelemetry-sdk-trace:1.38.0'
-    implementation 'io.opentelemetry:opentelemetry-sdk-metrics:1.38.0'
-    implementation 'io.opentelemetry:opentelemetry-sdk-common:1.38.0'
-    implementation 'io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi:1.38.0'
-    implementation 'io.opentelemetry:opentelemetry-extension-trace-propagators:1.38.0'
-    implementation 'io.opentelemetry:opentelemetry-exporter-common:1.38.0'
-    implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.38.0'
-    implementation 'io.opentelemetry:opentelemetry-exporter-otlp-common:1.38.0'
-    implementation 'io.opentelemetry.instrumentation:opentelemetry-instrumentation-api-semconv:1.33.6-alpha'
 
+    implementation 'io.opentelemetry:opentelemetry-api:1.46.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk:1.46.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk-trace:1.46.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk-metrics:1.46.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk-logs:1.46.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk-common:1.46.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi:1.46.0'
+    implementation 'io.opentelemetry:opentelemetry-extension-trace-propagators:1.46.0'
+    implementation 'io.opentelemetry:opentelemetry-exporter-common:1.46.0'
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.46.0'
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp-common:1.46.0'
+
+    implementation 'io.opentelemetry.instrumentation:opentelemetry-instrumentation-api-semconv:1.33.6-alpha'
     implementation 'io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0:1.33.6-alpha'
 
     implementation 'jakarta.mail:jakarta.mail-api:2.1.3'

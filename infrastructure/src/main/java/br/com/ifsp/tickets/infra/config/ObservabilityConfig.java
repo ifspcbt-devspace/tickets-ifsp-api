@@ -16,6 +16,7 @@ import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.semconv.ResourceAttributes;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -23,6 +24,7 @@ import org.springframework.core.env.Environment;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class ObservabilityConfig {
@@ -50,7 +52,7 @@ public class ObservabilityConfig {
 
     @Bean
     public SdkLoggerProvider otelSdkLoggerProvider(Environment environment, ObjectProvider<LogRecordProcessor> logRecordProcessors) {
-        final String applicationName = environment.getProperty("spring.application.name", "tickets-api");
+        final String applicationName = environment.getProperty("spring.application.name", "yoop-api");
         final Resource springResource = Resource.create(Attributes.of(ResourceAttributes.SERVICE_NAME, applicationName));
         final SdkLoggerProviderBuilder builder = SdkLoggerProvider.builder()
                 .setResource(Resource.getDefault().merge(springResource));
@@ -59,12 +61,13 @@ public class ObservabilityConfig {
     }
 
     @Bean
-    public LogRecordProcessor otelLogRecordProcessor() {
+    public LogRecordProcessor otelLogRecordProcessor(@Value("${management.otlp.log.endpoint}") String endpoint) {
         return BatchLogRecordProcessor
                 .builder(
                         OtlpGrpcLogRecordExporter.builder()
-                                .setEndpoint("http://localhost:4317")
+                                .setEndpoint(endpoint)
                                 .build())
+                .setScheduleDelay(30, TimeUnit.SECONDS)
                 .build();
     }
 

@@ -28,10 +28,12 @@ management:
   otlp:
     metrics:
       export:
-        url: http://localhost:4318/v1/metrics
-        step: 10s
+        url: ${METRICS_ENDPOINT:http://0.0.0.0:4318/v1/metrics}
+        step: 30s
     tracing:
-      endpoint: http://localhost:4318/v1/traces
+      endpoint: ${TRACING_ENDPOINT:http://0.0.0.0:4318/v1/traces}
+    log:
+      endpoint: ${LOGGING_ENDPOINT:http://0.0.0.0:4317}
   tracing:
     sampling:
       probability: 1.0
@@ -81,7 +83,7 @@ spring:
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
   application:
-    name: tickets-api
+    name: yoop-api
 
 server:
   error:

@@ -1,16 +1,17 @@
 receivers:
   otlp:
     protocols:
-      http:
       grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
 
 processors:
   # batch metrics before sending to reduce API usage
   batch:
 
 exporters:
-  logging:
-    loglevel: debug
+  debug:
 
   loki:
     endpoint: "http://loki:3100/loki/api/v1/push"
@@ -28,11 +29,6 @@ exporters:
   zipkin:
     endpoint: "http://zipkin-all-in-one:9411/api/v2/spans"
     format: proto
-
-  jaeger:
-    endpoint: jaeger-all-in-one:14250
-    tls:
-      insecure: true
 
 # https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/README.md
 extensions:
@@ -53,7 +49,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [jaeger,zipkin,otlp]
+      exporters: [zipkin,otlp]
     logs:
       receivers: [otlp]
       exporters: [loki]

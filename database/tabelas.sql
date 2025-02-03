@@ -166,6 +166,53 @@ alter table messages
     add constraint messages_pkey
         primary key (id);
 
+create table order_items
+(
+    quantity  integer not null,
+    id        bigint  not null,
+    order_id  bigint  not null,
+    ticket_id uuid    not null
+);
+
+alter table order_items
+    add constraint order_items_pkey
+        primary key (id);
+
+alter table order_items
+    add constraint order_items_ticket_id_key
+        unique (ticket_id);
+
+create table orders
+(
+    birth_date   date         not null,
+    status       smallint     not null,
+    created_at   timestamp(6) not null,
+    id           bigint       not null,
+    updated_at   timestamp(6) not null,
+    customer_id  uuid         not null,
+    document     varchar(255) not null,
+    email        varchar(255) not null,
+    name         varchar(255) not null,
+    payment_url  varchar(255) not null,
+    phone_number varchar(255) not null
+);
+
+alter table orders
+    add constraint orders_pkey
+        primary key (id);
+
+alter table order_items
+    add constraint fkbioxgbv59vetrxe0ejfubep1w
+        foreign key (order_id) references orders;
+
+alter table orders
+    add constraint orders_customer_id_key
+        unique (customer_id);
+
+alter table orders
+    add constraint orders_status_check
+        check ((status >= 0) AND (status <= 5));
+
 create table password_recovery
 (
     used       boolean      not null,
@@ -189,21 +236,33 @@ alter table password_recovery
 
 create table payments
 (
-    id                 bigint       not null,
-    payment_date       timestamp(6) not null,
-    external_reference varchar(255) not null,
-    status             varchar(255) not null
+    amount        numeric(38, 2) not null,
+    approval_date timestamp(6)   not null,
+    created_at    timestamp(6)   not null,
+    id            bigint         not null,
+    order_id      bigint         not null,
+    updated_at    timestamp(6)   not null,
+    currency      varchar(255)   not null,
+    external_id   varchar(255)   not null,
+    payment_type  varchar(255)   not null,
+    status        varchar(255)   not null
 );
 
 alter table payments
     add constraint payments_pkey
         primary key (id);
 
+alter table payments
+    add constraint payments_status_check
+        check ((status)::text = ANY
+               ((ARRAY ['APPROVED'::character varying, 'PENDING'::character varying, 'IN_PROCESS'::character varying, 'IN_MEDIATION'::character varying, 'AUTHORIZED'::character varying, 'REJECTED'::character varying, 'CANCELLED'::character varying, 'REFUNDED'::character varying, 'CHARGED_BACK'::character varying])::text[]));
+
 create table ticket_sale
 (
     active      boolean        not null,
     entries     integer        not null,
     price       numeric(38, 2) not null,
+    stock       integer        not null,
     event_id    uuid           not null,
     id          uuid           not null,
     description varchar(255)   not null,
@@ -214,25 +273,36 @@ alter table ticket_sale
     add constraint ticket_sale_pkey
         primary key (id);
 
+alter table order_items
+    add constraint fkegruj7f1h2ydrkkkaoms7smdq
+        foreign key (ticket_id) references ticket_sale;
+
 create table tickets
 (
     expired_in         date         not null,
     valid_in           date         not null,
     created_at         timestamp(6) not null,
     last_time_consumed timestamp(6),
+    enrollment_id      uuid         not null,
     event_id           uuid         not null,
     id                 uuid         not null,
     ticket_sale_id     uuid         not null,
-    user_id            uuid,
     code               varchar(255) not null,
     description        varchar(255) not null,
-    document           varchar(255) not null,
     status             varchar(255) not null
 );
 
 alter table tickets
     add constraint tickets_pkey
         primary key (id);
+
+alter table tickets
+    add constraint tickets_enrollment_id_key
+        unique (enrollment_id);
+
+alter table tickets
+    add constraint fkslq762rjk546robb4sxlj8f8h
+        foreign key (enrollment_id) references enrollments;
 
 create table upsert_emails
 (
@@ -260,23 +330,6 @@ alter table upsert_emails
     add constraint upsert_emails_token_key
         unique (token);
 
-create table upsert_enrollments
-(
-    birth_date     date         not null,
-    event_id       uuid         not null,
-    id             uuid         not null,
-    ticket_id      uuid         not null,
-    ticket_sale_id uuid         not null,
-    user_id        uuid,
-    document       varchar(255) not null,
-    email          varchar(255) not null,
-    name           varchar(255) not null
-);
-
-alter table upsert_enrollments
-    add constraint upsert_enrollments_pkey
-        primary key (id);
-
 create table users
 (
     active        boolean      not null,
@@ -298,6 +351,10 @@ alter table users
     add constraint users_pkey
         primary key (id);
 
+alter table orders
+    add constraint fksjfs85qf6vmcurlx43cnc16gy
+        foreign key (customer_id) references users;
+
 alter table password_recovery
     add constraint fke8rvirgchpmurh9y9sq1rkxsd
         foreign key (user_id) references users;
@@ -317,3 +374,4 @@ alter table users
 alter table users
     add constraint users_username_key
         unique (username);
+
