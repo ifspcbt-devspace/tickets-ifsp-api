@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
@@ -27,7 +27,7 @@ jobs:
         run: ./gradlew --refresh-dependencies
 
       - name: Cache Gradle dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/wrapper
@@ -43,7 +43,7 @@ jobs:
 
       - name: Save artifact for master branch
         if: github.ref == 'refs/heads/master'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jar-artifact
           path: build/libs/*.jar
@@ -51,7 +51,7 @@ jobs:
 
       - name: Save artifact for other branches
         if: github.ref != 'refs/heads/master'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jar-artifact
           path: build/libs/*.jar
@@ -64,10 +64,10 @@ jobs:
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/homolog'
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download the JAR artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: jar-artifact
           path: ./build/libs
