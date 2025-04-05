@@ -25,15 +25,22 @@ services:
       - MAIL_PORT=587
       - MAIL_USERNAME=example@gmail.com
       - MAIL_PASSWORD=password
-      - DATASOURCE_URL=jdbc:postgresql://localhost:5432/ifspcbt
+      - DATASOURCE_URL=jdbc:postgresql://psql-db:5432/ifspcbt
       - DATASOURCE_USERNAME=root
       - DATASOURCE_PASSWORD=password
       - ENCRYPTOR_VALUE=secret
       - FRONTEND_TICKET_CHECK_URL=https://eventos.ifspcbt.shop/admin/ticket/%s/check
       - MERCADOPAGO_ACCESSTOKEN=token
-      - ENV_NAME=dev
+      - ENV_NAME=prod
       - LOG_PATH=/ticketsapi/logs/
       - UPLOAD_PATH=/ticketsapi/uploads/
+      - METRICS_ENDPOINT=http://otlp:4318/v1/metrics
+      - TRACING_ENDPOINT=http://otlp:4318/v1/traces
+      - LOGGING_ENDPOINT=http://otlp:4317
+      - SERVICE_DEPARTMENT=software
+      - SERVICE_ENV=prod
+      - SERVICE_REGION=brazil-south
+      - SERVICE_INSTANCE_ID=default
     volumes:
       - /home/ticketsapi/uploads:/ticketsapi/uploads
       - /home/ticketsapi/logs:/ticketsapi/logs
@@ -41,6 +48,8 @@ services:
       - "8091:8091"
     depends_on:
       - db
+      - otlp
+      - loki
     networks:
       - ifspcbt
 
@@ -58,3 +67,4 @@ volumes:
 networks:
   ifspcbt:
     driver: bridge
+    external: true

@@ -1,8 +1,10 @@
 services:
   otel-collector:
     container_name: otlp
-    image: otel/opentelemetry-collector-contrib:0.118.0
+    image: otel/opentelemetry-collector-contrib:0.123.0
     restart: always
+    networks:
+      - ifspcbt
     command:
       - --config=/etc/otelcol-contrib/otel-collector.yml
     volumes:
@@ -25,6 +27,8 @@ services:
     image: prom/prometheus
     restart: always
     user: root
+    networks:
+      - ifspcbt
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
@@ -40,12 +44,16 @@ services:
     image: grafana/loki:latest
     command: -config.file=/etc/loki/local-config.yaml
     restart: always
+    networks:
+      - ifspcbt
     ports:
       - "3100:3100"
 
   init:
     image: &tempoImage grafana/tempo:latest
     user: root
+    networks:
+      - ifspcbt
     entrypoint:
       - "chown"
       - "10001:10001"
@@ -58,6 +66,8 @@ services:
     image: *tempoImage
     command: [ "-config.file=/etc/tempo.yml" ]
     restart: always
+    networks:
+      - ifspcbt
     volumes:
       - ./docker/tempo/tempo.yml:/etc/tempo.yml
       - ./tempo-data:/var/tempo
@@ -72,6 +82,8 @@ services:
     image: grafana/grafana
     restart: always
     user: root
+    networks:
+      - ifspcbt
     volumes:
       - ./docker/grafana/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
       - ./grafana-data:/var/lib/grafana
@@ -88,3 +100,8 @@ services:
     restart: always
     ports:
       - "9411:9411"
+
+networks:
+  ifspcbt:
+    driver: bridge
+    external: true

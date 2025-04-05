@@ -28,12 +28,14 @@ management:
   otlp:
     metrics:
       export:
-        url: ${METRICS_ENDPOINT:http://0.0.0.0:4318/v1/metrics}
+        url: ${METRICS_ENDPOINT:http://otlp:4318/v1/metrics}
         step: 30s
     tracing:
-      endpoint: ${TRACING_ENDPOINT:http://0.0.0.0:4318/v1/traces}
-    log:
-      endpoint: ${LOGGING_ENDPOINT:http://0.0.0.0:4317}
+      endpoint: ${TRACING_ENDPOINT:http://otlp:4318/v1/traces}
+    logging:
+      endpoint: ${LOGGING_ENDPOINT:http://otlp:4317}
+      timeout: 30s
+      transport: grpc
   tracing:
     sampling:
       probability: 1.0
