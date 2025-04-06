@@ -1,26 +1,21 @@
 package br.com.ifsp.tickets.infra.contexts.administrative.user;
 
 import br.com.ifsp.tickets.app.administrative.auth.IAuthUtils;
+import br.com.ifsp.tickets.domain.administrative.user.User;
 import br.com.ifsp.tickets.domain.shared.utils.UUIDUtils;
 import br.com.ifsp.tickets.domain.shared.validation.Error;
 import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
-import br.com.ifsp.tickets.domain.administrative.user.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.passay.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
-import java.util.function.Function;
 
 public class AuthUtils implements IAuthUtils {
 
@@ -31,22 +26,23 @@ public class AuthUtils implements IAuthUtils {
 
     private final PasswordValidator passwordValidator = new PasswordValidator(LENGTH_RULE, NUMBER, UPPERCASE, LOWERCASE);
     private final String secretKey;
+    private final String issuer;
     private final PasswordEncoder passwordEncoder;
 
     public AuthUtils(PasswordEncoder passwordEncoder, String secretKey) {
         this.passwordEncoder = passwordEncoder;
         this.secretKey = secretKey;
+        this.issuer = "tickets-ifsp-api";
     }
 
     public String generateToken(String aSubject) {
-        return Jwts
-                .builder()
-                .setIssuer("tickets-ifsp-api")
-                .setSubject(aSubject)
-                .setIssuedAt(Date.from(Instant.now()))
-                .setExpiration(Date.from(Instant.now().plus(14, ChronoUnit.DAYS)))
-                .signWith(this.getSingInKey(), SignatureAlgorithm.HS256)
-                .compact();
+        return JWT
+                .create()
+                .withIssuer(issuer)
+                .withSubject(aSubject)
+                .withIssuedAt(Instant.now())
+                .withExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS))
+                .sign(this.getSingInKey());
     }
 
     public boolean isTokenValid(String token, User userDetails) {
@@ -57,7 +53,7 @@ public class AuthUtils implements IAuthUtils {
     }
 
     public UUID getUuidFromToken(String token) {
-        return UUIDUtils.getFromString(this.extractClaim(token, Claims::getSubject));
+        return UUIDUtils.getFromString(this.decode(token).getSubject());
     }
 
     @Override
@@ -72,35 +68,28 @@ public class AuthUtils implements IAuthUtils {
         passwordValidator.getMessages(result).forEach(message -> validationHandler.append(new Error(message)));
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        return claimsResolver.apply(this.extractAllClaims(token));
-    }
-
     private boolean isTokenExpired(String token) {
         return this.extractExpiration(token) != null
                 && this.extractExpiration(token).before(Date.from(Instant.now()));
     }
 
     private Date extractExpiration(String token) {
-        return extractAllClaims(token).getExpiration();
+        return decode(token).getExpiresAt();
     }
 
     private LocalDate extractIssuedAt(String token) {
-        return LocalDate.from(extractAllClaims(token).getIssuedAt().toInstant().atZone(ZoneId.of("GMT-3")));
+        return LocalDate.from(decode(token).getIssuedAt().toInstant());
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(this.getSingInKey())
+    private DecodedJWT decode(String token) {
+        return JWT.require(this.getSingInKey())
+                .withIssuer(issuer)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
-
+                .verify(token);
     }
 
-    private Key getSingInKey() {
-        byte[] keyBytes = this.secretKey.getBytes(StandardCharsets.UTF_8);
-        return Keys.hmacShaKeyFor(keyBytes);
+    private Algorithm getSingInKey() {
+        return Algorithm.HMAC256(secretKey);
     }
 
 
