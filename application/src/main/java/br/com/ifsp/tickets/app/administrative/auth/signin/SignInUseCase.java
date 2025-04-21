@@ -35,7 +35,12 @@ public class SignInUseCase implements ISignInUseCase {
         final User user = this.userGateway.findByUsernameOrEmail(anIn.login())
                 .orElseThrow(() -> NotFoundException.with("User not found with login: " + anIn.login()));
 
-        this.authManager.auth(user.getUsername(), anIn.password());
+        try {
+            this.authManager.auth(user.getUsername(), anIn.password());
+        } catch (Exception e) {
+            Notification.create("Authentication error").append(e.getMessage()).throwAnyErrors();
+        }
+
         final String token = this.authUtils.generateToken(user.getId().toString());
         return SignInOutput.from(user, token);
     }

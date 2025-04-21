@@ -1,0 +1,45 @@
+services:
+  db:
+    container_name: psql-db
+    image: postgres:16.4
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./database:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - ifspcbt
+    restart: always
+
+  backend:
+    container_name: tickets-api
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - /home/ticketsapi/uploads:/ticketsapi/uploads
+      - /home/ticketsapi/logs:/ticketsapi/logs
+    ports:
+      - "8091:8091"
+    depends_on:
+      - db
+    networks:
+      - ifspcbt
+
+  watchtower:
+    privileged: true
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    command: --interval 30
+
+volumes:
+  db_data:
+
+networks:
+  ifspcbt:
+    driver: bridge
+    external: true
