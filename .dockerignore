@@ -1,0 +1,26 @@
+# Controle de versão
+.git
+.gitignore
+
+# IDEs e configurações locais
+.idea/
+*.iml
+
+# Cache e artefatos do Gradle
+.gradle/
+**/build/
+
+# Diretórios de saída de compilação ou IDEs
+out/
+
+# Arquivos de ambiente
+.env
+.env.*
+
+# Arquivos temporários do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log

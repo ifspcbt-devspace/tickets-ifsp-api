@@ -49,3 +49,6 @@ app.pub
 *.pub
 
 prometheus-data/
+loki-data/
+grafana-data/
+tempo-data/

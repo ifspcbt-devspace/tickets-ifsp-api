@@ -3,12 +3,13 @@ services:
     container_name: psql-db
     image: postgres:16.4
     environment:
-      POSTGRES_DB: ifspcbt
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
-      TZ: America/Sao_Paulo
+      - POSTGRES_DB=ifspcbt
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - TZ=America/Sao_Paulo
     volumes:
       - db_data:/var/lib/postgresql/data
+      - ./database:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
     networks:
@@ -16,7 +17,7 @@ services:
     restart: always
 
   backend:
-    container_name: ifspcbt-api
+    container_name: tickets-api
     image: ghcr.io/ifspcbt-devspace/ifspcbt-devspace/tickets-ifsp-api:latest
     environment:
       - TZ=America/Sao_Paulo
@@ -48,8 +49,6 @@ services:
       - "8091:8091"
     depends_on:
       - db
-      - otlp
-      - loki
     networks:
       - ifspcbt
 
