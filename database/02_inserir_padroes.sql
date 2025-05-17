@@ -10,14 +10,14 @@ DECLARE
 BEGIN
     INSERT INTO users (id, name, role_id, username, email, phone, password, document, birth_date, active)
     VALUES (uuid_generate_v4(),
-            'Leonardo',
+            'Grêmio Estudantil Chico Mendes',
             2,
             'c_manager',
-            'l.6042silva@gmail.com',
+            'ifspcbt.informatica@gmail.com',
             '11999999999',
-            '$2y$10$C2LFrm1SlAx8H13NsZDns.DOj4eHVBz4mfYVwI.MaGKD6/IKAZItG',
+            '$2a$12$P8X9u6OK8rSvNl6Rn3xfkemTTx3cacvxlpFbV9HUnbRXWlGTTS1Pa',
             '219555783',
-            '1999-04-02',
+            '1990-05-30',
             true)
     RETURNING id INTO id_usuario;
 
@@ -64,11 +64,9 @@ BEGIN
             '2024-07-30',
             id_event, -- Use the ID of the address created above
             id_company,
-            3);
+            6);
 
 end ;
 $$ LANGUAGE plpgsql;
 
 CALL CriarEntidadesPadroes();
-
-SELECT * FROM users WHERE id NOT IN (select user_id from tickets);

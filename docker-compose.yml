@@ -19,6 +19,9 @@ services:
   backend:
     container_name: tickets-api
     image: ghcr.io/ifspcbt-devspace/ifspcbt-devspace/tickets-ifsp-api:latest
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     environment:
       - TZ=America/Sao_Paulo
       - JWT_SECRET_KEY=secret
@@ -53,12 +56,12 @@ services:
       - ifspcbt
 
   watchtower:
-    privileged: true
     image: containrrr/watchtower
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/config.json
-    command: --interval 30
+    command: --interval 60 --label-enable
 
 volumes:
   db_data:
