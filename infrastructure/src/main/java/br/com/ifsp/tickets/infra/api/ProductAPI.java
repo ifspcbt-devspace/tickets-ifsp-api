@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public interface ProductAPI {
 
     @PostMapping(
-            value = "/{id}/ticketSale", consumes = "application/json")
+            value = "/{id}", consumes = "application/json")
     @Operation(
             summary = "Create ticket sale",
             description = "Create a new ticket sale",

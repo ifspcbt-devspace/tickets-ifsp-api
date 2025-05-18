@@ -45,7 +45,6 @@ public class SecurityConfig {
             "/v1/auth/activate/*",
             "/v1/auth/recovery/**",
             "/v1/cep/**",
-            "/v1/product/*/ticketSale",
             "/v1/billing/listener"
     };
 
@@ -88,6 +87,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/v1/event/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/event/*/thumbnail").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/product/*/ticketSale").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/event/search").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/actuator/**").hasAuthority("ADMIN")
