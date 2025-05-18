@@ -45,7 +45,7 @@ public class SecurityConfig {
             "/v1/auth/activate/*",
             "/v1/auth/recovery/**",
             "/v1/cep/**",
-            "/v1/event/*/ticketSale",
+            "/v1/product/*/ticketSale",
             "/v1/enrollment/webhook"
     };
 
