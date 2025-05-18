@@ -169,7 +169,7 @@ alter table messages
 create table order_items
 (
     quantity  integer not null,
-    id        bigint  not null,
+    id        bigserial  not null,
     order_id  bigint  not null,
     ticket_id uuid    not null
 );
@@ -187,7 +187,7 @@ create table orders
     birth_date   date         not null,
     status       smallint     not null,
     created_at   timestamp(6) not null,
-    id           bigint       not null,
+    id           bigserial       not null,
     updated_at   timestamp(6) not null,
     customer_id  uuid         not null,
     document     varchar(255) not null,
