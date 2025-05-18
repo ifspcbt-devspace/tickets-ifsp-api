@@ -6,7 +6,6 @@ $$
 DECLARE
     id_usuario uuid;
     id_company uuid;
-    id_event   uuid;
 BEGIN
     INSERT INTO users (id, name, role_id, username, email, phone, password, document, birth_date, active)
     VALUES (uuid_generate_v4(),
@@ -16,7 +15,7 @@ BEGIN
             'ifspcbt.informatica@gmail.com',
             '11999999999',
             '$2a$12$P8X9u6OK8rSvNl6Rn3xfkemTTx3cacvxlpFbV9HUnbRXWlGTTS1Pa',
-            '219555783',
+            '/fBJq8d8esoxnRAShHKe7d1X9UdUQGXp',
             '1990-05-30',
             true)
     RETURNING id INTO id_usuario;
@@ -41,30 +40,6 @@ BEGIN
             '10882594000327',
             id_usuario,
             id_company);
-
-
-    id_event := uuid_generate_v4();
-
-    INSERT INTO addresses (id, street, number, complement, neighborhood, city, state, country, zip_code)
-    VALUES (id_event,
-            'Rua Maria Cristina',
-            '50',
-            '', -- Assuming complement is optional and nullable
-            'Jardim Casqueiro',
-            'Cubatão',
-            'São Paulo',
-            'Brasil',
-            '11533160');
-
-    INSERT INTO events (id, name, description, init_date, end_date, address_id, company_id, status)
-    VALUES (id_event,
-            'Festa Junina',
-            'A Festa Junina é uma tradicional celebração brasileira que ocorre em junho, homenageando os santos populares São João, Santo Antônio e São Pedro. Com danças de quadrilha, fogueiras, comidas típicas como milho e quentão, e trajes caipiras, a festa destaca-se pela sua atmosfera alegre e colorida. É comum ver barracas com brincadeiras como pescaria e correio elegante. A celebração também inclui músicas típicas e uma forte influência das tradições rurais do nordeste do Brasil.',
-            '2024-07-29',
-            '2024-07-30',
-            id_event, -- Use the ID of the address created above
-            id_company,
-            6);
 
 end ;
 $$ LANGUAGE plpgsql;

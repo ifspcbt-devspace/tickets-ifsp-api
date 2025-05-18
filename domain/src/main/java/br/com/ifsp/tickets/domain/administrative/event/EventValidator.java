@@ -4,6 +4,8 @@ import br.com.ifsp.tickets.domain.administrative.event.vo.EventConfigKey;
 import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import br.com.ifsp.tickets.domain.shared.validation.Validator;
 
+import java.util.Arrays;
+
 public class EventValidator extends Validator {
 
     private final Event event;
@@ -63,7 +65,7 @@ public class EventValidator extends Validator {
     }
 
     public void validateConfiguration() {
-        for (EventConfigKey value : EventConfigKey.values()) {
+        for (EventConfigKey value : Arrays.stream(EventConfigKey.values()).filter(EventConfigKey::isRequired).toList()) {
             if (this.event.getConfiguration(value) == null) {
                 error("Configuration " + value + " is required");
             }
