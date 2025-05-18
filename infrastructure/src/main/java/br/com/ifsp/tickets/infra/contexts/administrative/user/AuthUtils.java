@@ -2,7 +2,6 @@ package br.com.ifsp.tickets.infra.contexts.administrative.user;
 
 import br.com.ifsp.tickets.app.administrative.auth.IAuthUtils;
 import br.com.ifsp.tickets.domain.administrative.user.User;
-import br.com.ifsp.tickets.domain.shared.utils.UUIDUtils;
 import br.com.ifsp.tickets.domain.shared.validation.Error;
 import br.com.ifsp.tickets.domain.shared.validation.IValidationHandler;
 import com.auth0.jwt.JWT;
@@ -53,7 +52,7 @@ public class AuthUtils implements IAuthUtils {
     }
 
     public UUID getUuidFromToken(String token) {
-        return UUIDUtils.getFromString(this.decode(token).getSubject());
+        return UUID.fromString(this.decode(token).getSubject());
     }
 
     @Override
@@ -69,8 +68,8 @@ public class AuthUtils implements IAuthUtils {
     }
 
     private boolean isTokenExpired(String token) {
-        return this.extractExpiration(token) != null
-                && this.extractExpiration(token).before(Date.from(Instant.now()));
+        final Date expiration = this.extractExpiration(token);
+        return expiration != null && expiration.before(new Date());
     }
 
     private Date extractExpiration(String token) {
@@ -78,7 +77,8 @@ public class AuthUtils implements IAuthUtils {
     }
 
     private LocalDate extractIssuedAt(String token) {
-        return LocalDate.from(decode(token).getIssuedAt().toInstant());
+        final Instant issuedAt = decode(token).getIssuedAt().toInstant();
+        return issuedAt.atZone(java.time.ZoneId.systemDefault()).toLocalDate();
     }
 
     private DecodedJWT decode(String token) {
