@@ -34,6 +34,7 @@ public class HandlePaymentUseCase implements IHandlePaymentUseCase {
         final Optional<Payment> paymentOptional = this.paymentGateway.findByExternalId(anIn.externalId());
         if (paymentOptional.isPresent()) {
             payment = paymentOptional.get();
+            if (payment.getStatus() == anIn.status()) return HandlePaymentOutput.from(payment);
             payment.changeStatus(anIn.status());
         }
         else {
