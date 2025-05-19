@@ -17,7 +17,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 public class PaymentJpaEntity implements Serializable {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
     @Column(name = "external_id", nullable = false, updatable = false)
