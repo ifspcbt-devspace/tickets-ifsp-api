@@ -10,6 +10,7 @@ import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,7 @@ import java.util.HexFormat;
 
 @RestController
 @RequiredArgsConstructor(onConstructor_ = @__(@Autowired))
+@Slf4j
 public class BillingController implements BillingAPI {
 
     private final PaymentService paymentService;
@@ -35,7 +37,8 @@ public class BillingController implements BillingAPI {
             if (!this.verifyWebhook(headers, request.data().id().toString(), mercadoPagoSecret))
                 return ResponseEntity.status(401).build();
         } catch (Exception e) {
-            return ResponseEntity.status(401).build();
+            log.error("Error verifying Mercado Pago webhook", e);
+            return ResponseEntity.status(400).build();
         }
 
         final PaymentClient paymentClient = new PaymentClient();
