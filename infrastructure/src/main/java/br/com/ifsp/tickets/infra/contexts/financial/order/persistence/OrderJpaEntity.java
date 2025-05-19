@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -80,7 +81,7 @@ public class OrderJpaEntity implements Serializable {
                 order.getStatus(),
                 order.getCreatedAt(),
                 order.getUpdatedAt(),
-                order.getItems().stream().map(OrderItemJpaEntity::from).toList()
+                new ArrayList<>(order.getItems().stream().map(OrderItemJpaEntity::from).toList())
         );
     }
 

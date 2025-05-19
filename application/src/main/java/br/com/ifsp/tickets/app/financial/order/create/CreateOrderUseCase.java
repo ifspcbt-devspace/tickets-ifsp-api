@@ -66,7 +66,7 @@ public class CreateOrderUseCase implements ICreateOrderUseCase {
 
         Order createdOrder = this.orderGateway.create(Order.newOrderTicket(
                 authenticatedUser.orElse(null),
-                List.of(),
+                new ArrayList<>(),
                 name,
                 emailAddress,
                 phoneNumber,
