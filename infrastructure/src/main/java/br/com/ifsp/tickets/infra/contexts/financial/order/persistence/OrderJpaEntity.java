@@ -94,7 +94,7 @@ public class OrderJpaEntity implements Serializable {
                 new PhoneNumber(this.getPhoneNumber()),
                 new RG(this.getDocument()),
                 this.getBirthDate(),
-                this.getItems().stream().map(OrderItemJpaEntity::toAggregate).toList(),
+                new ArrayList<>(this.getItems().stream().map(OrderItemJpaEntity::toAggregate).toList()),
                 this.getPaymentUrl(),
                 this.getStatus(),
                 this.getCreatedAt(),
