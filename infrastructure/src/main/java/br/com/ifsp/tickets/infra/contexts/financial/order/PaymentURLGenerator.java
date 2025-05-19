@@ -13,6 +13,8 @@ import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import com.mercadopago.client.common.IdentificationRequest;
 import com.mercadopago.client.common.PhoneRequest;
 import com.mercadopago.client.preference.*;
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.net.MPResponse;
 import com.mercadopago.resources.preference.Preference;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,6 +91,10 @@ public class PaymentURLGenerator implements IPaymentURLGenerator {
             preference = client.create(preferenceRequest);
         } catch (Exception e) {
             log.error("Error creating preference", e);
+            if (e instanceof MPApiException mpApiException) {
+                final MPResponse response = mpApiException.getApiResponse();
+                log.error("MPAPI - Code {}: {}", response.getStatusCode(), response.getContent());
+            }
             throw new ValidationException("Error creating preference", Notification.create(e.getMessage()));
         }
 
