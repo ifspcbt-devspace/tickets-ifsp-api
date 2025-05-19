@@ -100,6 +100,7 @@ public class CreateOrderUseCase implements ICreateOrderUseCase {
             }
 
             createdOrder.addItems(items);
+            createdOrder = this.orderGateway.update(createdOrder);
             createdOrder.generatePaymentUrl(this.paymentURLGenerator);
             createdOrder = this.orderGateway.update(createdOrder);
 
