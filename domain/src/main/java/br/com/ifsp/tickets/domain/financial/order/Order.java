@@ -49,7 +49,7 @@ public class Order extends AggregateRoot<OrderID> {
     }
 
     public static Order newOrderTicket(User customer, List<OrderItem> items, String name, EmailAddress email, PhoneNumber phoneNumber, Document document, LocalDate birthDate) {
-        return new Order(new OrderID(null), customer, name, email, phoneNumber, document, birthDate, items, null, OrderStatus.PENDING, LocalDateTime.now(), LocalDateTime.now());
+        return new Order(new OrderID(null), customer, name, email, phoneNumber, document, birthDate, items, null, OrderStatus.RESERVED, LocalDateTime.now(), LocalDateTime.now());
     }
 
     public void generatePaymentUrl(IPaymentURLGenerator paymentURLGenerator) {

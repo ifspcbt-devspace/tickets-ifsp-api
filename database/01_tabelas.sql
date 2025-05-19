@@ -168,10 +168,10 @@ alter table messages
 
 create table order_items
 (
-    quantity  integer not null,
-    id        bigserial  not null,
-    order_id  bigint  not null,
-    ticket_id uuid    not null
+    quantity  integer   not null,
+    id        bigserial not null,
+    order_id  bigint    not null,
+    ticket_id uuid      not null
 );
 
 alter table order_items
@@ -187,13 +187,13 @@ create table orders
     birth_date   date         not null,
     status       smallint     not null,
     created_at   timestamp(6) not null,
-    id           bigserial       not null,
+    id           bigserial    not null,
     updated_at   timestamp(6) not null,
     customer_id  uuid         not null,
     document     varchar(255) not null,
     email        varchar(255) not null,
     name         varchar(255) not null,
-    payment_url  varchar(255) not null,
+    payment_url  varchar(255),
     phone_number varchar(255) not null
 );
 
@@ -239,7 +239,7 @@ create table payments
     amount        numeric(38, 2) not null,
     approval_date timestamp(6)   not null,
     created_at    timestamp(6)   not null,
-    id            bigint         not null,
+    id            bigserial      not null,
     order_id      bigint         not null,
     updated_at    timestamp(6)   not null,
     currency      varchar(255)   not null,
