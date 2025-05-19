@@ -30,10 +30,6 @@ alter table companies
         primary key (id);
 
 alter table companies
-    add constraint companies_address_id_key
-        unique (address_id);
-
-alter table companies
     add constraint companies_cnpj_key
         unique (cnpj);
 
@@ -128,14 +124,6 @@ alter table event_configurations
         foreign key (event_id) references events;
 
 alter table events
-    add constraint events_address_id_key
-        unique (address_id);
-
-alter table events
-    add constraint events_event_thumbnail_id_key
-        unique (event_thumbnail_id);
-
-alter table events
     add constraint fkquc7xx27bo60lupj2rf7e0hn2
         foreign key (address_id) references addresses;
 
@@ -178,10 +166,6 @@ alter table order_items
     add constraint order_items_pkey
         primary key (id);
 
-alter table order_items
-    add constraint order_items_ticket_id_key
-        unique (ticket_id);
-
 create table orders
 (
     birth_date   date         not null,
@@ -204,10 +188,6 @@ alter table orders
 alter table order_items
     add constraint fkbioxgbv59vetrxe0ejfubep1w
         foreign key (order_id) references orders;
-
-alter table orders
-    add constraint orders_customer_id_key
-        unique (customer_id);
 
 alter table orders
     add constraint orders_status_check
