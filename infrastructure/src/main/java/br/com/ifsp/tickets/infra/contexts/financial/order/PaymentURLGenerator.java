@@ -19,8 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -45,8 +45,7 @@ public class PaymentURLGenerator implements IPaymentURLGenerator {
                 .min(Comparator.comparing(Event::getInitDate))
                 .orElseThrow(() -> new ValidationException("No event found for order", Notification.create("No event found for order")));
 
-        final LocalDateTime expirationTime = event.getConfiguration(EventConfigKey.END_SELLING_DATE).getLocalDateTime();
-
+        final OffsetDateTime expirationTime = event.getConfiguration(EventConfigKey.END_SELLING_DATE).getLocalDateTime().atOffset(ZoneOffset.of("-03:00"));
         final PreferenceClient client = new PreferenceClient();
 
         final List<PreferenceItemRequest> items = order.getItems().stream().map(orderItem -> PreferenceItemRequest.builder()
@@ -65,7 +64,7 @@ public class PaymentURLGenerator implements IPaymentURLGenerator {
 
         final PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .expires(true)
-                .dateOfExpiration(OffsetDateTime.from(expirationTime))
+                .dateOfExpiration(expirationTime)
                 .items(items)
                 .payer(
                         PreferencePayerRequest.builder()
