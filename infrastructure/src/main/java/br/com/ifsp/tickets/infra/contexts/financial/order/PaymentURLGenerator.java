@@ -66,6 +66,7 @@ public class PaymentURLGenerator implements IPaymentURLGenerator {
         final PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .expires(true)
                 .dateOfExpiration(expirationTime)
+                .autoReturn("approved")
                 .items(items)
                 .backUrls(
                         PreferenceBackUrlsRequest.builder()
