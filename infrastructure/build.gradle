@@ -42,7 +42,7 @@ dependencies {
     implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
 
     // mercadopago sdk
-    implementation group: 'com.mercadopago', name: 'sdk-java', version: '2.2.0'
+    implementation group: 'com.mercadopago', name: 'sdk-java', version: '2.4.0'
 
     // spring boot
     implementation 'org.springframework.boot:spring-boot-starter-actuator'

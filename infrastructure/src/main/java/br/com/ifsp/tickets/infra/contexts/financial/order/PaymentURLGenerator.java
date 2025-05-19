@@ -62,7 +62,6 @@ public class PaymentURLGenerator implements IPaymentURLGenerator {
         final List<PreferencePaymentTypeRequest> excludedPaymentTypes = new ArrayList<>();
         excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder().id("ticket").build());
         excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder().id("credit_card").build());
-        excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder().id("debit_card").build());
 
         final PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .expires(true)
@@ -79,7 +78,6 @@ public class PaymentURLGenerator implements IPaymentURLGenerator {
                 .externalReference(orderId.getValue().toString())
                 .paymentMethods(
                         PreferencePaymentMethodsRequest.builder()
-                                .defaultPaymentMethodId("pix")
                                 .excludedPaymentTypes(excludedPaymentTypes)
                                 .installments(1)
                                 .defaultInstallments(1)
