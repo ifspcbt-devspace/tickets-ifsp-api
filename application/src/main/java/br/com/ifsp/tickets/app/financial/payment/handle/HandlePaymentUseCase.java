@@ -50,7 +50,7 @@ public class HandlePaymentUseCase implements IHandlePaymentUseCase {
             if (!this.orderGateway.exists(orderID))
                 throw NotFoundException.with(Order.class, orderID);
 
-            payment = Payment.newPayment(
+            payment = this.paymentGateway.create(Payment.newPayment(
                     externalId,
                     status,
                     orderID,
@@ -60,7 +60,7 @@ public class HandlePaymentUseCase implements IHandlePaymentUseCase {
                     createdAt,
                     updatedAt,
                     approvalDate
-            );
+            ));
         }
 
         final OrderID orderId = payment.getOrderId();
@@ -77,7 +77,7 @@ public class HandlePaymentUseCase implements IHandlePaymentUseCase {
             }
         }
 
-        payment = paymentOptional.isPresent() ? this.paymentGateway.update(payment) : this.paymentGateway.create(payment);
+        payment = this.paymentGateway.update(payment);
 
         return HandlePaymentOutput.from(payment);
     }
