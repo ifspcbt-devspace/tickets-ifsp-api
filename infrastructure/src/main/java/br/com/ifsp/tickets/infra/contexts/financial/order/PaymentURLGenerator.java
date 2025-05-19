@@ -67,6 +67,11 @@ public class PaymentURLGenerator implements IPaymentURLGenerator {
                 .expires(true)
                 .dateOfExpiration(expirationTime)
                 .items(items)
+                .backUrls(
+                        PreferenceBackUrlsRequest.builder()
+                                .success("https://eventos.gremioifspcbt.shop/user/account")
+                                .build()
+                )
                 .payer(
                         PreferencePayerRequest.builder()
                                 .name(name)

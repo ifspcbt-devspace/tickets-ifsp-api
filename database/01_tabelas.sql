@@ -217,7 +217,7 @@ alter table password_recovery
 create table payments
 (
     amount        numeric(38, 2) not null,
-    approval_date timestamp(6)   not null,
+    approval_date timestamp(6),
     created_at    timestamp(6)   not null,
     id            bigserial      not null,
     order_id      bigint         not null,
