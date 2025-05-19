@@ -8,6 +8,7 @@ import br.com.ifsp.tickets.domain.financial.order.OrderID;
 import br.com.ifsp.tickets.domain.financial.order.OrderStatus;
 import br.com.ifsp.tickets.infra.contexts.administrative.user.persistence.UserJpaEntity;
 import br.com.ifsp.tickets.infra.contexts.financial.order.persistence.item.OrderItemJpaEntity;
+import br.com.ifsp.tickets.infra.shared.encryption.EncryptionService;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,7 +60,7 @@ public class OrderJpaEntity implements Serializable {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.document = document;
+        this.document = EncryptionService.encrypt(document);
         this.birthDate = birthDate;
         this.paymentUrl = paymentUrl;
         this.status = status;
@@ -92,7 +93,7 @@ public class OrderJpaEntity implements Serializable {
                 this.getName(),
                 new EmailAddress(this.getEmail()),
                 new PhoneNumber(this.getPhoneNumber()),
-                new RG(this.getDocument()),
+                new RG(this.getDecryptedDocument()),
                 this.getBirthDate(),
                 new ArrayList<>(this.getItems().stream().map(OrderItemJpaEntity::toAggregate).toList()),
                 this.getPaymentUrl(),
@@ -100,6 +101,10 @@ public class OrderJpaEntity implements Serializable {
                 this.getCreatedAt(),
                 this.getUpdatedAt()
         );
+    }
+
+    public String getDecryptedDocument() {
+        return EncryptionService.decrypt(this.document);
     }
 
 }
