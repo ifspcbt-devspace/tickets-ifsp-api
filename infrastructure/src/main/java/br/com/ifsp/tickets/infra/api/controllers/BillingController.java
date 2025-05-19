@@ -18,20 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
+import java.security.MessageDigest;
+import java.util.HexFormat;
 
 @RestController
 @RequiredArgsConstructor(onConstructor_ = @__(@Autowired))
 public class BillingController implements BillingAPI {
 
     private final PaymentService paymentService;
-    @Value("${mercadopago.access.token}")
-    private String mercadoPagoAccessToken;
+    @Value("${mercadopago.webhook.secret}")
+    private String mercadoPagoSecret;
 
     @Override
     public ResponseEntity<Void> listener(PaymentListenerRequest request, HttpHeaders headers) {
         try {
-            if (!this.verifyWebhook(headers, request.data().id().toString(), mercadoPagoAccessToken))
+            if (!this.verifyWebhook(headers, request.data().id().toString(), mercadoPagoSecret))
                 return ResponseEntity.status(401).build();
         } catch (Exception e) {
             return ResponseEntity.status(401).build();
@@ -66,7 +67,9 @@ public class BillingController implements BillingAPI {
         final String xSignature = headers.getFirst("x-signature");
         final String xRequestId = headers.getFirst("x-request-id");
 
-        assert xSignature != null;
+        if (xSignature == null || xRequestId == null) {
+            return false;
+        }
         final String[] parts = xSignature.split(",");
         String ts = null;
         String hash = null;
@@ -78,6 +81,9 @@ public class BillingController implements BillingAPI {
                 hash = keyValue[1];
             }
         }
+        if (ts == null || hash == null) {
+            return false;
+        }
 
         final String manifest = String.format("id:%s;request-id:%s;ts:%s;", id, xRequestId, ts);
 
@@ -86,7 +92,7 @@ public class BillingController implements BillingAPI {
         hmac.init(secretKeySpec);
         byte[] signature = hmac.doFinal(manifest.getBytes());
 
-        final String computedHash = Base64.getEncoder().encodeToString(signature);
-        return computedHash.equals(hash);
+        final String computedHash = HexFormat.of().formatHex(signature);
+        return MessageDigest.isEqual(computedHash.getBytes(), hash.getBytes());
     }
 }

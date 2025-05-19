@@ -10,6 +10,8 @@ security:
     secret-key: ${JWT_SECRET_KEY}
 
 mercadopago:
+  webhook:
+    secret: ${MERCADOPAGO_WEBHOOK_SECRET}
   access:
     token: ${MERCADOPAGO_ACCESSTOKEN}
 

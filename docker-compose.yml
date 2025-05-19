@@ -35,6 +35,7 @@ services:
       - ENCRYPTOR_VALUE=secret
       - FRONTEND_TICKET_CHECK_URL=https://eventos.ifspcbt.shop/admin/ticket/%s/check
       - MERCADOPAGO_ACCESSTOKEN=token
+      - MERCADOPAGO_WEBHOOK_SECRET=secret
       - ENV_NAME=prod
       - LOG_PATH=/ticketsapi/logs/
       - UPLOAD_PATH=/ticketsapi/uploads/
