@@ -26,7 +26,7 @@ public interface OrderAPI {
             }
 
     )
-    ResponseEntity<CreateOrderResponse> pay(CreateOrderRequest request);
+    ResponseEntity<CreateOrderResponse> pay(@RequestBody CreateOrderRequest request);
 
     @PostMapping(
             value = "/search",

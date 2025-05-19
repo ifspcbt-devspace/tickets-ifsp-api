@@ -17,6 +17,7 @@ import java.io.Serializable;
 public class OrderItemJpaEntity implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
     @Column(name = "order_id", nullable = false)

@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,7 @@ import java.util.List;
 public class OrderJpaEntity implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
     @OneToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
@@ -47,7 +49,7 @@ public class OrderJpaEntity implements Serializable {
     private LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "order_id")
     private List<OrderItemJpaEntity> items;
 
@@ -79,7 +81,7 @@ public class OrderJpaEntity implements Serializable {
                 order.getStatus(),
                 order.getCreatedAt(),
                 order.getUpdatedAt(),
-                order.getItems().stream().map(OrderItemJpaEntity::from).toList()
+                new ArrayList<>(order.getItems().stream().map(OrderItemJpaEntity::from).toList())
         );
     }
 
@@ -92,7 +94,7 @@ public class OrderJpaEntity implements Serializable {
                 new PhoneNumber(this.getPhoneNumber()),
                 new RG(this.getDocument()),
                 this.getBirthDate(),
-                this.getItems().stream().map(OrderItemJpaEntity::toAggregate).toList(),
+                new ArrayList<>(this.getItems().stream().map(OrderItemJpaEntity::toAggregate).toList()),
                 this.getPaymentUrl(),
                 this.getStatus(),
                 this.getCreatedAt(),

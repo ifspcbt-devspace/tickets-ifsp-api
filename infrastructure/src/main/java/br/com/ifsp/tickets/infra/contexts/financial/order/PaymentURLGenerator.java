@@ -13,14 +13,16 @@ import br.com.ifsp.tickets.domain.shared.validation.handler.Notification;
 import com.mercadopago.client.common.IdentificationRequest;
 import com.mercadopago.client.common.PhoneRequest;
 import com.mercadopago.client.preference.*;
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.net.MPResponse;
 import com.mercadopago.resources.preference.Preference;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -45,8 +47,7 @@ public class PaymentURLGenerator implements IPaymentURLGenerator {
                 .min(Comparator.comparing(Event::getInitDate))
                 .orElseThrow(() -> new ValidationException("No event found for order", Notification.create("No event found for order")));
 
-        final LocalDateTime expirationTime = event.getConfiguration(EventConfigKey.END_SELLING_DATE).getLocalDateTime();
-
+        final OffsetDateTime expirationTime = event.getConfiguration(EventConfigKey.END_SELLING_DATE).getLocalDateTime().atOffset(ZoneOffset.of("-03:00"));
         final PreferenceClient client = new PreferenceClient();
 
         final List<PreferenceItemRequest> items = order.getItems().stream().map(orderItem -> PreferenceItemRequest.builder()
@@ -61,11 +62,10 @@ public class PaymentURLGenerator implements IPaymentURLGenerator {
         final List<PreferencePaymentTypeRequest> excludedPaymentTypes = new ArrayList<>();
         excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder().id("ticket").build());
         excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder().id("credit_card").build());
-        excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder().id("debit_card").build());
 
         final PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .expires(true)
-                .dateOfExpiration(OffsetDateTime.from(expirationTime))
+                .dateOfExpiration(expirationTime)
                 .items(items)
                 .payer(
                         PreferencePayerRequest.builder()
@@ -78,7 +78,6 @@ public class PaymentURLGenerator implements IPaymentURLGenerator {
                 .externalReference(orderId.getValue().toString())
                 .paymentMethods(
                         PreferencePaymentMethodsRequest.builder()
-                                .defaultPaymentMethodId("pix")
                                 .excludedPaymentTypes(excludedPaymentTypes)
                                 .installments(1)
                                 .defaultInstallments(1)
@@ -90,6 +89,10 @@ public class PaymentURLGenerator implements IPaymentURLGenerator {
             preference = client.create(preferenceRequest);
         } catch (Exception e) {
             log.error("Error creating preference", e);
+            if (e instanceof MPApiException mpApiException) {
+                final MPResponse response = mpApiException.getApiResponse();
+                log.error("MPAPI - Code {}: {}", response.getStatusCode(), response.getContent());
+            }
             throw new ValidationException("Error creating preference", Notification.create(e.getMessage()));
         }
 
