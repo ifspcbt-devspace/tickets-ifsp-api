@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.MessageDigest;
 import java.util.HexFormat;
 
 @RestController
@@ -96,6 +95,6 @@ public class BillingController implements BillingAPI {
         byte[] signature = hmac.doFinal(manifest.getBytes());
 
         final String computedHash = HexFormat.of().formatHex(signature);
-        return MessageDigest.isEqual(computedHash.getBytes(), hash.getBytes());
+        return computedHash.equalsIgnoreCase(hash);
     }
 }
