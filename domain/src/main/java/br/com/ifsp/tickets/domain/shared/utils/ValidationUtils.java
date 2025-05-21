@@ -8,16 +8,18 @@ import java.util.regex.Pattern;
 public class ValidationUtils {
 
     public static boolean isRG(String rg) {
-        // Remove todos os caracteres não numéricos (pontos, hífens, espaços)
-        final String cleanRG = rg.replaceAll("[^\\dXx]", "");
+        // Remove todos os caracteres que não são letras nem números
+        final String cleanRG = rg.replaceAll("[^a-zA-Z0-9]", "");
 
-        // Verifica se o tamanho do RG é válido (8 dígitos + dígito verificador opcional)
-        if (cleanRG.length() < 8 || cleanRG.length() > 9) {
+        // Verifica se o tamanho do RG é válido (mínimo 5, máximo 9, por exemplo)
+        if (cleanRG.length() < 5 || cleanRG.length() > 9) {
             return false;
         }
 
-        return Pattern.matches("^[0-9]{7,9}[0-9Xx]?$", cleanRG);
+        // Verifica se só contém letras e números
+        return Pattern.matches("^[a-zA-Z0-9]{5,9}$", cleanRG);
     }
+
 
     public static boolean isCPF(String CPF) {
         CPF = CPF.replaceAll("[^0-9]", "");
